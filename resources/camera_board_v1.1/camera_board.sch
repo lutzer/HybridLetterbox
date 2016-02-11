@@ -193,7 +193,7 @@ U 1 1 569CF6C0
 P 3100 2200
 F 0 "P1" H 3100 2350 50  0000 C CNN
 F 1 "CONN_01X02" V 3200 2200 50  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x02" H 3100 2200 50  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Angled_1x02" H 3100 2200 50  0001 C CNN
 F 3 "" H 3100 2200 50  0000 C CNN
 	1    3100 2200
 	0    -1   -1   0   
