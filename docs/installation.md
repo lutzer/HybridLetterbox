@@ -36,8 +36,8 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 ### Setup ip adress of pi or skip or use dhcp server
 
 * setup rasp pi ip adress
-  1. sudo ip addr add 192.168.72.2/24 broadcast 192.168.72.255 dev eth0
-  2. sudo ip route add default via 192.168.72.1
+  1. `sudo ip addr add 192.168.72.2/24 broadcast 192.168.72.255 dev eth0`
+  2. `sudo ip route add default via 192.168.72.1`
   3. persistent config see: https://wiki.archlinux.org/index.php/
   4. Network_configuration#Configure_the_IP_address
 
@@ -69,80 +69,23 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 ### Install Packages
 
 1. install time deamon ntpd: `pacman -S ntp`
+   
 2. enable ntpd: `systemctl enable ntpd`
+   
+   ​
 
+### Install and Setup Nodejs Webserver
 
-
-### TODO: Install and Setup Webserver (Change to node.js)`
-
-1. installl ngix webserver: `pacman -S nginx`
+1. install node: `pacman -S nodejs npm`
    
-   enable automatic startup: systemctl enable nginx
+2. install pm2 node process manager: `pacman -S pm2`
    
-2. configure nano /etc/nginx/nginx.conf:
+3. redirect port 80 requests to port 8080
    
-   add to server "root   /home/letterbox/http;”
-   
-   remove root directive from all locations
-   
-   and change code inside server to this:
-   
-   ``` nginx
-   server {
-        listen       80;
-        server_name  localhost;
-        root    /home/letterbox/http;
-   
-        #charset koi8-r;
-   
-        #access_log  logs/host.access.log  main;
-   
-        location / {
-            index  index.html index.htm;
-            try_files   $uri $uri/ @tinyurl;
-        }
-   
-        location @tinyurl {
-            rewrite ^/(.*)$ /api/index.php?q=$1 last;
-        }
-   
-        location ~ \.php$ {
-            fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
-            fastcgi_index  index.php;
-            include        fastcgi.conf;
-        }
-   }
+   ``` shell
+    # add this line to /etc/rc.local
+    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
    ```
-   
-3. install php: pacman -S php and pacman -S php-fpm
-   
-   enable autoamtic startup: systemctl enable php-fpm
-   
-   configure /etc/php/php.ini: "nano /etc/php/php.ini"
-   
-   -> add "/home/letterbox/http” to open_basedir and 
-   
-      uncomment "extension=pdo_mysql.so"
-   
-4. install mariadb: pacman -S mariadb
-   
-5. systemctl start mysqld
-   
-   mysql_secure_installation -> mariadb root password: <mysqlpassword>
-   
-   systemctl restart mysqld
-   
-   systemctl enable mysqld
-   
-6. login to mariadb: mysql -u root -p
-   
-   -> GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.72.%' IDENTIFIED BY '<rootpassword>' WITH GRANT OPTION;
-   
-7. minimize memory usage: cp /usr/share/mysql/my-small.cnf /etc/mysql/my.cnf
-   
-8. chmod 755 on /home and /home/letterbox and /home/letterbox/html
-   
-   files need 644
 
 ### Setup Camera
 
@@ -269,6 +212,10 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 1. sudo systemctl daemon-reload
 2. sudo systemctl enable powerswitch.service
 
+### Autostart pm2 manager
+
+TODO
+
 
 
 ## CONFIGURE TP-LINK MOBILE ROUTER
@@ -276,3 +223,10 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 * first **upgarde firmware**! Then install configuration image or configure it manually.
 * setup dhcp reservation of rasp pi to always assign it to 192.168.72.2
 * change admin pw!
+
+## CONFIGURE ATTINY ON PI HEAD BOARD
+
+see  [attiny-installation.md](attiny-installation.md)
+
+
+
