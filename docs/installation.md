@@ -1,6 +1,6 @@
-# HYBRID LETTERBOX
+# Hybrid Letterbox
 
-## INSTALLATION GUIDE FOR RASPBERRY PI
+## Installation Guide for Raspberry Pi
 
 ### Prepare SD Card
 
@@ -218,15 +218,13 @@ TODO
 
 
 
-## CONFIGURE TP-LINK MOBILE ROUTER
+## Configure Tp-Link Router
 
 * first **upgarde firmware**! Then install configuration image or configure it manually.
 * setup dhcp reservation of rasp pi to always assign it to 192.168.72.2
 * change admin pw!
 
-## CONFIGURE ATTINY ON PI HEAD BOARD
+## Configure Attiny Head Board
 
 see  [attiny-installation.md](attiny-installation.md)
-
-
 
