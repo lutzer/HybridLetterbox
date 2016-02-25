@@ -1,23 +1,17 @@
-# Configure Attiny for Letterbox Board
+# Setup Attiny
 
 
 
-## Setup IDE
+## Useful Links
 
-Install Attiny Support for Arduin iDE: 
+### Attiny Setup
 
-* add `https://raw.githubusercontent.com/damellis/attiny/ide-1.6.x-boards-manager/package_damellis_attiny_index.json` to board manager preferences
-* install **attiny** library from Board Manager
+* http://highlowtech.org/?p=1695
 
-### Install Servo Lib
+### Serial Communication attiny <> rasp pi
 
-* download http://playground.arduino.cc/ComponentLib/Servo
-  
-* in arduino IDE: Include Library -> Add Zip File
-  
-* go to library folder, edit SoftwareServo.h, change:
-  
-  ``` c
-  #include <WProgram.h> to #include <Arduino.h>
-  ```
+* http://www.forum-raspberrypi.de/Thread-serial-ueber-gpio
 
+### Stepper motor
+
+* <http://www.geeetech.com/wiki/index.php/Stepper_Motor_5V_4-Phase_5-Wire_%26_ULN2003_Driver_Board_for_Arduino>
