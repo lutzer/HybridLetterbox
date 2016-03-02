@@ -13,13 +13,16 @@
 
 #include <string.h>
 #include "StepperMotorControl.h"
+#include "Photocell.h"
 
 // PIN LAYOUTS
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
-#define MOTOR_PIN1  2 // IN1 on the ULN2003 driver 1
-#define MOTOR_PIN2  3 // IN2 on the ULN2003 driver 1
-#define MOTOR_PIN3  4 // IN3 on the ULN2003 driver 1
-#define MOTOR_PIN4  5 // IN4 on the ULN2003 driver 1
+#define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
+#define PHOTORESISTOR_LED_PIN 8 //CONNECT PHOTORESISTOR LED TO THIS
+#define MOTOR_PIN1  4 // IN1 on the ULN2003 driver 1
+#define MOTOR_PIN2  5 // IN2 on the ULN2003 driver 1
+#define MOTOR_PIN3  6 // IN3 on the ULN2003 driver 1
+#define MOTOR_PIN4  7 // IN4 on the ULN2003 driver 1
 #define REED_PIN 6 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
@@ -33,20 +36,27 @@ byte serialBufferPosition = 0;
 
 // MOTOR VARS
 StepperMotorControl stepperMotor(MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4, REED_PIN);
+Photocell photocell(PHOTORESISTOR_PIN,PHOTORESISTOR_LED_PIN);
 
 void setup() {
 
-  //setup led pin
+  // setup led pin
   pinMode(LED_STATUS_PIN, OUTPUT);
   
   // start serial port
   Serial.begin(BAUD_RATE);
   Serial.println("start\n");
 
+  // send a byte to establish contact until receiver responds
   digitalWrite(LED_STATUS_PIN,HIGH);
-  establishSerialContact();  // send a byte to establish contact until receiver responds
+  establishSerialContact();  
   digitalWrite(LED_STATUS_PIN,LOW);
 
+  //calibrate photocell
+  while (photocell.calibrate())
+  	blinkStatusLed(500);
+
+  //calibrate stepper
   stepperMotor.calibrate();
 
 }
@@ -81,6 +91,8 @@ void loop() {
       digitalWrite(LED_STATUS_PIN,HIGH);
     else if (compareSubString(serialBuffer,"led:0"))
       digitalWrite(LED_STATUS_PIN,LOW);
+    else if (compareSubString(serialBuffer,"sensor:?"))
+      Serial.write("sensor: "+photocell.isBlocked());
     else if (compareSubString(serialBuffer,"stepper:0"))
       stepperMotor.setPosition(STEPPER_START);
     else if (compareSubString(serialBuffer,"stepper:1"))
@@ -97,6 +109,9 @@ void loop() {
 
   // update the stepper motors position
   stepperMotor.update();
+
+  // update photocell
+  photocell.update();
   
 }
 

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <Bounce2.h>
-#include "AccelStepper.h"
+#include "MinStepper.h"
 
 #define HALFSTEP 8
 #define MOTOR_MAX_SPEED 1000.0
@@ -23,7 +23,7 @@ enum StepperPosition {
 class StepperMotorControl {
 
   private:
-    AccelStepper stepper;
+    MinStepper stepper;
     long stepperStartPos = 0;
 
     Bounce reedSwitch;
@@ -34,11 +34,11 @@ class StepperMotorControl {
     
     StepperMotorControl() { };
     
-    StepperMotorControl(int motorPin1, int motorPin2, int motorPin3, int motorPin4, int reedPin) {
+    StepperMotorControl(byte motorPin1, byte motorPin2, byte motorPin3, byte motorPin4, byte reedPin) {
       // setup motor
-      stepper = AccelStepper(HALFSTEP, motorPin1, motorPin3, motorPin2, motorPin4);
-      stepper.setMaxSpeed(MOTOR_MAX_SPEED);
-      stepper.setAcceleration(MOTOR_ACCELLERATION);
+      stepper = MinStepper(HALFSTEP, motorPin1, motorPin3, motorPin2, motorPin4);
+      /*stepper.setMaxSpeed(MOTOR_MAX_SPEED);
+      stepper.setAcceleration(MOTOR_ACCELLERATION);*/
       stepper.setSpeed(0);
 
       // setup reed switch
