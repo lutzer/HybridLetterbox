@@ -87,11 +87,11 @@ void loop() {
 
     //Serial.write(serialBuffer);
     
-    if (compareSubString(serialBuffer,"led:1"))
+    /*if (compareSubString(serialBuffer,"led:1"))
       digitalWrite(LED_STATUS_PIN,HIGH);
     else if (compareSubString(serialBuffer,"led:0"))
-      digitalWrite(LED_STATUS_PIN,LOW);
-    else if (compareSubString(serialBuffer,"sensor:?"))
+      digitalWrite(LED_STATUS_PIN,LOW);*/
+   	if (compareSubString(serialBuffer,"sensor:?"))
       Serial.write("sensor: "+photocell.isBlocked());
     else if (compareSubString(serialBuffer,"stepper:0"))
       stepperMotor.setPosition(STEPPER_START);
