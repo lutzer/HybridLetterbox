@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-03-01 11:53:42
 * @Last Modified by:   lutz
-* @Last Modified time: 2016-03-01 16:34:43
+* @Last Modified time: 2016-03-03 11:46:09
 */
 
 /* 
@@ -18,12 +18,12 @@
 // PIN LAYOUTS
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
 #define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
-#define PHOTORESISTOR_LED_PIN 8 //CONNECT PHOTORESISTOR LED TO THIS
+#define PHOTORESISTOR_LED_PIN 9 //CONNECT PHOTORESISTOR LED TO THIS
 #define MOTOR_PIN1  4 // IN1 on the ULN2003 driver 1
 #define MOTOR_PIN2  5 // IN2 on the ULN2003 driver 1
 #define MOTOR_PIN3  6 // IN3 on the ULN2003 driver 1
 #define MOTOR_PIN4  7 // IN4 on the ULN2003 driver 1
-#define REED_PIN 6 // CONNECT TO REED SWITCH
+#define REED_PIN 8 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
 #define SERIAL_BUFFER_SIZE 16
@@ -45,19 +45,23 @@ void setup() {
   
   // start serial port
   Serial.begin(BAUD_RATE);
-  Serial.println("start\n");
 
   // send a byte to establish contact until receiver responds
-  digitalWrite(LED_STATUS_PIN,HIGH);
-  establishSerialContact();  
-  digitalWrite(LED_STATUS_PIN,LOW);
+  while (Serial.available() <= 0) {
+    Serial.write("waiting\n");
+    blinkStatusLed(1000);
+  }
 
   //calibrate photocell
-  while (photocell.calibrate())
-  	blinkStatusLed(500);
+  while (!photocell.calibrate())
+  	blinkStatusLed(100);
 
   //calibrate stepper
   stepperMotor.calibrate();
+  stepperMotor.setPosition(STEPPER_START);
+
+  //enable photocell
+  photocell.enable(true);
 
 }
 
@@ -87,22 +91,20 @@ void loop() {
 
     //Serial.write(serialBuffer);
     
-    /*if (compareSubString(serialBuffer,"led:1"))
-      digitalWrite(LED_STATUS_PIN,HIGH);
-    else if (compareSubString(serialBuffer,"led:0"))
-      digitalWrite(LED_STATUS_PIN,LOW);*/
-   	if (compareSubString(serialBuffer,"sensor:?"))
-      Serial.write("sensor: "+photocell.isBlocked());
-    else if (compareSubString(serialBuffer,"stepper:0"))
+   	if (compareSubString(serialBuffer,"sensor:?")) {
+      char response[] = "sensor:?\n";
+      response[7] = photocell.isBlocked() ? '1' : '0';
+      Serial.write(response);
+   	} else if (compareSubString(serialBuffer,"stepper:0"))
       stepperMotor.setPosition(STEPPER_START);
     else if (compareSubString(serialBuffer,"stepper:1"))
       stepperMotor.setPosition(STEPPER_TURN);
     else if (compareSubString(serialBuffer,"stepper:2"))
       stepperMotor.setPosition(STEPPER_EJECT);
     else if (compareSubString(serialBuffer,"start"))
-      Serial.write("started");
+      Serial.write("started\n");
     else
-      Serial.write("error");
+      Serial.write("error\n");
       
     clearSerialBuffer();
   }
@@ -112,14 +114,6 @@ void loop() {
 
   // update photocell
   photocell.update();
-  
-}
-
-void establishSerialContact() {
-  while (Serial.available() <= 0) {
-    Serial.write("waiting\n");
-    blinkStatusLed(500);
-  }
 }
 
 void clearSerialBuffer() {

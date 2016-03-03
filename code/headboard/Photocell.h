@@ -13,8 +13,10 @@ class Photocell {
     byte _resistorPin;
     byte _ledPin;
 
-    bool _changed = false;
+    bool _enabled = false;
+    
     bool _reading = false;
+    bool _blocked = false;
 
     long _lastChanged = 0;
 
@@ -26,16 +28,16 @@ class Photocell {
       _resistorPin = resistorPin;
       _ledPin = ledPin;
 
-      // enable led pin
+      // setup led pin
       pinMode(_ledPin, OUTPUT);
-      digitalWrite(_ledPin, HIGH);
+      digitalWrite(_ledPin, LOW);
 
     };
 
     boolean calibrate() {
 
       int low = 0;
-      int high = 0;
+      int high = 1024;
 
       digitalWrite(_ledPin, LOW); // turn off led
       delay(100);
@@ -43,51 +45,62 @@ class Photocell {
         low = max(low,analogRead(_resistorPin));
         delay(25);
       }
-
-      digitalWrite(_ledPin, LOW); // turn on led
+      digitalWrite(_ledPin, HIGH); // turn on led
       delay(100);
       for (int i=0;i < CALIBRATION_READINGS; i++) {
         high = min(high,analogRead(_resistorPin));
         delay(25);
       }
+      digitalWrite(_ledPin, LOW); // turn off led
 
       //could not calibrate sensor
-      if (low <= high)
+      if (low >= high)
         return false;
       
-      _threshold = low + high / 2;
+      _threshold = low + (high-low) / 2;
       return true;
     };
 
     void update() {
 
+      if (!_enabled)
+        return;
+
       long time = millis();
 
-      if (time < _lastChanged + DEBOUNCE_INTERVALL)
+      if (time <= _lastChanged + DEBOUNCE_INTERVALL)
         return;
 
       int val = analogRead(_resistorPin);
 
       if (val > _threshold) {
-        if (_reading != val) {
-          _changed = true;
-          _lastChanged = time;
-        }
         _reading = true;
       } else {
+        // if previous reading was false
+        if (_reading == true) {
+          _blocked = true;
+        }
+        _lastChanged = time;
         _reading = false;
       }
-
-      _lastChanged = time;
 
     };
 
     boolean isBlocked() {
 
-      if (_changed && !_reading)
+      if (_enabled && _blocked) {
+        _blocked = false;
         return true;
+      }
 
       return false;
+    }
+
+    void enable(bool on) {
+
+      // turn on led
+      digitalWrite(_ledPin, on ? HIGH : LOW);
+      _enabled = on;
     }
 
 };
