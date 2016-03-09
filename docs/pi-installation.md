@@ -64,7 +64,6 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 
    setup sudo for user: `EDITOR=nano visudo` -> add line `letterbox ALL=(ALL) ALL`
 
-
 ### Install Packages
 
 1. install time deamon ntpd: `pacman -S ntp`
@@ -104,8 +103,6 @@ prevent rasp pi from broadcasting boot messages over serial
 - change content to `root=/dev/mmcblk0p2 rw rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop` (delete both entries with xxxx=ttyAMA0,115)
 - enable tty: `sudo systemctl enable getty\@tty1.service
 
-
-
 ### Setup Camera
 
 1. nano /boot/config.txt, add following lines to the end:
@@ -123,11 +120,23 @@ prevent rasp pi from broadcasting boot messages over serial
    export PATH=$PATH:/opt/vc/bin
    ```
 
-3. to test camera: raspistill -o image.jpg 
+3. `nano /etc/modprobe.d/blacklist.conf`, add:
 
-4. install python lib: pip install picamera
+   ```
+   blacklist i2c_bcm2708
+   ```
 
-5. install: sudo pacman -S python-pillow (PIL image lib)
+   ​
+
+4. reboot system
+
+5. to test camera: `raspistill -o image.jpg` or `raspistill -t 99999`
+
+   * more info here: https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspistill.md
+
+6. install python lib: pip install picamera
+
+   * also install: sudo pacman -S python-pillow (PIL image lib)
 
 ### Connect Servo
 

@@ -1,16 +1,50 @@
 # Setup ATmega328
 
-see https://www.arduino.cc/en/Tutorial/ArduinoToBreadboard
+see http://www.gammon.com.au/forum/?id=11637 or https://www.arduino.cc/en/Tutorial/ArduinoToBreadboard
 
-1. download hardware configuration archive
+
 
 ## Pin Layouts
 
- ![Atmega328-pinout](images/Atmega328-pinout.png)
+ ![Atmega168PinMap2](images/Atmega168PinMap2.png)
 
  ![Raspberry-Pi-GPIO-Layout-Model-B-Plus](images/Raspberry-Pi-GPIO-Layout-Model-B-Plus.png)
 
 
+
+## Burn Bootloader on Atmega
+
+
+
+ ![SimpleBreadboardAVR](images/SimpleBreadboardAVR.png)
+
+* Connect Cables like on the layout above + **add 10k pullup resistor between ATMega's RESET PIN and VCC**
+
+* Download Sketches from this page: https://github.com/nickgammon/arduino_sketches
+
+* Run Atmega_Board_Detector to see if there is a bootloader installed. 
+
+  * If chip is not detected, it might meed a crystal: connect ATMega's D9 Clock pin with Arduino digital pin 9 to emulate the crystal
+
+* Run Atmega_Board_Programmer to install liliypad bootloader, 
+
+  * open serial console. Send L, then G
+
+      ​
+
+## Upload Sketches to Atmega328
+
+
+
+ ![ArduinoUSBSerialSimple](images/ArduinoUSBSerialSimple.png)
+* First upload Bootloader (see above)
+* Connect cables like in the layout above or use FTDI Serial Adapter
+  * **Important: add 0,1 - 10 uF Capacitor between RESET and ATMega's pin1 (RST)**
+  * RX -> TX, TX -> RX, VCC -> 5V, GND -> GND, RST -> RESET / DTR
+
+  * If using arduino, remove Atmega from Arduino
+* Upload Sketches using Lilypad Arduino with atmega328 chip
+* Programmer: AVR mkII
 
 ## Serial Connection with rasp pi
 

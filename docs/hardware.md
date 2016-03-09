@@ -1,8 +1,14 @@
 # Letterbox Hardware
 
-## Rev 1
+## Headboard
 
 ### Pin Layout
+
+ ![Atmega168PinMap2](images/Atmega168PinMap2.png)
+
+ ![driver-ic-of-motor](images/driver-ic-of-motor.png)
+
+
 
 #### Servo
 

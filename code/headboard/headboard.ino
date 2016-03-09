@@ -19,18 +19,26 @@
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
 #define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
 #define PHOTORESISTOR_LED_PIN 9 //CONNECT PHOTORESISTOR LED TO THIS
-#define MOTOR_PIN1  4 // IN1 on the ULN2003 driver 1
-#define MOTOR_PIN2  5 // IN2 on the ULN2003 driver 1
+#define MOTOR_PIN1  8 // IN1 on the ULN2003 driver 1
+#define MOTOR_PIN2  7 // IN2 on the ULN2003 driver 1
 #define MOTOR_PIN3  6 // IN3 on the ULN2003 driver 1
-#define MOTOR_PIN4  7 // IN4 on the ULN2003 driver 1
-#define REED_PIN 8 // CONNECT TO REED SWITCH
+#define MOTOR_PIN4  5 // IN4 on the ULN2003 driver 1
+#define REED_PIN 4 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
+#define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
+#define SERIAL softwareSerial // change to Serial for using normal Serial
+#define RX_PIN 0 //only used  for software serial
+#define TX_PIN 1 //only used for software serial
 #define SERIAL_BUFFER_SIZE 16
 #define SERIAL_END_CHARACTER '\n'
 #define BAUD_RATE 9600
 
 // SERIAL VARS
+#ifdef SOFTWARE_SERIAL
+#include <SoftwareSerial.h>
+SoftwareSerial SERIAL(RX_PIN, TX_PIN);
+#endif
 char serialBuffer[SERIAL_BUFFER_SIZE]; //allow only messages of the size of eight bytes
 byte serialBufferPosition = 0;
 
@@ -44,11 +52,15 @@ void setup() {
   pinMode(LED_STATUS_PIN, OUTPUT);
   
   // start serial port
-  Serial.begin(BAUD_RATE);
+  #ifdef SOFTWARE_SERIAL
+  pinMode(RX_PIN, INPUT);
+  pinMode(TX_PIN, OUTPUT);
+  #endif
+  SERIAL.begin(BAUD_RATE);
 
   // send a byte to establish contact until receiver responds
-  while (Serial.available() <= 0) {
-    Serial.write("waiting\n");
+  while (SERIAL.available() <= 0) {
+    SERIAL.write("waiting\n");
     blinkStatusLed(1000);
   }
 
@@ -56,12 +68,15 @@ void setup() {
   while (!photocell.calibrate())
   	blinkStatusLed(100);
 
+  SERIAL.write("calibrate motor\n");
   //calibrate stepper
   stepperMotor.calibrate();
-  stepperMotor.setPosition(STEPPER_START);
 
   //enable photocell
+  SERIAL.write("calibrate pr\n");
   photocell.enable(true);
+
+  SERIAL.write("initialized\n");
 
 }
 
@@ -69,9 +84,9 @@ void loop() {
  
   byte messageReceived = false;
   // read bytes from serial port
-  while (Serial.available() > 0) {
+  while (SERIAL.available() > 0) {
     // get incoming byte:
-    char inByte = Serial.read();
+    char inByte = SERIAL.read();
 
     if (inByte == SERIAL_END_CHARACTER) {
       //received end byte
@@ -89,28 +104,37 @@ void loop() {
   // process message if there is one received
   if (messageReceived) {
 
-    //Serial.write(serialBuffer);
+    Serial.write(serialBuffer);
     
-   	if (compareSubString(serialBuffer,"sensor:?")) {
-      char response[] = "sensor:?\n";
-      response[7] = photocell.isBlocked() ? '1' : '0';
-      Serial.write(response);
-   	} else if (compareSubString(serialBuffer,"stepper:0"))
+   	if (compareSubString(serialBuffer,"pr:?")) {
+      char response[] = "pr:?\n";
+      response[3] = photocell.isBlocked() ? '1' : '0';
+      SERIAL.write(response);
+   	} else if (compareSubString(serialBuffer,"stp:0") && !stepperMotor.moving) {
       stepperMotor.setPosition(STEPPER_START);
-    else if (compareSubString(serialBuffer,"stepper:1"))
+      SERIAL.write("stp:s\n");
+   	} else if (compareSubString(serialBuffer,"stp:1") && !stepperMotor.moving) {
       stepperMotor.setPosition(STEPPER_TURN);
-    else if (compareSubString(serialBuffer,"stepper:2"))
+      SERIAL.write("stp:s\n");
+    } else if (compareSubString(serialBuffer,"stp:2") && !stepperMotor.moving) {
       stepperMotor.setPosition(STEPPER_EJECT);
+      SERIAL.write("stp:s\n");
+    } else if (compareSubString(serialBuffer,"stp:c") && !stepperMotor.moving) {
+      SERIAL.write("stp:c\n");
+      stepperMotor.calibrate();
+      SERIAL.write("stp:e\n");
+    }
     else if (compareSubString(serialBuffer,"start"))
-      Serial.write("started\n");
+      SERIAL.write("started\n");
     else
-      Serial.write("error\n");
+      SERIAL.write("error\n");
       
     clearSerialBuffer();
   }
 
   // update the stepper motors position
-  stepperMotor.update();
+  if (stepperMotor.update())
+    SERIAL.write("stp:e\n");
 
   // update photocell
   photocell.update();

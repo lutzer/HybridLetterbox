@@ -74,13 +74,15 @@ class Photocell {
       int val = analogRead(_resistorPin);
 
       if (val > _threshold) {
+        if (_reading == false)
+          _lastChanged = time;
         _reading = true;
       } else {
         // if previous reading was false
         if (_reading == true) {
           _blocked = true;
+           _lastChanged = time;
         }
-        _lastChanged = time;
         _reading = false;
       }
 

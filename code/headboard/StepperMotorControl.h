@@ -22,13 +22,12 @@ enum StepperPosition {
 
 class StepperMotorControl {
 
+  public:
+    bool moving = false;
+
   private:
     AccelStepper stepper;
-    long stepperStartPos = 0;
-
     Bounce reedSwitch;
-
-    bool moving = false;
 
   public:
     
@@ -50,11 +49,21 @@ class StepperMotorControl {
 
     void calibrate() {
 
+      moving = true;
+
       long start1 = 0;
       long start2 = 0;
 
-      Serial.println("cal:start\n");
+      this->readReedSwitch();
+      delay(100);
 
+      //check if it is already close to the start position, if yes, turn backwards
+      stepper.setSpeed(-400);
+      while (this->readReedSwitch() == LOW) {
+        this->stepper.runSpeed();
+      }
+
+      // start forward calibration
       stepper.setSpeed(400);
       while (this->readReedSwitch() == HIGH) {
         this->stepper.runSpeed();
@@ -64,23 +73,29 @@ class StepperMotorControl {
         this->stepper.runSpeed();
       }
       start2 = this->stepper.currentPosition();
+      stepper.setSpeed(0);
 
       // calculate middle position
-      this->stepperStartPos = (start2 - start1) / 2 + start1;
+      long stepperStartPos = (start2 - start1) / 2 + start1;
 
-      stepper.setSpeed(0);
-      Serial.println("cal:done\n");
+      //move to start position
+      stepper.moveTo(stepperStartPos);
+      stepper.runToPosition();
+
+      //reset current position to zero
+      stepper.setCurrentPosition(0);
+
+      moving = false;
     }
 
     void setPosition(StepperPosition position) {
       moving = true;
-      Serial.write("move:start\n");
       if (position == STEPPER_EJECT)
-        stepper.moveTo(stepperStartPos + MOTOR_FULL_TURN * 0.8);
+        stepper.moveTo(MOTOR_FULL_TURN * 0.8);
       else if (position == STEPPER_TURN)
-        stepper.moveTo(stepperStartPos + MOTOR_FULL_TURN * 0.5);
+        stepper.moveTo(MOTOR_FULL_TURN * 0.5);
       else {
-        stepper.moveTo(stepperStartPos);
+        stepper.moveTo(0);
       }
     }
 
@@ -89,13 +104,15 @@ class StepperMotorControl {
       return reedSwitch.read();
     }
 
-    void update() {
+    //returns true when reached position
+    bool update() {
       if (stepper.distanceToGo() != 0) {
         stepper.run();
       } else if (moving) {
         moving = false;
-        Serial.write("move:done\n");
+        return true;
       }
+      return false;
     }
 };
 
