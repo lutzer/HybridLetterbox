@@ -8,31 +8,18 @@
 
  ![driver-ic-of-motor](images/driver-ic-of-motor.png)
 
+## Camera Board
+
+* Transistor Base: 330 Ohm Resistor to GPIO
+* Transitor: 547 NPN
+* LED 20mA Through hole White:  Resistor 100 Ohm each
+* SMD LEDs white 3x20mA: http://www.produktinfo.conrad.com/datenblaetter/175000-199999/183097-da-01-en-LED_TOP_VIEW_NEUTRALWS_STW9T36B_D.pdf
+  * missing triangular edge marks the vcc pins, opposite site is gnd **(check before soldering, normally it should be the other way around)**
+  * resistor for SMD LED (60mA) 3.2 V: 33 Ohm
 
 
-#### Servo
 
-* GPIO 18
-* -Ground
-* +5V
 
-#### LED
 
-* GPIO 22
-* -Ground
-* +5V
-* Resistor: 40 Ohm
-* Array: Bourns 4116R-1-470LF (8 resistors)
-* <http://www.conrad.com/ce/en/product/1055170/Bourns-4116R-1-470LF?ref=list>
 
-#### Photoresistor
 
-* GPIO 4
-* -GROUND
-* +3V
-
-#### Powerswitch
-
-* GPIO 17
-* -GROUND
-* +3V

@@ -91,8 +91,8 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 2. pacman -S python2-pip
 3. pip2 install pyserial
 4. pip2 install picamera
-5. pip2 install requests & pip2 install gerequests
-6. pip2 install RPi.GPIO
+5. pip2 install RPi.GPIO
+6. pip2 install requests & pip2 install gerequests
 7. pacman -S python2-scipy
 
 ## Enable Serial Connection
