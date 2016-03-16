@@ -97,11 +97,20 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 
 ## Enable Serial Connection
 
-prevent rasp pi from broadcasting boot messages over serial
+see  http://rpi900.com/tutorials/using-the-serial-port.html
+
+* prevent rasp pi from broadcasting boot messages over serial
+
 
 - `sudo nano /boot/cmdline.txt`
-- change content to `root=/dev/mmcblk0p2 rw rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop` (delete both entries with xxxx=ttyAMA0,115)
-- enable tty: `sudo systemctl enable getty\@tty1.service
+  - change content to `root=/dev/mmcblk0p2 rw rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop` (delete both entries with xxxx=ttyAMA0,115)
+- disable terminal service for serial port: `sudo systemctl disable serial-getty@ttyAMA0.service`
+- give user letterbox access to serial console: `$sudo usermod -a -G uucp letterbox` and reopen terminal
+- configure serial port to use 9600 baud `stty -F /dev/ttyAMA0 9600`
+- install picocom for testing: `sudo pacman -S picocom`
+  - start serial monitor: `picocom -b 9600 /dev/ttyAMA0`
+  - send commands by just typing in picocom **(Newline charatcter is send as \r)** or by sending `echo "Command" > /dev/ttyAMA0` (newline character is send as \n)
+
 
 ### Setup Camera
 
