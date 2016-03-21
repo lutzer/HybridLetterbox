@@ -70,7 +70,6 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 
 2. enable ntpd: `systemctl enable ntpd`
 
-   ​
 
 ### Install and Setup Nodejs Webserver
 
@@ -85,21 +84,11 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
     iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
    ```
 
-### Install Python 2
-
-1. sudo pacman -S python2 gcc
-2. pacman -S python2-pip
-3. pip2 install pyserial
-4. pip2 install picamera
-5. pip2 install RPi.GPIO
-6. pip2 install requests & pip2 install gerequests
-7. pacman -S python2-scipy
-
-## Enable Serial Connection
+### Enable Serial Connection
 
 see  http://rpi900.com/tutorials/using-the-serial-port.html
 
-* prevent rasp pi from broadcasting boot messages over serial
+- prevent rasp pi from broadcasting boot messages over serial
 
 
 - `sudo nano /boot/cmdline.txt`
@@ -111,12 +100,11 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
   - start serial monitor: `picocom -b 9600 /dev/ttyAMA0`
   - send commands by just typing in picocom **(Newline charatcter is send as \r)** or by sending `echo "Command" > /dev/ttyAMA0` (newline character is send as \n)
 
-
 ### Setup Camera
 
 1. nano /boot/config.txt, add following lines to the end:
 
-   ``` shell
+   ```shell
    ## Enable Camera
    start_file=start_x.elf
    fixup_file=fixup_x.dat
@@ -124,7 +112,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 2. nano ~/.bashrc:
 
-   ``` shell
+   ```shell
    # add camera commands to path
    export PATH=$PATH:/opt/vc/bin
    ```
@@ -141,11 +129,21 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 5. to test camera: `raspistill -o image.jpg` or `raspistill -t 99999`
 
-   * more info here: https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspistill.md
+   - more info here: https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspistill.md
 
 6. install python lib: pip install picamera
 
-   * also install: sudo pacman -S python-pillow (PIL image lib)
+   - ## also install: sudo pacman -S python-pillow (PIL image lib)
+
+### Install Python 2
+
+1. sudo pacman -S python2 gcc
+2. pacman -S python2-pip
+3. pip2 install pyserial
+4. pip2 install picamera
+5. pip2 install RPi.GPIO
+6. pip2 install requests & pip2 install gerequests
+7. pacman -S python2-scipy
 
 ### Connect Servo
 
@@ -243,8 +241,6 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 TODO
 
-
-
 ## Configure Tp-Link Router
 
 * first **upgarde firmware**! Then install configuration image or configure it manually.
@@ -254,3 +250,10 @@ TODO
 ## Configure Attiny Head Board
 
 see  [attiny-installation.md](attiny-installation.md)
+
+
+
+## Calibrate Camera
+
+* copy calibration file to current dir: `scp letterbox@192.168.72.2:/home/letterbox/image-grid.jpg ./`
+
