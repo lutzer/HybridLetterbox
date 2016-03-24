@@ -69,6 +69,7 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 1. install time deamon ntpd: `pacman -S ntp`
 
 2. enable ntpd: `systemctl enable ntpd`
+3. install additional packages: `git,`
 
 
 ### Install and Setup Nodejs Webserver
@@ -97,7 +98,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 - give user letterbox access to serial console: `$sudo usermod -a -G uucp letterbox` and reopen terminal
 - configure serial port to use 9600 baud `stty -F /dev/ttyAMA0 9600`
 - install picocom for testing: `sudo pacman -S picocom`
-  - start serial monitor: `picocom -b 9600 /dev/ttyAMA0`
+  - start serial monitor: `picocom -b 9600 /dev/ttyAMA0` or by `cat /dev/ttyAMA0 `
   - send commands by just typing in picocom **(Newline charatcter is send as \r)** or by sending `echo "Command" > /dev/ttyAMA0` (newline character is send as \n)
 
 ### Setup Camera
@@ -256,4 +257,3 @@ see  [attiny-installation.md](attiny-installation.md)
 ## Calibrate Camera
 
 * copy calibration file to current dir: `scp letterbox@192.168.72.2:/home/letterbox/image-grid.jpg ./`
-

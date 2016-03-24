@@ -24,13 +24,16 @@
 
 ### Photoresistor
 
-* Pin 23 (A0) with 
+* Pin 23 (A0) with 10 kOhm pulldown resistor
 
 ### Serial Connector
 
 * 10uF 50V Capacitor (Footprint: D5 L11)
 * 10 kOhm Resistor to 5V
-* m
+* TX: PIN1, RX: PIN0
 
 
+### Reed Switch
+
+* PIN4 with 10 kOhm Current limiting resistor
 

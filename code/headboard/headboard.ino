@@ -6,9 +6,11 @@
 */
 
 /* 
-* Sketch for the attiny, placed on the Hybrid Letterboxes Pi Headboard,
+* Sketch for the atmega328, placed on the Hybrid Letterboxes Pi Headboard,
 * Manages Stepper motor, reed switch for positioning, and photoresistor for
 * detecting Postcards
+* 
+* Upload as "Lilypad Arduino" with atmega328.
 */
 
 #include <string.h>
@@ -18,7 +20,7 @@
 // PIN LAYOUTS
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
 #define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
-#define PHOTORESISTOR_LED_PIN 9 //CONNECT PHOTORESISTOR LED TO THIS
+#define PHOTORESISTOR_LED_PIN 3 //CONNECT PHOTORESISTOR LED TO THIS
 #define MOTOR_PIN1  8 // IN1 on the ULN2003 driver 1
 #define MOTOR_PIN2  7 // IN2 on the ULN2003 driver 1
 #define MOTOR_PIN3  6 // IN3 on the ULN2003 driver 1
@@ -28,8 +30,8 @@
 // SERIAL PARAMETERS
 #define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
 #define SERIAL softwareSerial // change to Serial for using normal Serial
-#define RX_PIN 0 //only used  for software serial
-#define TX_PIN 1 //only used for software serial
+#define RX_PIN 1 //only used  for software serial
+#define TX_PIN 0 //only used for software serial
 #define SERIAL_BUFFER_SIZE 16
 #define SERIAL_END_CHARACTER '\n'
 #define BAUD_RATE 9600
@@ -43,8 +45,11 @@ char serialBuffer[SERIAL_BUFFER_SIZE]; //allow only messages of the size of eigh
 byte serialBufferPosition = 0;
 
 // MOTOR VARS
-StepperMotorControl stepperMotor(MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4, REED_PIN);
+StepperMotorControl stepperMotor(MOTOR_PIN1, MOTOR_PIN3, MOTOR_PIN2, MOTOR_PIN4, REED_PIN);
 Photocell photocell(PHOTORESISTOR_PIN,PHOTORESISTOR_LED_PIN);
+
+// function makes the arduino reset
+void (* resetArduino) (void) = 0;
 
 void setup() {
 
@@ -77,6 +82,7 @@ void setup() {
   photocell.enable(true);
 
   SERIAL.write("initialized\n");
+  digitalWrite(LED_STATUS_PIN,HIGH); // turn status led on
 
 }
 
@@ -126,6 +132,8 @@ void loop() {
     }
     else if (compareSubString(serialBuffer,"start"))
       SERIAL.write("started\n");
+    else if (compareSubString(serialBuffer,"reset"))
+      resetArduino();
     else
       SERIAL.write("error\n");
       
@@ -160,4 +168,5 @@ void blinkStatusLed(int delaytime) {
   digitalWrite(LED_STATUS_PIN,LOW);
   delay(delaytime);
 }
+
 

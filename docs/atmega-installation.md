@@ -70,3 +70,13 @@ see http://www.gammon.com.au/forum/?id=11637 or https://www.arduino.cc/en/Tutori
   except KeyboardInterrupt:
       ser.close()
   ```
+
+## Problems
+
+* Headboard
+  * Make Serial port a 5 pin port (rx, tx, vcc, gnd, dts) to be able to program atmega with turned of rasp pi. or: jumper to block serial connection to rasp pi
+  * Connect all gnds,5v and 3v together to be able to power it from another power src than rasp pi
+  * mixed up RX and TX Connection to rasp pi
+  * Feedback LED on wrong pin for wpm: do we need that?
+* Camera Board
+  * Move power connector to bottom side

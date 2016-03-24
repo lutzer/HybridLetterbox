@@ -35,7 +35,7 @@ class StepperMotorControl {
     
     StepperMotorControl(byte motorPin1, byte motorPin2, byte motorPin3, byte motorPin4, byte reedPin) {
       // setup motor
-      stepper = AccelStepper(HALFSTEP, motorPin1, motorPin3, motorPin2, motorPin4);
+      stepper = AccelStepper(HALFSTEP, motorPin1, motorPin2, motorPin3, motorPin4);
       stepper.setMaxSpeed(MOTOR_MAX_SPEED);
       stepper.setAcceleration(MOTOR_ACCELLERATION);
       stepper.setSpeed(0);
