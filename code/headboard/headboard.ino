@@ -70,8 +70,11 @@ void setup() {
   }
 
   //calibrate photocell
-  while (!photocell.calibrate())
+  // TODO: write calibration error function
+  while (!photocell.calibrate()) {
   	blinkStatusLed(100);
+      
+  }
 
   SERIAL.write("calibrate motor\n");
   //calibrate stepper

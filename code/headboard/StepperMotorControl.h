@@ -47,6 +47,7 @@ class StepperMotorControl {
       reedSwitch.interval(DEBOUNCE_INTERVAL);
     }
 
+    // TODO: add calibration error function
     void calibrate() {
 
       moving = true;
