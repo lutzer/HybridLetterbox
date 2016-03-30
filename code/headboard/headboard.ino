@@ -30,11 +30,14 @@
 // SERIAL PARAMETERS
 #define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
 #define SERIAL softwareSerial // change to Serial for using normal Serial
-#define RX_PIN 1 //only used  for software serial
-#define TX_PIN 0 //only used for software serial
+#define RX_PIN 1 //only used  for software serial, rx = 0
+#define TX_PIN 0 //only used for software serial, tx = 1
 #define SERIAL_BUFFER_SIZE 16
 #define SERIAL_END_CHARACTER '\n'
 #define BAUD_RATE 9600
+
+// OTHER PARAMETERS
+#define CALIBRATION_TRIES 10
 
 // SERIAL VARS
 #ifdef SOFTWARE_SERIAL
@@ -64,16 +67,25 @@ void setup() {
   SERIAL.begin(BAUD_RATE);
 
   // send a byte to establish contact until receiver responds
-  while (SERIAL.available() <= 0) {
-    SERIAL.write("waiting\n");
-    blinkStatusLed(1000);
+  while (true) {
+    if (readSerialMessages()) {
+      if (compareSubString(serialBuffer,"start"))
+         break;
+      clearSerialBuffer();
+    }
+    //SERIAL.write("waiting\n");
+    blinkStatusLed(50);
   }
 
   //calibrate photocell
-  // TODO: write calibration error function
-  while (!photocell.calibrate()) {
-  	blinkStatusLed(100);
-      
+  SERIAL.write("calibrate photocell\n");
+  int i = 0;
+  while(!photocell.calibrate()) {
+    blinkStatusLed(100);
+    if (i >= CALIBRATION_TRIES -1) {
+      resetArduino();
+    }
+    i++;
   }
 
   SERIAL.write("calibrate motor\n");
@@ -81,39 +93,18 @@ void setup() {
   stepperMotor.calibrate();
 
   //enable photocell
-  SERIAL.write("calibrate pr\n");
   photocell.enable(true);
 
-  SERIAL.write("initialized\n");
   digitalWrite(LED_STATUS_PIN,HIGH); // turn status led on
-
+  
+  clearSerialBuffer();
+  SERIAL.write("started\n");
 }
 
 void loop() {
  
-  byte messageReceived = false;
-  // read bytes from serial port
-  while (SERIAL.available() > 0) {
-    // get incoming byte:
-    char inByte = SERIAL.read();
-
-    if (inByte == SERIAL_END_CHARACTER) {
-      //received end byte
-      messageReceived = true;
-    } else if (serialBufferPosition < SERIAL_BUFFER_SIZE) {
-      //add one byte
-      serialBuffer[serialBufferPosition] = inByte;
-      serialBufferPosition++;
-    } else {
-      //overflow
-      clearSerialBuffer();
-    }
-  }
-
   // process message if there is one received
-  if (messageReceived) {
-
-    Serial.write(serialBuffer);
+  if (readSerialMessages()) {
     
    	if (compareSubString(serialBuffer,"pr:?")) {
       char response[] = "pr:?\n";
@@ -138,8 +129,8 @@ void loop() {
     else if (compareSubString(serialBuffer,"reset"))
       resetArduino();
     else
-      SERIAL.write("error\n");
-      
+      SERIAL.write("?\n");
+
     clearSerialBuffer();
   }
 
@@ -149,6 +140,27 @@ void loop() {
 
   // update photocell
   photocell.update();
+}
+
+boolean readSerialMessages() {
+  while (SERIAL.available() > 0) {
+    // get incoming byte:
+    char inByte = SERIAL.read();
+    
+    if (inByte == SERIAL_END_CHARACTER) {
+      //received end byte
+      return true;
+    } else if (serialBufferPosition < SERIAL_BUFFER_SIZE) {
+      //add one byte
+      serialBuffer[serialBufferPosition] = inByte;
+      serialBufferPosition++;
+    } else {
+      //overflow
+      clearSerialBuffer();
+    }
+    
+    return false; // no end byte received
+  }
 }
 
 void clearSerialBuffer() {

@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-29 17:10:16
+# @Last Modified time: 2016-03-30 14:57:40
 
 from SerialThread import *
 import RPi.GPIO as GPIO
@@ -23,17 +23,18 @@ class LetterboxControl:
 		if (cleanup == False):
 			GPIO.setwarnings(False)
 
+		self.cleanup = cleanup
+
         # init pins
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(FEEDBACK_LED_PIN, GPIO.OUT)
 		GPIO.setup(CAMERA_LED_PIN, GPIO.OUT)
 
-		# opern serial connection
+		# open serial connection to headboard
 		self.serial = SerialThread(SERIAL_ADDRESS, SERIAL_BAUDRATE)
 		self.serial.start();
 
-		self.cleanup = cleanup
-
+		self.init();
 
 	def __del__(self):
 		if (self.cleanup):
@@ -45,6 +46,20 @@ class LetterboxControl:
     #################### 
 	# CONTROL HARDWARE FUNCTIONS #
 	####################
+	
+	# start atmega on headboard
+	def init(self):
+		logger.info("init headboard")
+		
+		self.serial.clear()
+		self.serial.sendMessage("start")
+		while (True):
+			response = self.serial.waitForResponse()
+			if (response == "started"):
+				break;
+
+		logger.info("init headboard done")
+
 
 	def toggleFeedbackLed (self,on):
 		if (on):
@@ -60,5 +75,4 @@ class LetterboxControl:
 
 	def checkPhotocell(self):
 		self.serial.sendMessage("pr:?")
-		response = self.serial.waitForResponse()
-		return response
+		return self.serial.waitForResponse()
