@@ -2,11 +2,12 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 14:57:40
+# @Last Modified time: 2016-03-30 16:06:49
 
 from SerialThread import *
 import RPi.GPIO as GPIO
 import logging
+from enum import Enum
 
 # CONSTANTS
 FEEDBACK_LED_PIN = 24
@@ -14,7 +15,14 @@ CAMERA_LED_PIN = 4
 SERIAL_BAUDRATE = 9600
 SERIAL_ADDRESS = "/dev/ttyAMA0"
 
+STEPPER_TIMEOUT = 8 #8 seconds for making a full turn
+
 logger = logging.getLogger(__name__)
+
+class StepperPosition(Enum):
+	START = 0
+	TURN = 1
+	EJECT = 2
 
 # Class Controls the Hardware of the Letterbox
 class LetterboxControl:
@@ -60,7 +68,6 @@ class LetterboxControl:
 
 		logger.info("init headboard done")
 
-
 	def toggleFeedbackLed (self,on):
 		if (on):
 			GPIO.output(FEEDBACK_LED_PIN, GPIO.HIGH)
@@ -76,3 +83,18 @@ class LetterboxControl:
 	def checkPhotocell(self):
 		self.serial.sendMessage("pr:?")
 		return self.serial.waitForResponse()
+
+	def setStepperPosition(self,pos):
+		self.serial.sendMessage("stp:"+str(pos))
+		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
+
+	def calibrateStepper(self):
+		self.serial.sendMessage("stp:c")
+		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
+
+		# resets and recalibrates the headboard
+	def reset(self):
+		logger.info("resetting headboard")
+		self.serial.sendMessage('reset')
+		time.sleep(2) # give the headboard 2 seconds to reset
+		self.init()

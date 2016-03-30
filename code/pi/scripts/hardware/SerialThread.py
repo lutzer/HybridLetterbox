@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-29 16:36:22
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 14:53:04
+# @Last Modified time: 2016-03-30 15:49:23
 
 from __future__ import with_statement
 from serial import Serial
@@ -77,13 +77,14 @@ class SerialThread(Thread):
 			return self.messageQueue.pop(); 
 
 	# waits for a number of seconds for the first serial response
-	def waitForResponse(self,timeout = RESPONSE_TIMEOUT):
+	def waitForResponse(self,text=False,timeout = RESPONSE_TIMEOUT):
 		startTime = time.time()
 
 		while (time.time() < startTime + timeout):
 			message = self.popMessage()
 			if message != False:
-				return message
+				if (text == False or message == text):
+					return message
 			time.sleep(DELAY_BETWEEN_READINGS)
 
 		return False

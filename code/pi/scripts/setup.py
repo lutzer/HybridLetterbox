@@ -3,14 +3,14 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 14:58:07
+# @Last Modified time: 2016-03-30 16:08:11
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
 import logging
 
 # debug options
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 lbControl = False
 
@@ -22,9 +22,8 @@ lbControl = False
 
 def led_command(off=False,name='cam'):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""
-
+	
 	global lbControl
-
 	from hardware.LetterboxControl import LetterboxControl
 	lbControl = LetterboxControl(cleanup=False)
 
@@ -39,11 +38,10 @@ def led_command(off=False,name='cam'):
 
 def photocell_command(repeat=1):
 	"""Gets a reading from the photocell"""
-	#global lbControl
-
+	
+	global lbControl
 	from hardware.LetterboxControl import LetterboxControl
-
-	lbControl = LetterboxControl(cleanup=False)
+	lbControl = LetterboxControl()
 
 	for n in range(0,repeat):
 		response = lbControl.checkPhotocell();
@@ -51,6 +49,33 @@ def photocell_command(repeat=1):
 			print response
 		else:
 			print "Timed out"
+
+def reset_command():
+	'''Resets the headboard'''
+
+	global lbControl
+	from hardware.LetterboxControl import LetterboxControl
+	lbControl = LetterboxControl()
+
+	lbControl.reset();
+
+def stepper_command(pos=0,calibrate=False):
+	'''Turns or calibrates the stepper motor'''
+	global lbControl
+	from hardware.LetterboxControl import LetterboxControl
+	lbControl = LetterboxControl()
+
+	if (calibrate):
+		if lbControl.calibrateStepper() == False:
+			print "Error: Stepper could not calibrate"
+		else:
+			print "Stepper calibrated succesfully."
+	else:
+		if lbControl.setStepperPosition(pos) == False:
+			print "Error: Stepper did not reach position."
+		else:
+			print "Stepper reached position."
+
 
 if __name__ == '__main__':
 	import scriptine
