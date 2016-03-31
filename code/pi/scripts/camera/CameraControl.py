@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-03-31 11:22:00
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-03-31 18:07:55
 
 import picamera
 import cv2
@@ -15,33 +15,34 @@ logger = logging.getLogger(__name__)
 
 
 # CAMERA PARAMETERS
-CAMERA_WHITE_BALANCE = 3000
-CAMERA_SHUTTER_SPEED = 0.01
+CAMERA_WHITE_BALANCE = 4.0 # 0.0 - 8.0
+CAMERA_SHUTTER_SPEED = 100 # in miliseconds
 CAMERA_ISO = 800
 CAMERA_RESOLUTION = (1600, 1200)
 
 # Class Controls the Camera
 class CameraControl:
-	def __init__(self):
+	def __init__(self,automode=False):
 		logger.info('init PiCamera')
 		self.camera = None
 
 		logger.info('starting  camera...')
-		self.startCamera()
+		self.startCamera(automode)
 
 	def __del__(self):
 		self.stopCamera()
 		logger.info("cleaned up CameraControl")
 
-	def startCamera (self):
+	def startCamera (self,automode):
 		self.camera = picamera.PiCamera()
-		self.camera.framerate = 5
-		self.camera.exposure_mode = 'off'
-		self.camera.shutter_speed = CAMERA_SHUTTER_SPEED
-		self.camera.awb_mode = 'off'
-		self.camera.awb_gains = CAMERA_WHITE_BALANCE
-		self.camera.ISO = CAMERA_ISO
-		self.camera.resolution = CAMERA_RESOLUTION
+		if not automode:
+			self.camera.framerate = 2
+			self.camera.exposure_mode = 'off'
+			self.camera.shutter_speed = CAMERA_SHUTTER_SPEED * 1000
+			self.camera.awb_mode = 'off'
+			self.camera.awb_gains = CAMERA_WHITE_BALANCE
+			self.camera.ISO = CAMERA_ISO
+			self.camera.resolution = CAMERA_RESOLUTION
 		time.sleep(1) # warmup time
 
 	def stopCamera(self):
@@ -58,8 +59,7 @@ class CameraControl:
 		logger.info('image taken')
 		return image
 
-	def startPreview(self):
+	def startPreview(self,duration=1):
 		logger.info("started camera preview")
-		camera.start_preview()
-		while True:
-			time.sleep(1)
+		self.camera.start_preview()
+		time.sleep(duration)
