@@ -31,7 +31,21 @@
 
 ### Resize partition
 
-http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
+```
+sudo fdisk /dev/mmcblk0
+-----
+* press p to print partion table:
+Device         Boot  Start     End Sectors  Size Id Type
+/dev/mmcblk0p1        2048  206847  204800  100M  c W95 FAT32 (LBA)
+/dev/mmcblk0p2      206848 3913726 3706879  1.8G 83 Linux
+* take note of start sector of Linux partition: 206848
+* press d -> 2 to delete second partition
+* prress n -> p -> 2 to create primary partition on number 2 with startsector as noted before. choose end sector whatever size you need your partition to be.
+* press w to write partion table
+-----
+sudo reboot
+sudo resize2fs /dev/mmcblk0p2
+```
 
 ### Setup ip adress of pi or skip or use dhcp server
 
@@ -157,21 +171,10 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 2. pacman -S opencv (also includes python cv2 wrapper)
 
-3. (optional) create compile script: only if you wanna write c code
+   1. might need to upgrade nettle and gnutls by `pacman -S gnutls nettle`
 
-   ``` shell
-   #filename: compile.sh
-   #adjust path to source code
-   cd /root
+   2. also `sudo pip2 install numpy`
 
-   PKG_CONFIG_PATH=/usr/lib/pkgconfig:${PKG_CONFIG_PATH}
-   export PKG_CONFIG_PATH
-
-   #adjust name of output file and code file
-   g++ $(pkg-config --cflags --libs opencv) -lm -o image image.c
-   ```
-
-## Copying Scripts
 
 ### Configure Git Sparse Checkout
 
@@ -265,8 +268,6 @@ TODO
 ## Configure Attiny Head Board
 
 see  [attiny-installation.md](attiny-installation.md)
-
-
 
 ## Calibrate Camera
 
