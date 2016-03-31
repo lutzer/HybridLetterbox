@@ -2,23 +2,24 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 16:08:11
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-03-31 11:48:38
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
 import logging
 
 # debug options
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 lbControl = False
 
-# def camera_command(focus=True):
-#     """Opens a camera window to focus the lens"""
-#     from camera.CameraControl import CameraControl
-#     camera = CameraControl()
-#     del camera
+def camera_command(focus=True,calibrate=False,extract=False):
+	"""Opens a camera window to focus the lens"""
+	from camera.CameraControl import CameraControl
+	camera = CameraControl()
+	camera.startPreview()
+	del camera
 
 def led_command(off=False,name='cam'):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""

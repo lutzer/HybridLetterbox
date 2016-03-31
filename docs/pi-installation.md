@@ -134,7 +134,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 6. install python lib: pip install picamera
 
-   - ## also install: sudo pacman -S python-pillow (PIL image lib)
+   -  also install: sudo pacman -S python-pillow (PIL image lib)
 
 ### Install Python 2
 
@@ -171,7 +171,21 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
    g++ $(pkg-config --cflags --libs opencv) -lm -o image image.c
    ```
 
-## After Copying Scripts
+## Copying Scripts
+
+### Configure Git Sparse Checkout
+
+* go to home directory
+
+* ```
+  mkdir HybridLetterbox
+  cd HybridLetterbox
+  git init https://github.com/lutzer/HybridLetterbox.git
+  git config core.sparsecheckout true
+  echo code/pi/scripts/ >> .git/info/sparse-checkout
+  git read-tree -mu HEAD
+  git pull
+  ```
 
 ### Autostart Python Scripts
 
