@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-03-31 14:39:06
+# @Last Modified time: 2016-03-31 14:43:57
 
 from SerialThread import *
 import RPi.GPIO as GPIO
@@ -70,9 +70,9 @@ class LetterboxControl:
 
 	def blinkFeedbackLed(self,times=20,delay=0.1):
 		for i in range(0,times):
-			lbControl.toggleCameraLed(True)
+			self.toggleCameraLed(True)
 			time.sleep(delay)
-			lbControl.toggleCameraLed(False)
+			self.toggleCameraLed(False)
 			time.sleep(delay)
 
 	def toggleFeedbackLed (self,on):
