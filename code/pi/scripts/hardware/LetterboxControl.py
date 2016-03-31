@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 16:06:49
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-03-31 14:39:06
 
 from SerialThread import *
 import RPi.GPIO as GPIO
@@ -67,6 +67,13 @@ class LetterboxControl:
 				break;
 
 		logger.info("init headboard done")
+
+	def blinkFeedbackLed(self,times=20,delay=0.1):
+		for i in range(0,times):
+			lbControl.toggleCameraLed(True)
+			time.sleep(delay)
+			lbControl.toggleCameraLed(False)
+			time.sleep(delay)
 
 	def toggleFeedbackLed (self,on):
 		if (on):

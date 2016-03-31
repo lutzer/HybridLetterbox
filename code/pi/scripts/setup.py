@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-03-31 11:48:38
+# @Last Modified time: 2016-03-31 14:40:43
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -21,7 +21,7 @@ def camera_command(focus=True,calibrate=False,extract=False):
 	camera.startPreview()
 	del camera
 
-def led_command(off=False,name='cam'):
+def led_command(off=False,name='cam',blink=0):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""
 	
 	global lbControl
@@ -33,7 +33,10 @@ def led_command(off=False,name='cam'):
 	if (name == 'cam'):
 		lbControl.toggleCameraLed(not off)
 	elif (name == 'feedback'):
-		lbControl.toggleFeedbackLed(not off)
+		if blink > 0:
+			lbControl.blinkFeedbackLed(blink)
+		else:
+			lbControl.toggleFeedbackLed(not off)
 	else:
 		print "led can either be 'cam' or 'feedback'"
 
