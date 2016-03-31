@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-29 16:36:22
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-03-30 15:49:23
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-03-31 15:42:38
 
 from __future__ import with_statement
 from serial import Serial
@@ -12,7 +12,7 @@ import logging
 
 SERIAL_MESSAGE_TERMINATOR = '\n'
 DELAY_BETWEEN_READINGS = 0.005 # 5 miliseconds
-RESPONSE_TIMEOUT = 5.0 # 1 second
+RESPONSE_TIMEOUT = 2.0 # 2 seconds
 
 logger = logging.getLogger(__name__)
 
