@@ -11,16 +11,17 @@ import logging
 
 CHESSBOARD_ROWS = 8
 CHESSBOARD_COLUMNS = 11
-CALIBRATION_MATRIX_FILE = "calibration_matrix.json"
 
 logger = logging.getLogger(__name__)
 
 class CameraCalibrator:
 
-	def __init__(self):
+	def __init__(self,matrixFile=False):
 		self.calibrationData = False
+		if (matrixFile != False):
+			self.loadCalibrationMatrix(matrixFile)
 
-	def createCalibrateMatrix(self,input_images):
+	def createCalibrationMatrix(self,input_images):
 
 		# termination criteria
 		criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -33,11 +34,11 @@ class CameraCalibrator:
 		objpoints = [] # 3d point in real world space
 		imgpoints = [] # 2d points in image plane.
 
-		if (len(self.input_images) < 1):
+		if (len(input_images) < 1):
 			logger.info("Could not calibrate, no pictures taken")
 			return
 
-		logger.info("Calibrate Camera using " + len(self.input_images) + "images.")
+		logger.info("Calibrate Camera using " + str(len(input_images)) + " images.")
 
 		for img in input_images:
 		    gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
@@ -47,7 +48,7 @@ class CameraCalibrator:
 
 		    # If found, add object points, image points (after refining them)
 		    if ret == True:
-		        print "found chessboard in "+fname;
+		        logger.debug("found chessboard")
 		        objpoints.append(objp)
 
 		        cv2.cornerSubPix(gray,corners,(11,11),(-1,-1),criteria)
@@ -56,6 +57,8 @@ class CameraCalibrator:
 		        # Draw and display the corners
 		        #cv2.drawChessboardCorners(img, (CHESSBOARD_ROWS,CHESSBOARD_COLUMNS), corners,ret)
 		        #showImage(img,500)
+		    else:
+		    	logger.debug("didnt find chessboard")
 		
 		# create calibration matrix
 		logger.info("Creating calibration matrix")
@@ -64,26 +67,26 @@ class CameraCalibrator:
 		# if successfull save calibration values
 		if (ret):
 			self.calibrationData = {
-		        "camera_matrix" : mtx.tolist(), 
-		        "dist_coeff" : dist.tolist()
-	    	}
-		    logger.info("calibration succesfull.")
+			"camera_matrix" : mtx.tolist(), 
+			"dist_coeff" : dist.tolist()
+			}
+			logger.info("calibration succesfull.")
 		else:
-		    logger.info("calibration failed.")
+			logger.info("calibration failed.")
 
-	def writeCalibrationMatrix(self):
-		with open(CALIBRATION_MATRIX_FILE, "w") as file:
-       		json.dump(self.calibrationData, file)
+	def writeCalibrationMatrix(self,path):
+		with open(path, "w") as file:
+			json.dump(self.calibrationData, file)
 
-    def loadCalibrationMatrix(self):
-	    with open(CALIBRATION_MATRIX_FILE) as file:    
-	        self.calibrationData = json.load(file)
-	    return data;
+	def loadCalibrationMatrix(self,path):
+		with open(path) as file:    
+			self.calibrationData = json.load(file)
+		return self.calibrationData;
 	
 	def undistortImage(self,img):
-		if (self.calibrationData == False)
+		if (self.calibrationData == False):
 			return img
 
 		h,  w = img.shape[:2]
-	    img = cv2.undistort(img, np.asarray(self.calibrationData['camera_matrix']), np.asarray(self.calibrationData['dist_coeff']), None)
-	    return img
+		img = cv2.undistort(img, np.asarray(self.calibrationData['camera_matrix']), np.asarray(self.calibrationData['dist_coeff']), None)
+		return img

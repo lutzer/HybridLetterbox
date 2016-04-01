@@ -4,7 +4,7 @@
 # @Last Modified by:   lutzer
 # @Last Modified time: 2016-03-31 14:43:57
 
-from SerialThread import *
+from serialThread import *
 import RPi.GPIO as GPIO
 import logging
 from enum import Enum
@@ -61,12 +61,13 @@ class LetterboxControl:
 		
 		self.serial.clear()
 		self.serial.sendMessage("start")
-		while (True):
-			response = self.serial.waitForResponse()
-			if (response == "started"):
-				break;
-
-		logger.info("init headboard done")
+		response = self.serial.waitForResponse(text="started",timeout=20)
+		if (response == False):
+			logger.info("init headboard timed out")
+			return response
+		else:
+			logger.info("init headboard done")
+			return response
 
 	def blinkFeedbackLed(self,times=20,delay=0.1):
 		for i in range(0,times):
@@ -104,4 +105,4 @@ class LetterboxControl:
 		logger.info("resetting headboard")
 		self.serial.sendMessage('reset')
 		time.sleep(2) # give the headboard 2 seconds to reset
-		self.init()
+		return self.init()
