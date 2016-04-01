@@ -8,7 +8,7 @@
 # CV PARAMETERS
 RESIZE_FACTOR = 0.5
 
-class ImageExtractor:
+class CardScanner:
 
 	def __init__(self,image):
 		self.image = image

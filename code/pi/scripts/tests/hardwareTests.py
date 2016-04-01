@@ -41,11 +41,12 @@ class HardwareTests(unittest.TestCase):
 	def test_stepperMovement(self):
 		from ..hardware.letterboxControl import LetterboxControl
 		lbControl = LetterboxControl()
-		self.assertIsNot(lbControl.setStepperPosition(0),False)
-		self.assertIsNot(lbControl.setStepperPosition(1),False)
-		self.assertIsNot(lbControl.setStepperPosition(2),False)
+		self.assertEquals(lbControl.setStepperPosition(2),"stp:e")
+		self.assertIsNot(lbControl.setStepperPosition(1),"stp:e")
+		self.assertIsNot(lbControl.setStepperPosition(0),"stp:e")
 
 	def test_stepperCalibration(self):
 		from ..hardware.letterboxControl import LetterboxControl
 		lbControl = LetterboxControl()
-		self.assertIsNot(lbControl.calibrateStepper(),False)
+		lbControl.setStepperPosition(1)
+		self.assertIsNot(lbControl.calibrateStepper(),"stp:e")
