@@ -5,7 +5,7 @@
 # @Last Modified time: 2016-03-31 16:10:09
 
 # call unit test from code/pi folder with python2 -m scripts.tests or 
-# run specific test classes with python2 unittest scripts.test.modulename
+# run specific test classes with python2 -m unittest scripts.test.modulename
 
 import unittest
 import logging
