@@ -48,7 +48,7 @@ see http://www.gammon.com.au/forum/?id=11637 or https://www.arduino.cc/en/Tutori
 
 ## Serial Connection with rasp pi
 
-* Connect GND to GND, Atmega TX (pin2) to GPIO 15 (RXD), Atmega RX (pin3) to GPIO 14 (TXD)
+* Connect GND to GND, Atmega RX (pin2) to GPIO 14 (TXD), Atmega TX (pin3) to GPIO 15 (TXD)
 * **Make sure atmega runs on 3.3V**
 * prevent rasp pi from broadcasting boot messages over serial
   * `sudo nano /boot/cmdline.txt`

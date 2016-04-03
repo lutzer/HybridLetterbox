@@ -16,3 +16,9 @@
 
 ### Node Testscripts
 
+
+
+### Configure Atmega Head Board
+
+see  [atmega-installation.md](atmega-installation.md)`
+
