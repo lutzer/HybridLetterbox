@@ -5,11 +5,15 @@
 #include <Bounce2.h>
 #include "AccelStepper.h"
 
-#define HALFSTEP 8
 #define MOTOR_MAX_SPEED 1000.0
-#define MOTOR_ACCELLERATION 250.0
+#define MOTOR_ACCELLERATION 500.0
+#define MOTOR_CALIBRATION_SPEED 300.0
 #define MOTOR_FULL_TURN 64*64
+#define MOTOR_GEAR_OFFSET 0 //If the steppers gearbox axis is loose, correct calibration position by this offset
 #define NUM_MOTOR_PINS 4
+#define HALFSTEP 8
+
+#define LED_STATUS_PIN 13
 
 //reed switch debounce interval
 #define DEBOUNCE_INTERVAL 10 //in miliseconds
@@ -58,20 +62,23 @@ class StepperMotorControl {
       this->readReedSwitch();
       delay(100);
 
-      //check if it is already close to the start position, if yes, turn backwards
-      stepper.setSpeed(-400);
+      //check if it is already close to the start position, if yes, turn backwards by 45 degrees
       while (this->readReedSwitch() == LOW) {
-        this->stepper.runSpeed();
+        stepper.move(-MOTOR_FULL_TURN/8);
+        stepper.runToPosition();
       }
+      
 
       // start forward calibration
-      stepper.setSpeed(400);
+      stepper.setSpeed(MOTOR_CALIBRATION_SPEED);
       while (this->readReedSwitch() == HIGH) {
         this->stepper.runSpeed();
       }
+      
       start1 = this->stepper.currentPosition(); //move slowly to end of reed switch
       while (this->readReedSwitch() == LOW) {
         this->stepper.runSpeed();
+        
       }
       start2 = this->stepper.currentPosition();
       stepper.setSpeed(0);
@@ -80,7 +87,7 @@ class StepperMotorControl {
       long stepperStartPos = (start2 - start1) / 2 + start1;
 
       //move to start position
-      stepper.moveTo(stepperStartPos);
+      stepper.move( (start1 - start2) / 2 );
       stepper.runToPosition();
 
       //reset current position to zero
