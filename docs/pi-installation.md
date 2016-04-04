@@ -173,7 +173,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
    1. might need to upgrade nettle and gnutls by `pacman -S gnutls nettle`
 
-   2. also `sudo pip2 install numpy`
+   2. also `sudo pip2 install numpy` or `sudo pacman -S python2-numpy`
 
 
 ### Configure Git Sparse Checkout
