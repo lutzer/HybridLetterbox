@@ -34,6 +34,7 @@ def camera_command(calibrate=False,n=5):
 			images.append(img)
 			lbControl.setStepperPosition(1) 
 
+		# start calibration
 		from camera.cameraCalibrator import CameraCalibrator
 		calibrator = CameraCalibrator()
 		calibrator.createCalibrationMatrix(images)

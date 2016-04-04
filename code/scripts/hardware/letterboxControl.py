@@ -61,7 +61,7 @@ class LetterboxControl:
 		
 		self.serial.clear()
 		self.serial.sendMessage("start")
-		response = self.serial.waitForResponse(text="started",timeout=20)
+		response = self.serial.waitForResponse(text="started",timeout=STEPPER_TIMEOUT*2)
 		if (response == False):
 			logger.info("init headboard timed out")
 			return response
