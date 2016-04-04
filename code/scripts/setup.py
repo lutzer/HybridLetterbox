@@ -9,16 +9,50 @@
 
 import logging
 
+CAMERA_MATRIX_FILE = "camera_matrix.json"
+
 # debug options
 logging.basicConfig(level=logging.INFO)
 
 lbControl = False
 
-def camera_command(focus=True,calibrate=False,extract=False):
-	"""Opens a camera window to focus the lens"""
+def camera_command(calibrate=False,n=5):
+	"""Opens a camera window to focus the lens, to calibrate lens distortion"""
 	from camera.cameraControl import CameraControl
 	camera = CameraControl()
-	camera.startPreview()
+
+	if calibrate:
+		from hardware.letterboxControl import LetterboxControl
+		global lbControl
+		lbControl = LetterboxControl()
+
+		# capture images
+		images = []
+		for i in range(0,n):
+			lbControl.setStepperPosition(0) 
+			img = camera.captureImage()
+			images.append(img)
+			lbControl.setStepperPosition(1) 
+
+		from camera.cameraCalibrator import CameraCalibrator
+		calibrator = CameraCalibrator()
+		calibrator.createCalibrationMatrix(images)
+		calibrator.writeCalibrationMatrix(CAMERA_MATRIX_FILE)
+
+	else:
+		camera.startPreview()
+	del camera
+
+def scan_command():
+	"""Scans a postcard"""
+	from camera.cameraControl import CameraControl
+	from camera.cameraCalibrator import CameraCalibrator
+	camera = CameraControl()
+	calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
+
+	img = camera.captureImage()
+	img = calibrator.undistortImage(img)
+
 	del camera
 
 def led_command(off=False,name='cam',blink=0):
