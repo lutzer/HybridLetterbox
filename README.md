@@ -2,12 +2,23 @@
 
 ## Installation
 
-For installation instructions see file: [docs/pi-installation.md](docs/pi-installation.md)
+* For instructions how to setup the raspberry pi from scratch see file: [docs/pi-installation.md](docs/pi-installation.md)
 
-## Setup Script for Letterbox
+### Setup Letterbox for the first time
 
-Call Setup script within code/pi by `sudo scripts/setup.py`
+* Call Setup script with `sudo code/scripts/setup.py`
 
-## Python Test Scripts
+## Development
 
-Call testscripts from code/pi directory by sudo `python2 -m scripts.tests`
+### Python Test Scripts
+
+* Call testscripts by sudo `python2 -m code.scripts.tests`
+
+### Node Testscripts
+
+
+
+### Configure Atmega Head Board
+
+see  [atmega-installation.md](atmega-installation.md)`
+

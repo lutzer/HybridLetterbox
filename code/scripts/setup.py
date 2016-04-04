@@ -16,7 +16,7 @@ lbControl = False
 
 def camera_command(focus=True,calibrate=False,extract=False):
 	"""Opens a camera window to focus the lens"""
-	from camera.CameraControl import CameraControl
+	from camera.cameraControl import CameraControl
 	camera = CameraControl()
 	camera.startPreview()
 	del camera
@@ -25,7 +25,7 @@ def led_command(off=False,name='cam',blink=0):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""
 	
 	global lbControl
-	from hardware.LetterboxControl import LetterboxControl
+	from hardware.letterboxControl import LetterboxControl
 	lbControl = LetterboxControl(cleanup=False)
 
 	print "Turning "+ name + " led " + ("off" if off else "on")
@@ -44,7 +44,7 @@ def photocell_command(repeat=1):
 	"""Gets a reading from the photocell"""
 	
 	global lbControl
-	from hardware.LetterboxControl import LetterboxControl
+	from hardware.letterboxControl import LetterboxControl
 	lbControl = LetterboxControl()
 
 	for n in range(0,repeat):
@@ -58,7 +58,7 @@ def reset_command():
 	'''Resets the headboard'''
 
 	global lbControl
-	from hardware.LetterboxControl import LetterboxControl
+	from hardware.letterboxControl import LetterboxControl
 	lbControl = LetterboxControl()
 
 	lbControl.reset();
@@ -66,7 +66,7 @@ def reset_command():
 def stepper_command(pos=0,calibrate=False):
 	'''Turns or calibrates the stepper motor'''
 	global lbControl
-	from hardware.LetterboxControl import LetterboxControl
+	from hardware.letterboxControl import LetterboxControl
 	lbControl = LetterboxControl()
 
 	if (calibrate):

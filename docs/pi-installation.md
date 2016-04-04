@@ -152,18 +152,13 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 ### Install Python 2
 
-1. sudo pacman -S python2 gcc
-2. pacman -S python2-pip
-3. pip2 install pyserial
-4. pip2 install picamera
-5. pip2 install RPi.GPIO
-6. pip2 install requests & pip2 install gerequests
-7. pacman -S python2-scipy
-
-### Connect Servo
-
-1. Signal pin to gpio pin 18
-2. You NEED an external power supply, else the rasp pi will crash if too many movements commands
+{0}. sudo pacman -S python2 gcc
+{0}. pacman -S python2-pip
+{0}. pip2 install pyserial
+{0}. pip2 install picamera
+{0}. pip2 install RPi.GPIO
+{0}. pip2 install requests & pip2 install gerequests
+{0}. pacman -S python2-scipy
 
 ### Install opencv
 
@@ -264,11 +259,3 @@ TODO
 * first **upgarde firmware**! Then install configuration image or configure it manually.
 * setup dhcp reservation of rasp pi to always assign it to 192.168.72.2
 * change admin pw!
-
-## Configure Attiny Head Board
-
-see  [attiny-installation.md](attiny-installation.md)
-
-## Calibrate Camera
-
-* copy calibration file to current dir: `scp letterbox@192.168.72.2:/home/letterbox/image-grid.jpg ./`

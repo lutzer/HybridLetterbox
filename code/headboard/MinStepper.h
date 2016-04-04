@@ -16,7 +16,7 @@ class MinStepper {
     float _speed;
     float _currentSpeed;
 
-    unsigned long  _stepInterval;
+    unsigned int  _stepInterval;
     unsigned long  _lastStepTime;
 
   public:
@@ -51,8 +51,14 @@ class MinStepper {
 
       //make step when time has come
       if (time > _lastStepTime + _stepInterval) {
-        currentPos++;
+        
+        if (_currentSpeed > 0)
+          currentPos++;
+        else if (_currentSpeed < 0)
+          currentPos--;
+
         step(_currentPos);
+
         _lastStepTime = time;
         _stepInterval = -1;
       }
@@ -72,7 +78,7 @@ class MinStepper {
 
   private:
 
-    void calculateIntervall() {
+    int calculateIntervall() {
 
       long time = millis();
 
@@ -85,7 +91,7 @@ class MinStepper {
       else if (_currentSpeed > _speed)
         _currentSpeed -= max(_speed, _currentSpeed - ACCELERATION * deltaT);
 
-      return 1000/_currentSpeed;
+      return 1000.0/_currentSpeed;
     }
 
     void step8(long step) {
