@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 15:55:35
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-31 18:06:30
+# @Last Modified time: 2016-04-04 10:46:51
 
 import unittest
 
@@ -42,8 +42,8 @@ class HardwareTests(unittest.TestCase):
 		from ..hardware.letterboxControl import LetterboxControl
 		lbControl = LetterboxControl()
 		self.assertEquals(lbControl.setStepperPosition(2),"stp:e")
-		self.assertIsNot(lbControl.setStepperPosition(1),"stp:e")
 		self.assertIsNot(lbControl.setStepperPosition(0),"stp:e")
+		self.assertIsNot(lbControl.setStepperPosition(1),"stp:e")
 
 	def test_stepperCalibration(self):
 		from ..hardware.letterboxControl import LetterboxControl
