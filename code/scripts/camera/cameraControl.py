@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-03-31 18:07:55
+# @Last Modified time: 2016-04-13 12:11:28
 
 import picamera
 import cv2
@@ -37,11 +37,11 @@ class CameraControl:
 		self.camera = picamera.PiCamera()
 		if not automode:
 			self.camera.framerate = 2
-			self.camera.exposure_mode = 'off'
-			self.camera.shutter_speed = CAMERA_SHUTTER_SPEED * 1000
-			self.camera.awb_mode = 'off'
-			self.camera.awb_gains = CAMERA_WHITE_BALANCE
-			self.camera.ISO = CAMERA_ISO
+			#self.camera.exposure_mode = 'off'
+			#self.camera.shutter_speed = CAMERA_SHUTTER_SPEED * 1000
+			#self.camera.awb_mode = 'off'
+			#self.camera.awb_gains = CAMERA_WHITE_BALANCE
+			#self.camera.ISO = CAMERA_ISO
 			self.camera.resolution = CAMERA_RESOLUTION
 		time.sleep(1) # warmup time
 

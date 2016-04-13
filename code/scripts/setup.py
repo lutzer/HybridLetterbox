@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-03-31 14:40:43
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-04-13 12:09:34
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
 import logging
 
-CAMERA_MATRIX_FILE = "camera_matrix.json"
+CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
+SCAN_RESULT_FILE = "scan.jpg"
 
 # debug options
 logging.basicConfig(level=logging.INFO)
@@ -24,15 +25,15 @@ def camera_command(calibrate=False,n=5):
 	if calibrate:
 		from hardware.letterboxControl import LetterboxControl
 		global lbControl
-		lbControl = LetterboxControl()
+		#lbControl = LetterboxControl()
 
 		# capture images
 		images = []
 		for i in range(0,n):
-			lbControl.setStepperPosition(0) 
+			#lbControl.setStepperPosition(0) 
 			img = camera.captureImage()
 			images.append(img)
-			lbControl.setStepperPosition(1) 
+			#lbControl.setStepperPosition(1) 
 
 		# start calibration
 		from camera.cameraCalibrator import CameraCalibrator
@@ -48,11 +49,15 @@ def scan_command():
 	"""Scans a postcard"""
 	from camera.cameraControl import CameraControl
 	from camera.cameraCalibrator import CameraCalibrator
+	from camera.cardScanner import CardScanner
 	camera = CameraControl()
 	calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 	img = camera.captureImage()
 	img = calibrator.undistortImage(img)
+
+	scanner = CardScanner(img)
+	scanner.saveImage(SCAN_RESULT_FILE)
 
 	del camera
 
