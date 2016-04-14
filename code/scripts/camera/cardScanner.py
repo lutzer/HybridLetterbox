@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 17:07:06
+# @Last Modified time: 2016-04-14 17:08:30
 
 import cv2
 import numpy as np
@@ -81,7 +81,6 @@ class CardScanner:
 		#create pattern
 		pattern = np.array(MARKER.pattern,np.uint8)
 		pattern[pattern > 0] = 255
-		print pattern
 
 		#resize pattern for matching
 		for scale in np.linspace(1.0, 20.0, 20):
@@ -93,9 +92,9 @@ class CardScanner:
 			minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(mat)
 
 			if minVal < MARKER_THRESHOLD:
-				foundImg = small_image.copy()
-				cv2.rectangle(foundImg, (minLoc[0], minLoc[1]), (minLoc[0] + patternWidth, minLoc[1] + patternHeight), (100), 2)
-				showImage(foundImg)
+				#foundImg = small_image.copy()
+				#cv2.rectangle(foundImg, (minLoc[0], minLoc[1]), (minLoc[0] + patternWidth, minLoc[1] + patternHeight), (100), 2)
+				#showImage(foundImg)
 				return 1; # return cat
 
 		return category
