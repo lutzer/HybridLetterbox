@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 16:33:53
+# @Last Modified time: 2016-04-14 17:07:06
 
 import cv2
 import numpy as np
@@ -13,14 +13,20 @@ RESIZE_FACTOR = 0.3
 CONTOUR_MIN_SIZE = 900*500 #size of the sourunding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
-MARKER_PATTERN = [
-	[ 0, 0, 0, 0 ],
-	[ 0, 1, 1, 0 ],
-	[ 0, 1, 0, 0 ],
-	[ 0, 0, 0, 0 ]
-]
+
 MARKER_THRESHOLD = 0.2
 
+class MarkerPattern:
+
+	def __init__(self,pattern,size):
+		pattern = np.array(pattern)
+		self.innerPattern = pattern
+		self.pattern = np.ones((size+4,size+4),np.uint8)
+		cv2.rectangle(self.pattern,(1,1),(size+2,size+2),0)
+		self.pattern[2 : 2+pattern.shape[0], 2: 2+pattern.shape[1]] = pattern
+
+
+MARKER = MarkerPattern([[1, 1,],[1, 0,]],2)
 
 logger = logging.getLogger(__name__)
 
@@ -73,8 +79,9 @@ class CardScanner:
 		#showImage(small_image)
 		
 		#create pattern
-		pattern = np.array(MARKER_PATTERN,np.uint8)
+		pattern = np.array(MARKER.pattern,np.uint8)
 		pattern[pattern > 0] = 255
+		print pattern
 
 		#resize pattern for matching
 		for scale in np.linspace(1.0, 20.0, 20):
@@ -88,7 +95,7 @@ class CardScanner:
 			if minVal < MARKER_THRESHOLD:
 				foundImg = small_image.copy()
 				cv2.rectangle(foundImg, (minLoc[0], minLoc[1]), (minLoc[0] + patternWidth, minLoc[1] + patternHeight), (100), 2)
-				#showImage(foundImg)
+				showImage(foundImg)
 				return 1; # return cat
 
 		return category
