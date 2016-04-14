@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 15:55:35
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-03-31 18:06:30
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-04-13 12:27:24
 
 import unittest
 
-IMAGE_FOLDER = "scripts/tests/camera_images"
-TEST_IMAGE = "scripts/tests/camera_images/image1.jpg"
+IMAGE_FOLDER = "scripts/tests/images/"
+IMAGE_NAMES = ["image1.jpg","image2.jpg","image3.jpg","image4.jpg","image5.jpg"]
+TEST_IMAGE = "scripts/tests/images/image1.jpg"
 CAMERA_MATRIX_FILE = "matrix.json"
 
 class CalibrationTests(unittest.TestCase):
@@ -58,13 +59,11 @@ class CalibrationTests(unittest.TestCase):
 
 
 def createCalibrationMatrix(calibrator):
-	import glob,cv2
+	import cv2
 
-	imagePaths = glob.glob(IMAGE_FOLDER+"/*.jpg")
 	input_images = []
-	
-	for fname in imagePaths:
-		img = cv2.imread(fname)
+	for fname in IMAGE_NAMES:
+		img = cv2.imread(IMAGE_FOLDER+fname)
 		input_images.append(img)
 	calibrator.createCalibrationMatrix(input_images)
 

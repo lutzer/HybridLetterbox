@@ -28,10 +28,10 @@
 #define REED_PIN 4 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
-//#define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
-#define SERIAL Serial // change to Serial for using normal Serial
-#define RX_PIN 0 //only used  for software serial, rx = 0
-#define TX_PIN 1 //only used for software serial, tx = 1
+#define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
+#define SERIAL softwareSerial // change to Serial for using normal Serial
+#define RX_PIN 1 //only used  for software serial, rx = 0
+#define TX_PIN 0 //only used for software serial, tx = 1
 #define SERIAL_BUFFER_SIZE 16
 #define SERIAL_END_CHARACTER '\n'
 #define BAUD_RATE 9600
@@ -68,7 +68,7 @@ void setup() {
   SERIAL.write("waiting\n");
 
   // send a byte to establish contact until receiver responds
-  /*while (true) {
+  while (true) {
     if (readSerialMessages()) {
       if (compareSubString(serialBuffer,"start"))
          break;
@@ -76,19 +76,19 @@ void setup() {
     }
     //SERIAL.write("waiting\n");
     blinkStatusLed(50);
-  }*/
+  }
 
-  /*
+  
   //calibrate photocell
   SERIAL.write("calibrate photocell\n");
   int i = 0;
   while(!photocell.calibrate()) {
-    blinkStatusLed(100);
+    blinkStatusLed(200);
     if (i >= CALIBRATION_TRIES -1) {
       resetArduino();
     }
     i++;
-  }*/
+  }
 
   SERIAL.write("calibrate motor\n");
   //calibrate stepper

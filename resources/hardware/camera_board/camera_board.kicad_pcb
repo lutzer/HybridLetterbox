@@ -3,7 +3,7 @@
   (general
     (links 31)
     (no_connects 1)
-    (area 87.899999 60.099999 183.300001 116.500001)
+    (area 87.899999 59.514624 183.300001 117.265881)
     (thickness 1.6)
     (drawings 49)
     (tracks 65)
@@ -1110,7 +1110,7 @@
   (gr_text "Pi Camera" (at 135.6 87.8) (layer F.Cu)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
-  (gr_text "Hybrid Letterbox Camera Board v2.0" (at 174.2 88.8 90) (layer F.Cu)
+  (gr_text "Hybrid Letterbox Camera Board v0.2\n" (at 174.2 88.8 90) (layer F.Cu)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text GND (at 106.2 78.2 90) (layer F.Cu)
