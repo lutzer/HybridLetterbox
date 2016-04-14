@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 16:28:34
+# @Last Modified time: 2016-04-14 16:33:53
 
 import cv2
 import numpy as np
@@ -70,7 +70,7 @@ class CardScanner:
 		#size down image for faster image processing
 		small_image = cv2.resize(self.image, (0,0), fx=RESIZE_FACTOR, fy=RESIZE_FACTOR)
 
-		showImage(small_image)
+		#showImage(small_image)
 		
 		#create pattern
 		pattern = np.array(MARKER_PATTERN,np.uint8)
@@ -88,8 +88,8 @@ class CardScanner:
 			if minVal < MARKER_THRESHOLD:
 				foundImg = small_image.copy()
 				cv2.rectangle(foundImg, (minLoc[0], minLoc[1]), (minLoc[0] + patternWidth, minLoc[1] + patternHeight), (100), 2)
-				showImage(foundImg)
-				break;
+				#showImage(foundImg)
+				return 1; # return cat
 
 		return category
 
