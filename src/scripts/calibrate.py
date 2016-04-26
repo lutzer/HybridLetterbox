@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 # Read config PARAMETERS
-CONFIG_FILE = "/home/letterbox/scripts/letterbox/letterbox.ini"
+CONFIG_FILE = "/home/letterbox/HybridLetterbox/src/scripts/letterbox.ini"
 config = ConfigReader(CONFIG_FILE)
 
 # create pattern object

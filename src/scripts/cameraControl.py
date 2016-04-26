@@ -4,6 +4,7 @@ import io
 import logging
 import numpy
 import time
+from camera.cameraCalibrator import CameraCalibrator
 
 logger = logging.getLogger(__name__)
 
@@ -11,10 +12,10 @@ logger = logging.getLogger(__name__)
 RESIZE_FACTOR = 0.5
 #CAT_MARKERS = []
 CAT_MARKERS = [
-	"/home/letterbox/scripts/letterbox/images/marker0.jpg",
-	"/home/letterbox/scripts/letterbox/images/marker1.jpg",
-	"/home/letterbox/scripts/letterbox/images/marker2.jpg",
-	"/home/letterbox/scripts/letterbox/images/marker3.jpg",
+	"/home/letterbox/HybridLetterbox/src/scripts/images/marker0.jpg",
+	"/home/letterbox/HybridLetterbox/src/scripts/images/marker1.jpg",
+	"/home/letterbox/HybridLetterbox/src/scripts/images/marker2.jpg",
+	"/home/letterbox/HybridLetterbox/src/scripts/images/marker3.jpg",
 ]
 
 # Class Controls the Hardware of the Letterbox
@@ -35,6 +36,9 @@ class CameraControl:
 
 		# pattern vals
 		self.param["Pattern"] = Pattern
+
+		# init calibrator for undistoring images
+		self.calibrator = CameraCalibrator()
 
 		logger.info('starting  camera...')
 		self.startCamera()
@@ -82,6 +86,9 @@ class CameraControl:
 
 	# step 2
 	def extractSubmission (self,image):
+		logger.debug("undistort image")
+		image = calibrator.undistortImage(image)
+
 		logger.debug("thresholding image")
 		image = self.thresholdImage(image)
 
