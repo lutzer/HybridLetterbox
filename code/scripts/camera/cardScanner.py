@@ -2,11 +2,13 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 17:08:30
+# @Last Modified time: 2016-04-14 18:13:21
 
 import cv2
 import numpy as np
 import logging
+
+logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
@@ -14,7 +16,7 @@ CONTOUR_MIN_SIZE = 900*500 #size of the sourunding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
 
-MARKER_THRESHOLD = 0.2
+MARKER_THRESHOLD = 0.1
 
 class MarkerPattern:
 
@@ -25,10 +27,8 @@ class MarkerPattern:
 		cv2.rectangle(self.pattern,(1,1),(size+2,size+2),0)
 		self.pattern[2 : 2+pattern.shape[0], 2: 2+pattern.shape[1]] = pattern
 
-
 MARKER = MarkerPattern([[1, 1,],[1, 0,]],2)
 
-logger = logging.getLogger(__name__)
 
 class CardScanner:
 
@@ -76,28 +76,12 @@ class CardScanner:
 		#size down image for faster image processing
 		small_image = cv2.resize(self.image, (0,0), fx=RESIZE_FACTOR, fy=RESIZE_FACTOR)
 
-		#showImage(small_image)
-		
-		#create pattern
-		pattern = np.array(MARKER.pattern,np.uint8)
-		pattern[pattern > 0] = 255
+		results = []
+		results.append(checkPattern(small_image, MARKER.pattern, MARKER_THRESHOLD))
+		flipped = cv2.flip(MARKER.pattern,-1)
+		results.append(checkPattern(small_image, flipped, MARKER_THRESHOLD))
 
-		#resize pattern for matching
-		for scale in np.linspace(1.0, 20.0, 20):
-			resizedPattern = cv2.resize(pattern, (0,0), fx=scale, fy=scale, interpolation= cv2.INTER_NEAREST)
-			patternHeight,patternWidth = resizedPattern.shape
-
-			# match pattern
-			mat = cv2.matchTemplate(small_image,resizedPattern,cv2.TM_SQDIFF_NORMED);
-			minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(mat)
-
-			if minVal < MARKER_THRESHOLD:
-				#foundImg = small_image.copy()
-				#cv2.rectangle(foundImg, (minLoc[0], minLoc[1]), (minLoc[0] + patternWidth, minLoc[1] + patternHeight), (100), 2)
-				#showImage(foundImg)
-				return 1; # return cat
-
-		return category
+		return results
 
 
 	# masks everything on the picture except for 
@@ -134,11 +118,30 @@ class CardScanner:
 		self.image = cropImage(self.image)
 
 
-def showImage(img,wait = 0):
+# matches a pattern to different scales
+def checkPattern(img,pattern,threshold):
+	#create pattern
+	pattern = pattern.copy()
+	pattern[pattern > 0] = 255
+
+	#resize pattern for matching
+	for scale in np.linspace(1.0, 20.0, 20):
+		resizedPattern = cv2.resize(pattern, (0,0), fx=scale, fy=scale, interpolation= cv2.INTER_NEAREST)
+		patternHeight,patternWidth = resizedPattern.shape
+
+		# match pattern
+		mat = cv2.matchTemplate(img,resizedPattern,cv2.TM_SQDIFF_NORMED)
+		minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(mat)
+
+		if minVal < threshold:
+			return minVal, minLoc, maxLoc
+
+
+def showImage(img,wait = 0,resize=True):
 	import cv2
-	#res_img = cv2.resize(img,(1024,768))
-	res_img = img
-	cv2.imshow('img',res_img)
+	if resize:
+		img = cv2.resize(img,(1024,768))
+	cv2.imshow('img',img)
 	cv2.waitKey(wait)
 
 def invertImage(img):
