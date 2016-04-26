@@ -1,0 +1,17 @@
+[Unit]
+
+Description=Launches letterbox script
+
+After=network.target
+
+[Service]
+
+Type=simple
+
+ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
+
+RemainAfterExit=true
+
+[Install]
+
+WantedBy=multi-user.target

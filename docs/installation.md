@@ -105,9 +105,10 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 1. nano /boot/config.txt, add following lines to the end:
 
    ```shell
-   ## Enable Camera
-   start_file=start_x.elf
-   fixup_file=fixup_x.dat
+     ## Enable Camera
+     start_file=start_x.elf
+     fixup_file=fixup_x.dat
+     gpu_mem=128
    ```
 
 2. nano ~/.bashrc:
@@ -214,23 +215,23 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 1. create another service: powerswitch.service
 
    ``` shell
-   [Unit]
+     [Unit]
 
-   Description=Launches powerswitch script
+     Description=Launches powerswitch script
 
-   After=network.target
+     After=network.target
 
-   [Service]
+     [Service]
 
-   Type=simple
+     Type=simple
 
-   ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
+     ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
 
-   RemainAfterExit=true
+     RemainAfterExit=true
 
-   [Install]
+     [Install]
 
-   WantedBy=multi-user.target
+     WantedBy=multi-user.target
    ```
 
 
