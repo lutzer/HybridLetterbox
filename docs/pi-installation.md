@@ -1,244 +1,261 @@
-HYBRID LETTERBOX
-================
+# Hybrid Letterbox
 
-
-INSTALLATION GUIDE FOR RASPBERRY PI
------------------------------------
+## Installation Guide for Raspberry Pi
 
 ### Prepare SD Card
 
-1. Download Arch linux image and use apple pi-baker to transfer image to sd card
+1. Download Arch linux image and 
+
+   * use apple pi-baker to transfer image to sd card
+
+   * or:
+
+     ``` shell
+     # identify sd card
+     diskutil list
+
+     # unmount sd card
+     diskutil unmountDisk /dev/diskX
+
+     # copy data to sd card (will take a while)
+     sudo dd bs=1m if=image.img of=/dev/rdiskX
+     ```
+
+     ​
+
 2. Plug the raspberry pi ethernet cable into router or
+
    Setup dhcp server on mac, plug it into the macs ethernet port
+
    and use LanScan to detect its ip adress
 
 ### Resize partition
 
-http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
+```
+sudo fdisk /dev/mmcblk0
+-----
+* press p to print partion table:
+Device         Boot  Start     End Sectors  Size Id Type
+/dev/mmcblk0p1        2048  206847  204800  100M  c W95 FAT32 (LBA)
+/dev/mmcblk0p2      206848 3913726 3706879  1.8G 83 Linux
+* take note of start sector of Linux partition: 206848
+* press d -> 2 to delete second partition
+* prress n -> p -> 2 to create primary partition on number 2 with startsector as noted before. choose end sector whatever size you need your partition to be.
+* press w to write partion table
+-----
+sudo reboot
+sudo resize2fs /dev/mmcblk0p2
+```
 
-### (Setup ip adress of pi or skip and use dhcp server)
+### Setup ip adress of pi or skip or use dhcp server
 
-1. sudo ip addr add 192.168.2.2/24 broadcast 192.168.2.255 dev eth0
-2. sudo ip route add default via 192.168.2.1
-3. persistent config see: https://wiki.archlinux.org/index.php/
-4. Network_configuration#Configure_the_IP_address
+* setup rasp pi ip adress
+  1. `sudo ip addr add 192.168.72.2/24 broadcast 192.168.72.255 dev eth0`
+  2. `sudo ip route add default via 192.168.72.1`
+  3. persistent config see: https://wiki.archlinux.org/index.php/
+  4. Network_configuration#Configure_the_IP_address
 
-OR SEE BELOW (ASSIGN ip address BY ROUTER)
+
+* or see below (assign ip address by dhcp)
 
 ### Login into PI and create user accounts
 
 1. type ssh root@ip password is root
-2. change root password (to <rootpasswd>): passwd
-3. create new user account: useradd -m letterbox -> passwd letterbox <userpasswd>
-4. change hostname: sudo nano /etc/hostname
+2. change root password (to <rootpasswd>): `passwd`
+3. create new user account: `useradd -m letterbox` -> `passwd letterbox`
+4. change hostname: `nano /etc/hostname`
 
 ### Change keyboard and timezone Settings
 
-1. set berlin timezone: nano ~/.bashrc: TZ='Europe/Berlin'; export TZ 
-2. set german keyboard: localectl set-keymap --no-convert de 
+1. set berlin timezone: `nano ~/.bashrc: TZ='Europe/Berlin'; export TZ` 
+2. set german keyboard: `localectl set-keymap --no-convert de`
 
-### Install Pacman Packaging System
+### Update Pacman Packaging System and configure sudo
 
-1. update pacman: pacman -Syy
-2. install sudo: pacman -S sudo
-   setup sudo for user: "EDITOR=nano visudo" -> add line "letterbox ALL=(ALL) ALL"
+1. update pacman: `pacman -Syy`
 
-### Install Samba
+2. install sudo: `pacman -S sudo`
 
-1. pacman -S samba
-2. cp /etc/samba/smb.conf.default /etc/samba/smb.conf
-3. sudo smbpasswd -a letterbox (password: <userpasswd>
-4. start service: sudo systemctl start smbd.service
-5. connect through mac with address smb://rasp.pis.ip/homes
+   setup sudo for user: `EDITOR=nano visudo` -> add line `letterbox ALL=(ALL) ALL`
 
-### Install and Setup Webserver
+### Install Packages
 
-1. enable ntpd: systemctl enable ntpd
-2. installl ngix webserver: pacman -S nginx
-   enable automatic startup: systemctl enable nginx
-3. configure nano /etc/nginx/nginx.conf:
-   add to server "root   /home/letterbox/http;”
-   remove root directive from all locations
-   and change code inside server to this:
+1. install time deamon ntpd: `pacman -S ntp`
 
-   ```
-   server {
-        listen       80;
-        server_name  localhost;
-        root    /home/letterbox/http;
+2. enable ntpd: `systemctl enable ntpd`
+3. install additional packages: `git,`
 
-        #charset koi8-r;
 
-        #access_log  logs/host.access.log  main;
+### Install and Setup Nodejs Webserver
 
-        location / {
-            index  index.html index.htm;
-            try_files   $uri $uri/ @tinyurl;
-        }
+1. install node: `pacman -S nodejs npm`
 
-        location @tinyurl {
-            rewrite ^/(.*)$ /api/index.php?q=$1 last;
-        }
+2. install pm2 node process manager: `pacman -S pm2`
 
-        location ~ \.php$ {
-            fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
-            fastcgi_index  index.php;
-            include        fastcgi.conf;
-        }
-   }
+3. redirect port 80 requests to port 8080
+
+   ``` shell
+    # add this line to /etc/rc.local
+    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
    ```
 
-4. install php: pacman -S php and pacman -S php-fpm
-   enable autoamtic startup: systemctl enable php-fpm
-   configure /etc/php/php.ini: "nano /etc/php/php.ini"
-   -> add "/home/letterbox/http” to open_basedir and 
-      uncomment "extension=pdo_mysql.so"
-5. install mariadb: pacman -S mariadb
-6. systemctl start mysqld
-   mysql_secure_installation -> mariadb root password: <mysqlpassword>
-   systemctl restart mysqld
-   systemctl enable mysqld
-7. login to mariadb: mysql -u root -p
-   -> GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.72.%' IDENTIFIED BY '<rootpassword>' WITH GRANT OPTION;
-8. minimize memory usage: cp /usr/share/mysql/my-small.cnf /etc/mysql/my.cnf
-9. chmod 755 on /home and /home/letterbox and /home/letterbox/html
-   files need 644
+### Enable Serial Connection
 
-### (Install GUI: xorg, xfce4 and midori browser)
+see  http://rpi900.com/tutorials/using-the-serial-port.html
 
-1. pacman -S xorg-server
-2. install video driver: pacman -S xf86-video-fbdev xf86-video-vesa
-3. pacman -S xfce4
-4. pacman -S midori
+- prevent rasp pi from broadcasting boot messages over serial
 
-(# Install python)
-1. pacman -S python python-pip base-devel) need python2 , see below!
-2. install GPIO package: pip install RPi.GPIO (use this!)
-3. pip install requests (for http requests)
+
+- `sudo nano /boot/cmdline.txt`
+  - change content to `root=/dev/mmcblk0p2 rw rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop` (delete both entries with xxxx=ttyAMA0,115)
+- disable terminal service for serial port: `sudo systemctl disable serial-getty@ttyAMA0.service`
+- give user letterbox access to serial console: `$sudo usermod -a -G uucp letterbox` and reopen terminal
+- configure serial port to use 9600 baud `stty -F /dev/ttyAMA0 9600`
+- install picocom for testing: `sudo pacman -S picocom`
+  - start serial monitor: `picocom -b 9600 /dev/ttyAMA0` or by `cat /dev/ttyAMA0 `
+  - send commands by just typing in picocom **(Newline charatcter is send as \r)** or by sending `echo "Command" > /dev/ttyAMA0` (newline character is send as \n)
 
 ### Setup Camera
 
 1. nano /boot/config.txt, add following lines to the end:
 
-```
-## Enable Camera
-start_file=start_x.elf
-fixup_file=fixup_x.dat
-```
+   ```shell
+   ## Enable Camera
+   start_file=start_x.elf
+   fixup_file=fixup_x.dat
+   ```
 
-1. nano ~/.bashrc:
+2. nano ~/.bashrc:
 
-```
-# add camera commands to path
-export PATH=$PATH:/opt/vc/bin
-```
+   ```shell
+   # add camera commands to path
+   export PATH=$PATH:/opt/vc/bin
+   ```
 
-1. to test camera: raspistill -o image.jpg 
-2. install python lib: pip install picamera
-3. install: sudo pacman -S python-pillow (PIL image lib)
+3. `nano /etc/modprobe.d/blacklist.conf`, add:
 
-### CONNECT SERVO
+   ```
+   blacklist i2c_bcm2708
+   ```
 
-1. Signal pin to gpio pin 18
-2. You NEED an external power supply, else the rasp pi will crash if too many movements commands
+   ​
 
-### PYTHON 2
+4. reboot system
 
-1. sudo pacman -S python2 gcc
-2. pacman -S python2-pip
-3. pip2 install picamera
-4. pip2 install requests & pip2 install gerequests
-5. pip2 install RPi.GPIO
-6. pacman -S python2-pygame
-7. pacman -S python2-scipy
+5. to test camera: `raspistill -o image.jpg` or `raspistill -t 99999`
+
+   - more info here: https://www.raspberrypi.org/documentation/usage/camera/raspicam/raspistill.md
+
+6. install python lib: pip install picamera
+
+   -  also install: sudo pacman -S python-pillow (PIL image lib)
+
+### Install Python 2
+
+{0}. sudo pacman -S python2 gcc
+{0}. pacman -S python2-pip
+{0}. pip2 install pyserial
+{0}. pip2 install picamera
+{0}. pip2 install RPi.GPIO
+{0}. pip2 install requests & pip2 install gerequests
+{0}. pacman -S python2-scipy
 
 ### Install opencv
 
 1. pacman -S pkg-config
+
 2. pacman -S opencv (also includes python cv2 wrapper)
-   (3. create compile script:) only if you wanna write c code
 
-```
-#filename: compile.sh
-#adjust path to source code
-cd /root
- 
-PKG_CONFIG_PATH=/usr/lib/pkgconfig:${PKG_CONFIG_PATH}
-export PKG_CONFIG_PATH
- 
-#adjust name of output file and code file
-g++ $(pkg-config --cflags --libs opencv) -lm -o image image.c
-```
+   1. might need to upgrade nettle and gnutls by `pacman -S gnutls nettle`
 
-## After Copying Scripts
+   2. also `sudo pip2 install numpy` or `sudo pacman -S python2-numpy`
 
-### AUTOSTART PYTHON SCRIPT
+
+### Configure Git Sparse Checkout
+
+* go to home directory
+
+* ```
+  mkdir HybridLetterbox
+  cd HybridLetterbox
+  git init https://github.com/lutzer/HybridLetterbox.git
+  git config core.sparsecheckout true
+  echo code/pi/scripts/ >> .git/info/sparse-checkout
+  git read-tree -mu HEAD
+  git pull
+  ```
+
+### Autostart Python Scripts
 
 #### Letterbox
 
 1. create a file in folder /etc/systemd/system : letterbox.service
+
 2. insert:
 
-```
-[Unit]
+   ``` shell
+   [Unit]
 
-Description=Launches letterbox script
+   Description=Launches letterbox script
 
-After=network.target
+   After=network.target
 
-[Service]
+   [Service]
 
-Type=simple
+   Type=simple
 
-ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
+   ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
 
-RemainAfterExit=true
+   RemainAfterExit=true
 
-[Install]
+   [Install]
 
-WantedBy=multi-user.target
-```
+   WantedBy=multi-user.target
+   ```
+
 
 1. sudo systemctl daemon-reload
+
 2. sudo systemctl enable letterbox.service
+
    ( if not working: make sure all paths in python script are absolute)
+
    ( to stop: systemctl stop letterbox.service or systemctl disable letterbox.service
 
 #### Powerswitch
 
 1. create another service: powerswitch.service
 
-```
-[Unit]
+   ``` shell
+   [Unit]
 
-Description=Launches powerswitch script
+   Description=Launches powerswitch script
 
-After=network.target
+   After=network.target
 
-[Service]
+   [Service]
 
-Type=simple
+   Type=simple
 
-ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
+   ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
 
-RemainAfterExit=true
+   RemainAfterExit=true
 
-[Install]
+   [Install]
 
-WantedBy=multi-user.target
-```
+   WantedBy=multi-user.target
+   ```
+
 
 1. sudo systemctl daemon-reload
 2. sudo systemctl enable powerswitch.service
 
+### Autostart pm2 manager
 
+TODO
 
+## Configure Tp-Link Router
 
-CONFIGURE TP-LINK MOBILE ROUTER
--------------------------------
-
-first **upgarde firmware**! Then install configuration image or configure it manually.
-
-### setup dhcp reservation
-
-reserve mac adress of rasp pi to always assign it to 192.168.72.2
+* first **upgarde firmware**! Then install configuration image or configure it manually.
+* setup dhcp reservation of rasp pi to always assign it to 192.168.72.2
+* change admin pw!
