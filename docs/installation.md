@@ -71,18 +71,63 @@ http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
 2. enable ntpd: `systemctl enable ntpd`
 
 
-### Install and Setup Nodejs Webserver
+### Install and Setup Webserver
 
-1. install node: `pacman -S nodejs npm`
+1. enable ntpd: systemctl enable ntpd
 
-2. install pm2 node process manager: `pacman -S pm2`
+2. installl ngix webserver: pacman -S nginx
+   enable automatic startup: systemctl enable nginx
 
-3. redirect port 80 requests to port 8080
+3. configure nano /etc/nginx/nginx.conf:
+   remove root directive from all locations and change code inside server to this:
 
-   ``` shell
-    # add this line to /etc/rc.local
-    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
    ```
+   server {
+        listen       80;
+        server_name  localhost;
+        root    /home/letterbox/HybridLetterbox/src/www;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            index  index.html index.htm;
+            try_files   $uri $uri/ @tinyurl;
+        }
+
+        location @tinyurl {
+            rewrite ^/(.*)$ /api/index.php?q=$1 last;
+        }
+
+        location ~ \.php$ {
+            fastcgi_pass   unix:/run/php-fpm/php-fpm.sock;
+            fastcgi_index  index.php;
+            include        fastcgi.conf;
+        }
+   }
+   ```
+
+4. install php: pacman -S php and pacman -S php-fpm
+   enable autoamtic startup: systemctl enable php-fpm
+   configure /etc/php/php.ini: "nano /etc/php/php.ini"
+   -> add "/home/letterbox/HybridLetterbox/src/www” to open_basedir and 
+      uncomment "extension=pdo_mysql.so"
+
+5. install mariadb: pacman -S mariadb
+
+6. systemctl start mysqld
+   mysql_secure_installation -> mariadb root password: <mysqlpassword>
+   systemctl restart mysqld
+   systemctl enable mysqld
+
+7. login to mariadb: mysql -u root -p
+   -> GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.72.%' IDENTIFIED BY '<rootpassword>' WITH GRANT OPTION;
+
+8. minimize memory usage: cp /usr/share/mysql/my-small.cnf /etc/mysql/my.cnf
+
+9. chmod 755 on /home and /home/letterbox and /home/letterbox/html
+   files need 644
 
 ### Enable Serial Connection
 
@@ -105,10 +150,10 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 1. nano /boot/config.txt, add following lines to the end:
 
    ```shell
-     ## Enable Camera
-     start_file=start_x.elf
-     fixup_file=fixup_x.dat
-     gpu_mem=128
+       ## Enable Camera
+       start_file=start_x.elf
+       fixup_file=fixup_x.dat
+       gpu_mem=128
    ```
 
 2. nano ~/.bashrc:
@@ -192,7 +237,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
    Type=simple
 
-   ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
+   ExecStart=/bin/python2 /home/letterbox/HybridLetterbox/src/scripts/letterbox.py
 
    RemainAfterExit=true
 
@@ -215,23 +260,23 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 1. create another service: powerswitch.service
 
    ``` shell
-     [Unit]
+       [Unit]
 
-     Description=Launches powerswitch script
+       Description=Launches powerswitch script
 
-     After=network.target
+       After=network.target
 
-     [Service]
+       [Service]
 
-     Type=simple
+       Type=simple
 
-     ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
+       ExecStart=/bin/python2 /home/letterbox/HybridLetterbox/src/scripts/power/switch.py
 
-     RemainAfterExit=true
+       RemainAfterExit=true
 
-     [Install]
+       [Install]
 
-     WantedBy=multi-user.target
+       WantedBy=multi-user.target
    ```
 
 
