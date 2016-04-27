@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-03-31 11:49:47
+# @Last Modified time: 2016-04-27 11:08:52
 
 import numpy as np
 import cv2

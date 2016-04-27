@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-04-13 12:09:34
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-04-27 11:10:28
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -74,7 +74,7 @@ def led_command(off=False,name='cam',blink=0):
 		lbControl.toggleCameraLed(not off)
 	elif (name == 'feedback'):
 		if blink > 0:
-			lbControl.blinkFeedbackLed(blink)
+			lbControl.flashFeedbackLed(blink)
 		else:
 			lbControl.toggleFeedbackLed(not off)
 	else:
