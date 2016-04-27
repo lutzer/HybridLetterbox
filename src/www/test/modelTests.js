@@ -8,10 +8,6 @@ var config = r_require('/config.js')
 
 describe('Submissions Database', function(){
 
-	// change to test database
-  	var config = r_require('config.js')
-  	config.databaseSubmissions = "submissions_test.db"
-
   	beforeEach(function(done) {
   		// delete database file before each test call
   		submissions.drop(done);

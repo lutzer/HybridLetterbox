@@ -69,9 +69,12 @@ router.post('/', function (req, res) {
 router.delete('/:id', function(req, res) {
     submissions.remove(req.params.id, function(err,doc) {
 
+        utils.handleError(err);
+
         console.log('Submission deleted from database');
 
-        utils.handleError(err);
+        appEvents.emit('submission:removed',req.params.id)
+
         res.sendStatus(doc);
     });
 });

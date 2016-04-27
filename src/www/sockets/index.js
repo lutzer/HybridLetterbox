@@ -12,8 +12,8 @@ module.exports = function (http) {
 	    console.log('Socket: Client connected');
 
 	    // Server event handlers
-	    function submissionAddedHandler(doc) {
-		    socket.emit('submission:new',{doc: doc}); // this will send a signal to the interface and central webserver
+	    function submissionAddedHandler(model) {
+		    socket.emit('submission:new',{model: model}); // this will send a signal to the interface and central webserver
 	    }
 		appEvents.on('submission:new', submissionAddedHandler);
 
