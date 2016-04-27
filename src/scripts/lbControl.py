@@ -93,7 +93,7 @@ class LbControl:
 # pin, angle (From 0 to 1), duration (in s for pulse)
 def setServo (pin, angle, duration = 0.7):
 	angle = min(max(0,angle),1)
-	dutycycle = 5 + angle * (23 - 5) 
+	dutycycle = 4 + angle * (19 - 4) 
 	p = GPIO.PWM(pin,85)
 	p.start(dutycycle)
 	time.sleep(duration)

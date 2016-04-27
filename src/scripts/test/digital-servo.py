@@ -7,12 +7,16 @@ pin = 18
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(pin, GPIO.OUT)
 
+SERVO_MIN = 23
+SERVO_MAX = 52
+
 
 # pin, angle (From 0 to 1), duration (in s for pulse)
-def setServo (pin, angle, duration = 0.7):
+def setServo (pin, angle, duration = 1.0):
 	angle = min(max(0,angle),1)
-	dutycycle = 4 + angle * (19 - 4) 
-	p = GPIO.PWM(pin,85)
+	# dutycicle 100% = 4000 us, 50% = 2000ms, 1% = 40 us 
+	dutycycle = SERVO_MIN + angle * (SERVO_MAX - SERVO_MIN)
+	p = GPIO.PWM(pin,250)
 	p.start(dutycycle)
 	time.sleep(duration)
 	p.stop();

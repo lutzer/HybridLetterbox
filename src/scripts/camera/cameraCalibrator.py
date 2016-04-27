@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-04-26 15:15:46
+# @Last Modified time: 2016-04-27 18:32:54
 
 import numpy as np
 import cv2
@@ -12,7 +12,7 @@ import logging
 CHESSBOARD_ROWS = 8
 CHESSBOARD_COLUMNS = 11
 
-CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
+CAMERA_MATRIX_FILE = "/home/letterbox/HybridLetterbox/src/scripts/camera/camera_matrix.json"
 
 logger = logging.getLogger(__name__)
 

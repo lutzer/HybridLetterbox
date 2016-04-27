@@ -86,11 +86,11 @@ class CameraControl:
 
 	# step 2
 	def extractSubmission (self,image):
-		logger.debug("undistort image")
-		image = calibrator.undistortImage(image)
-
 		logger.debug("thresholding image")
 		image = self.thresholdImage(image)
+
+		logger.debug("undistort image")
+		image = calibrator.undistortImage(image)
 
 		logger.debug("extrct roi")
 		image,found, minVal,cat = self.extractRoiAndMaskPattern(image)
@@ -134,8 +134,8 @@ class CameraControl:
 		retval,threshImage = cv2.threshold(substractImage,self.param["Image_Threshold_Low"],0,cv2.THRESH_TOZERO)
 		retval,threshImage = cv2.threshold(threshImage,self.param["Image_Threshold_High"],0,cv2.THRESH_TRUNC)
 		kernel = numpy.ones((3,3),numpy.uint8)
-		threshImage = cv2.erode(threshImage,kernel,self.param['Dilate_Iterations'])
-		threshImage = cv2.dilate(threshImage,kernel,self.param['Dilate_Iterations'])
+		#threshImage = cv2.erode(threshImage,kernel,self.param['Dilate_Iterations'])
+		#threshImage = cv2.dilate(threshImage,kernel,self.param['Dilate_Iterations'])
 
 		# invert image
 		threshImage = 255 - (threshImage * (255 / self.param["Image_Threshold_High"]))
@@ -176,8 +176,8 @@ class CameraControl:
 		# check for category Marker
 		category = -1
 		if (len(self.catMarkers) > 0):
-			c1 = [minLoc[0] - width_marker*0.2, minLoc[1] - height_marker*2]
-			c2 = [minLoc[0] + width_marker*1.2, minLoc[1] ]
+			c1 = [minLoc[0] - width_marker*0.2, minLoc[1] + height_marker*0.9]
+			c2 = [minLoc[0] + width_marker*1.2, minLoc[1] + height_marker*2]
 			markerRegion = image[c1[1] : c2[1], c1[0] : c2[0]]
 			category = findCategoryMarker(markerRegion,self.catMarkers)
 

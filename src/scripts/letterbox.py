@@ -21,7 +21,7 @@ PIN_SERVO = 18
 PIN_PHOTORESISTOR = 17
 
 # # Parameters
-CONFIG_FILE = "/home/letterbox/scripts/letterbox/letterbox.ini"
+CONFIG_FILE = "/home/letterbox/HybridLetterbox/src/scripts/letterbox.ini"
 DELAY_BETWEEN_READINGS = 0.3 # 300 ms
 
 # Global Vars
