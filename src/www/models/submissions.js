@@ -5,7 +5,7 @@ var Database = r_require('/models/database');
 var config = r_require('/config');
 var utils = r_require('/utils/utils');
 
-var Submission = {
+var Submissions = {
 
 	create : function(data,callback) {
 		var db = new Database();
@@ -56,4 +56,4 @@ var Submission = {
 
 }
 
-module.exports = Submission;
+module.exports = Submissions;
