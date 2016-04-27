@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Polylogue</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+		<link href="css/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
+		<link href="css/spinner.css" type="text/css" rel="stylesheet" >
+	</head>
+	<body role='document'>
+	<div id="container">
+		<div id="console">
+			<div class="group">
+				<label for="message" id="message-label"> <span class="keyword">polylogue </span>&#62;</label>
+				<textarea id="message" maxlength="160"></textarea>
+				<div id="hint">
+					<p>(Type return to submit)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="modal">
+		<div class="dialog">
+			<h1>Submit message?</h1>
+			<p style="display:none" class="sent">Message sent.</p>
+			<p class="buttons"><a href="#" onclick="acceptConfirmDialog(true)">(Y)es</a><a href="#" onclick="acceptConfirmDialog(false)">(N)o</a>
+			<input id="button-input" type="text" class="ui-hidden-accessible"></p>
+
+		</div>
+	</div>
+	<div id="modal-container"></div>
+	<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/autosize.min.js"></script>
+	<script>
+
+		var message = '';
+
+        $(document).ready(function() {
+            onKeywordChanged();
+
+            //set focus on text field
+            $('#message').select();
+
+            jQuery('body').bind('focusin focus', function(e){
+ 				e.preventDefault();
+			});
+        });
+
+        function onKeywordChanged() {
+        	// set text area box indent depending on label size
+        	$('#message').css('text-indent',$('#message-label').width());
+        };
+
+        /* Terminal functions */
+        function onTextInputChanged(e) {
+			var allowed = /[a-zA-Z0-9]/;
+
+			//remove non asci characters and linebreaks
+			var str = $(this).val();
+			str = str.replace(/[^\x00-\x09|\x0b-\x7f]/g, "");
+
+			//dont allow more than 160 characters
+			str = str.substring(0,160);
+
+			if (str.length > 0)
+				$('#button').show();
+			else
+				$('#button').hide();
+
+			$(this).val(str);
+
+			//autosize textarea
+			autosize($('#message'));
+
+			// if pressed enter, submit
+			if (e.keyCode === 13 ) {
+				// check if the string is empty
+				var length = $(this).val().trim().length;
+				if (length > 0) {
+					message = str.trim();
+				    openConfirmDialog();
+				}
+			}
+        };
+        $('#message').on('keypress', onTextInputChanged);
+        $('#message').on('input change', onTextInputChanged);
+
+
+        function onMessageBlur() {
+        	var str = $(this).val();
+
+        	if (str.length > 0)
+        		$('#hint').show();
+        	else
+        		$('#hint').hide();
+        }
+        $('#message').on('blur',onMessageBlur);
+
+         /* Dialog Functions */
+        function openConfirmDialog() {
+        	$('#modal').show();
+        	$('#modal .buttons').show();
+		    $('#modal .sent').hide();
+
+		    $('#button-input').focus();
+        };
+
+        function onDialogKeyPress(e) {
+        	if (e.charCode == 121) //y 
+        		acceptConfirmDialog(true);
+        	else if (e.charCode == 110) //n
+        		acceptConfirmDialog(false);
+        };
+        $('#button-input').on('keypress', onDialogKeyPress);
+
+        function acceptConfirmDialog(result) {
+
+			$('#hint').hide();
+
+        	if (result) {
+		   		//submit & clear field
+		    	$('#message').val('');
+		    	$('#modal .buttons').hide();
+		    	$('#modal .sent').show();
+		    	submitMessage(message);
+		    	setTimeout( function() {
+		    		$('#modal').hide();
+		    	},3000);
+	    	} else {
+	    		$('#modal').hide();
+	    	}
+
+	    	// focus on message again
+	    	setTimeout(function() {
+	    		$('#message').focus();
+	    	},100);
+	    	
+        };
+
+        function submitMessage() {
+        	$.ajax({
+				type: 'POST',
+				url: 'api/submissions/',
+				data: { message: message },
+				dataType: 'json',
+				error: function(err) {
+					console.log(err);
+					alert("Error");
+				}
+			});
+        }
+
+	</script
+	</body>
+</html>
