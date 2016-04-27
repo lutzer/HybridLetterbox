@@ -1,8 +1,8 @@
 /* 
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-01-25 11:08:47
-* @Last Modified by:   lutz
-* @Last Modified time: 2016-01-25 11:08:57
+* @Last Modified by:   lutzer
+* @Last Modified time: 2016-04-27 16:26:29
 */
 
 /* use absolute paths for require */
@@ -17,6 +17,11 @@ var app = express();
 var http = require('http').Server(app);
 
 var config = r_require('/config.js');
+
+/* start Test server */
+if (process.argv[2] == 'test') {
+	config.databaseSubmissions = "submissions_test.db"
+}
 
 /* Load Sockets */
 

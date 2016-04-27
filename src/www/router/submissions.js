@@ -45,7 +45,7 @@ router.post('/', function (req, res) {
     };
 
     //insert data
-    submissions.create(data, function(err, docs) {
+    submissions.insert(data, function(err, docs) {
 
         utils.handleError(err);
 
@@ -54,13 +54,26 @@ router.post('/', function (req, res) {
         object = docs[0];
         var objectId = object._id;
 
-        // trigger socket event and send mesagge to printer
+        // trigger socket event and send message to web app
         appEvents.emit('submission:new',object)
 
         // send answer
         res.send(object);
     });
     
+});
+
+/*
+ * DELETE /api/submissions/:id
+ */
+router.delete('/:id', function(req, res) {
+    submissions.remove(req.params.id, function(err,doc) {
+
+        console.log('Submission deleted from database');
+
+        utils.handleError(err);
+        res.sendStatus(doc);
+    });
 });
 
 module.exports = router;

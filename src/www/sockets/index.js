@@ -9,27 +9,30 @@ module.exports = function (http) {
 
 	io.on('connection', function(socket){
 
-	    console.log('Socket: User connected');
+	    console.log('Socket: Client connected');
 
 	    // Server event handlers
-
 	    function submissionAddedHandler(doc) {
-	    	console.log('socket emit:<submission:new>');
-		    socket.emit('submission:new',{data: doc}); // this will send a signal to the interface and central webserver
+		    socket.emit('submission:new',{doc: doc}); // this will send a signal to the interface and central webserver
 	    }
 		appEvents.on('submission:new', submissionAddedHandler);
+
+		function submissionRemovedHandler(id) {
+			socket.emit('submission:removed',{id: id});
+		}
+		appEvents.on('submission:removed', submissionRemovedHandler);
 
 		socket.on('error', function(err) {
 	    	console.log(err);
 		});
 
 	    // Clean up after disconnect
-
 	    socket.on('disconnect', function(){
-	        console.log('Socket: User disconnected');
+	        console.log('Socket: Client disconnected');
 
 	        //remove server events
 	        appEvents.removeListener('submission:new',submissionAddedHandler);
+	        appEvents.removeListener('submission:removed',submissionRemovedHandler);
 	    });
 
 	});

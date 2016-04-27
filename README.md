@@ -6,17 +6,19 @@
 
 ### Setup Letterbox for the first time
 
-* Call Setup script with `sudo code/scripts/setup.py`
+* Call Setup script with `sudo src/python/setup.py`
 
 ## Development
 
 ### Python Test Scripts
 
-* Call testscripts by sudo `python2 -m code.scripts.tests`
+* Call testscripts by sudo `python2 -m src.python.tests`
 
 ### Node Testscripts
 
-
+*  go to `cd src/www`
+  * First start node test server with `npm app.js test`
+  * start new shell and start testscripts by calling `npm test`
 
 ### Configure Atmega Head Board
 
