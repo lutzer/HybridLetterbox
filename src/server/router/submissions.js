@@ -2,8 +2,6 @@ var express = require('express');
 var _ = require('underscore');
 var htmlspecialchars = require('htmlspecialchars');
 
-
-var config = r_require('/config.js');
 var submissions = r_require('/models/submissions');
 var appEvents = r_require('/utils/appEvents.js');
 var utils = r_require('/utils/utils');

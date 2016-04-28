@@ -4,9 +4,8 @@ var fs = require('fs')
 var _ = require('underscore')
 
 var submissions = r_require('models/submissions')
-var config = r_require('/config.js')
 
-var BASE_URL = "http://localhost:"+config.port+config.baseUrl
+var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
 var MODEL_ID = 2
 
 describe('API Routes', function(){

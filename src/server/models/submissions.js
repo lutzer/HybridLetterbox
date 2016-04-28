@@ -4,7 +4,6 @@ var uuid = require('node-uuid');
 var _ = require('underscore')
 
 var Database = r_require('/models/database');
-var config = r_require('/config');
 var utils = r_require('/utils/utils');
 
 var Submissions = {
@@ -66,7 +65,7 @@ var Submissions = {
 
 	drop: function(callback) {
 		// delete database file
-		var filepath = config.databaseDirectory + config.databaseSubmissions;
+		var filepath = Config.databaseDirectory + Config.databaseSubmissions;
 		try {
   			stats = fs.statSync(filepath);
   			if (stats.isFile())

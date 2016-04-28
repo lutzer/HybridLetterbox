@@ -4,9 +4,9 @@ var fs = require('fs')
 var _ = require('underscore')
 
 var submissions = r_require('models/submissions')
-var config = r_require('/config.js')
 
-describe('Submissions Database', function(){
+
+describe('Database Test', function(){
 
   	beforeEach(function(done) {
   		// delete database file before each test call

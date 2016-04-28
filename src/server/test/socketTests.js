@@ -3,10 +3,9 @@ var assert = require('assert');
 var _ = require('underscore')
 
 var submissions = r_require('models/submissions')
-var config = r_require('/config.js')
 
-var SOCKET_SERVER_URL = "http://localhost:"+config.port
-var BASE_URL = "http://localhost:"+config.port+config.baseUrl
+var SOCKET_SERVER_URL = "http://localhost:"+Config.port
+var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
 var MODEL_ID = 2
 
 describe('Socket Tests', function(){
