@@ -36,8 +36,6 @@ router.post('/', function (req, res) {
 
     console.log('Received new Submission');
 
-    console.log(req.body);
-
     var data = {
         message : req.body.message
     };
@@ -69,7 +67,7 @@ router.delete('/:id', function(req, res) {
 
         utils.handleError(err);
 
-        console.log('Submission deleted from database');
+        console.log("Submission "+req.params.id+" deleted from database");
 
         appEvents.emit('submission:removed',req.params.id)
 

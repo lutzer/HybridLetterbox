@@ -22,4 +22,6 @@ module.exports = function (app) {
     app.use(Config.baseUrl+'api/submissions', bodyParser.json());
     app.use(Config.baseUrl+'api/submissions', bodyParser.urlencoded({ extended: true }));
     app.use(Config.baseUrl+'api/submissions', require('./submissions'));
+
+    app.use(Config.baseUrl+'api/feedback', require('./feedback'));
 };

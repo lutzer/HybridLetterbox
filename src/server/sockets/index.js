@@ -22,6 +22,11 @@ module.exports = function (http) {
 		}
 		appEvents.on('submission:removed', submissionRemovedHandler);
 
+		function feedbackScanningHandler(progress) {
+			socket.emit('feedback:scanning',{progress: progress});
+		}
+		appEvents.on('feedback:scanning', feedbackScanningHandler);
+
 		socket.on('error', function(err) {
 	    	console.log(err);
 		});
@@ -33,6 +38,7 @@ module.exports = function (http) {
 	        //remove server events
 	        appEvents.removeListener('submission:new',submissionAddedHandler);
 	        appEvents.removeListener('submission:removed',submissionRemovedHandler);
+	        appEvents.removeListener('feedback:scanning',feedbackScanningHandler);
 	    });
 
 	});

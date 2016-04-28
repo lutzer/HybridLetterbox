@@ -14,7 +14,8 @@
     "underscore": "^1.8.3"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha test/main.js --reporter spec"
+    "test": "./node_modules/.bin/mocha test/main.js --reporter spec",
+    "start": "node app.js"
   },
   "author": "Lutz Reiter, Design Research Lab, University of Arts Berlin"
 }
