@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 18:13:21
+# @Last Modified time: 2016-04-28 10:33:00
 
 import cv2
 import numpy as np
@@ -44,6 +44,14 @@ class CardScanner:
 	def saveImage(self,path):
 		logger.info("save Image")
 		cv2.imwrite(path,self.image)
+
+	def extract():
+
+		self.threshold()
+		cat = self.findMarker()
+		self.maskRectangle()
+
+		return cat;
 
 	def threshold(self):
 		greyImage = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)

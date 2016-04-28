@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-04-13 12:11:28
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-04-28 10:28:00
 
 import picamera
 import cv2
@@ -59,7 +59,7 @@ class CameraControl:
 		logger.info('image taken')
 		return image
 
-	def startPreview(self,duration=1):
+	def startPreview(self,duration=30):
 		logger.info("started camera preview")
 		self.camera.start_preview()
 		time.sleep(duration)
