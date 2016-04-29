@@ -6,6 +6,7 @@ var _ = require('underscore')
 var submissions = r_require('models/submissions')
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
+console.log(BASE_URL)
 var MODEL_ID = 2
 
 describe('API Routes', function(){
@@ -42,8 +43,6 @@ describe('API Routes', function(){
 		}
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
 			if (err) {
-				assert(false)
-				done();
 				throw err;
 			}
 			assert.equal(res.body.message, data.message);
@@ -57,8 +56,6 @@ describe('API Routes', function(){
 
 		request(BASE_URL).get('api/submissions').expect(200).end(function(err, res) {
 			if (err) {
-				assert(false)
-				done();
 				throw err;
 			}
 			assert.equal(res.body[0].message,randomNumber)
@@ -72,8 +69,6 @@ describe('API Routes', function(){
 
 		request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
 			if (err) {
-				assert(false)
-				done();
 				throw err;
 			}
 			assert.equal(res.body._id,2)
@@ -87,16 +82,12 @@ describe('API Routes', function(){
 
 		request(BASE_URL).delete('api/submissions/'+MODEL_ID).end(function(err, res) {
 			if (err) {
-				assert(false)
-				done();
 				throw err;
 			}
 			
 			//check if model is really deleted
 			request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
 				if (err) {
-					assert(false)
-					done();
 					throw err;
 				}
 				assert(_.isEmpty(res.body));

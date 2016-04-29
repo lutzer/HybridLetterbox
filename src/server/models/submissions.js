@@ -1,6 +1,4 @@
-var fs = require('fs');
 var exec = require('child_process').exec;
-var uuid = require('node-uuid');
 var _ = require('underscore')
 
 var Database = r_require('/models/database');
@@ -10,15 +8,6 @@ var Submissions = {
 
 	insert : function(data,callback) {
 		var db = new Database();
-
-		//add uuid
-		if (!Array.isArray(data))
-			data = [ data ]
-		data = _.map(data, function(item) {
-			item.uuid = uuid.v1()
-			return item
-		});
-
 		db.submissions.insert(data,callback)
 	},
 
@@ -55,7 +44,7 @@ var Submissions = {
 
 	count : function(callback) {
 		var db = new Database();
-		db.submissions.find({}).count(callback);
+		db.submissions.length(callback);
 	},
 
 	remove : function(id,callback) {
@@ -64,16 +53,8 @@ var Submissions = {
 	},
 
 	drop: function(callback) {
-		// delete database file
-		var filepath = Config.databaseDirectory + Config.databaseSubmissions;
-		try {
-  			stats = fs.statSync(filepath);
-  			if (stats.isFile())
-				fs.unlinkSync(filepath);
-  		} catch (e) {
-  			// do nothing
-  		}
-  		callback();
+		var db = new Database();
+		db.drop(callback);
 	}
 }
 

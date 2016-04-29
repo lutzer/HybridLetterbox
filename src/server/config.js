@@ -4,6 +4,7 @@ var Config = {
 	
 	databaseDirectory : __dirname + "/data/", //chmod this path 777
 	databaseSubmissions : "submissions.db",
+	databaseChanges : "changes.db",
 
 	baseUrl : '/', // with trailing /
 	servePublicDir : true,

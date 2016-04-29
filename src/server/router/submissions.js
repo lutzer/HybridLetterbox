@@ -34,7 +34,7 @@ router.get('/:id',function(req,res){
  */ 
 router.post('/', function (req, res) {
 
-    console.log('Received new Submission');
+    print('Received new Submission');
 
     var data = {
         message : req.body.message
@@ -45,7 +45,7 @@ router.post('/', function (req, res) {
 
         utils.handleError(err);
 
-        console.log('Submission added to database');
+        print('Submission added to database');
 
         object = docs[0];
         var objectId = object._id;
@@ -67,7 +67,7 @@ router.delete('/:id', function(req, res) {
 
         utils.handleError(err);
 
-        console.log("Submission "+req.params.id+" deleted from database");
+        print("Submission "+req.params.id+" deleted from database");
 
         appEvents.emit('submission:removed',req.params.id)
 

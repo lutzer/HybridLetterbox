@@ -13,9 +13,16 @@ global.r_require = function(name) {
 /* register config as global var */
 global.Config = r_require('/config.js');
 
+/* alias for printing */
+global.print = function(string) {
+	console.log(string);
+}
+
 /* if startet as test server, change to test database */
 if (process.argv[2] == 'test') { 
-	Config.databaseDirectory = __dirname + "/test/data/"
+	Config.databaseDirectory = __dirname + "/tests/data/";
+	Config.port = '8881'
+	//print = function() {}; //turn of printing
 }
 
 /*Define dependencies.*/
@@ -23,9 +30,6 @@ if (process.argv[2] == 'test') {
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
-
-
-
 
 /* Load Sockets */
 
@@ -43,5 +47,5 @@ app.use(function(err, req, res, next) {
 /* Run the server */
 
 http.listen(Config.port,Config.hostname,function(){
-    console.log("Node Server listening on "+Config.hostname+":"+Config.port);
+    print("Node Server listening on "+Config.hostname+":"+Config.port);
 });

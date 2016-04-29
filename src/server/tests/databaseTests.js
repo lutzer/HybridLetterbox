@@ -8,6 +8,9 @@ var submissions = r_require('models/submissions')
 
 describe('Database Test', function(){
 
+	// sets thest timeout to 500 ms
+  	this.timeout(500);
+
   	beforeEach(function(done) {
   		// delete database file before each test call
   		submissions.drop(done);
@@ -30,7 +33,7 @@ describe('Database Test', function(){
 
 		var uuid = require('node-uuid');
 
-		randomNumber = uuid.v1()
+		randomNumber = uuid.v4()
 
 		data = {
 			category : 2,
@@ -111,4 +114,20 @@ describe('Database Test', function(){
 		});
 	})
 
+	it("should reflect inserts in the changes db", function(done) {
+
+		var uuid = require('node-uuid');
+		var Database = r_require('models/database.js');
+
+		submissions.insert({ data: "test"}, function(err,docs) {
+
+			var objectUuid = docs[0].uuid;
+
+			var db = new Database();
+			db.changes.findOne({ uuid: objectUuid}, function(err,doc) {
+				assert.equal(objectUuid,doc.uuid);
+				done();
+			});
+		});
+	});
 })

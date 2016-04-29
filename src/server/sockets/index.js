@@ -9,9 +9,16 @@ module.exports = function (http) {
 
 	io.on('connection', function(socket){
 
-	    console.log('Socket: Client connected');
+	    print('Socket: Client connected');
+
+		socket.on('error', function(err) {
+	    	print(err);
+		});
 
 	    // Server event handlers
+	    
+	    /* ALL NAMESPACES */
+
 	    function submissionAddedHandler(model) {
 		    socket.emit('submission:new',{model: model}); // this will send a signal to the interface and central webserver
 	    }
@@ -22,18 +29,17 @@ module.exports = function (http) {
 		}
 		appEvents.on('submission:removed', submissionRemovedHandler);
 
+		/* TABLET NAMESPACE */
+
 		function feedbackScanningHandler(progress) {
 			socket.emit('feedback:scanning',{progress: progress});
 		}
+		socket.on('feedback:scanning',feedbackScanningHandler)
 		appEvents.on('feedback:scanning', feedbackScanningHandler);
-
-		socket.on('error', function(err) {
-	    	console.log(err);
-		});
 
 	    // Clean up after disconnect
 	    socket.on('disconnect', function(){
-	        console.log('Socket: Client disconnected');
+	        print('Socket: Client disconnected');
 
 	        //remove server events
 	        appEvents.removeListener('submission:new',submissionAddedHandler);

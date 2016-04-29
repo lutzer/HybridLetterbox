@@ -16,9 +16,10 @@
 
 ### Node Testscripts
 
+* install pm2 `npm install pm2 -g`
+
 *  go to `cd src/www`
-  * First start node test server with `npm app.js test`
-  * start new shell and start testscripts by calling `npm test`
+   * start testscripts by calling `npm test`
 
 ### Configure Atmega Head Board
 

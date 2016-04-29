@@ -10,12 +10,16 @@ global.r_require = function(name) {
     return require(__dirname + "/../" + name);
 }
 
+global.print = function(string) {
+	console.log(string);
+}
+
 global.Config = r_require('/config.js');
 
 // change to test database
 Config.databaseDirectory = __dirname + "/data/"
-console.log(Config.databaseDirectory)
+Config.port = '8881'
 
-r_require("/test/databaseTests.js")
-r_require("/test/apiTests.js")
-r_require("/test/socketTests.js")
+r_require("/tests/databaseTests.js")
+r_require("/tests/apiTests.js")
+r_require("/tests/socketTests.js")
