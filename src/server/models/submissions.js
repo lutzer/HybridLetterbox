@@ -49,7 +49,7 @@ var Submissions = {
 
 	remove : function(id,callback) {
 		var db = new Database();
-		db.submissions.remove({_id: id},callback);
+		db.submissions.removeOne(id,callback);
 	},
 
 	drop: function(callback) {

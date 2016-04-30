@@ -22,18 +22,15 @@ var Database = function() {
 			if (!Array.isArray(data))
 				data = [ data ]
 			data = _.map(data, function(item) {
-				item.uuid = uuid.v4()
+				item._id = uuid.v4()
 				return item
 			});
 
 			self.databases.submissions.insert(data,function(err, docs) {
-				if (err)
-					callback(err)
-				else
-					self.addChange(docs, 'submissions', 'insert', function(err) {
-						callback(err,docs);
-					});
-					
+				Utils.handleError(err);
+				self.addChange(docs, 'submissions', 'insert', function(err) {
+					callback(err,docs);	
+				});
 			});
 		},
 
@@ -45,11 +42,15 @@ var Database = function() {
 			self.databases.submissions.find(query,callback)
 		},
 
-		remove: function(query,callback) {
-			self.databases.submissions.remove(query, function(err, docs) {
-				if (!err)
-					self.addChange(docs, 'submissions', 'remove', Utils.handleError);
-				callback(err,docs);
+		removeOne: function(id,callback) {
+			self.databases.submissions.remove({ _id : id}, function(err, docs) {
+
+				ids = [ { _id : id} ];
+
+				Utils.handleError(err);
+				self.addChange(ids, 'submissions', 'remove', function(err) {
+					callback(err,ids);
+				});
 			});
 		},
 
@@ -65,14 +66,20 @@ Database.prototype.addChange = function(docs,database,action,callback) {
 
 	data = _.map(docs, function(doc) {
 		return {
-			uuid : doc.uuid,
+			_id : doc._id,
 			database: database,
 			action: action
 		}
 	});
 
-	this.databases.changes.insert(data, function(err) {
-		callback(err)
+	ids = _.map(docs, function(doc) {
+		return doc._id
+	});
+
+
+	this.databases.changes.update( { _id : { $in : ids } }, data, { upsert: true, multiple: true }, function(err,docs) {
+		print(docs)
+		callback(err,docs);
 	});
 };
 

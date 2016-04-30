@@ -21,5 +21,5 @@ Config.databaseDirectory = __dirname + "/data/"
 Config.port = '8881'
 
 r_require("/tests/databaseTests.js")
-r_require("/tests/apiTests.js")
-r_require("/tests/socketTests.js")
+//r_require("/tests/apiTests.js")
+//r_require("/tests/socketTests.js")

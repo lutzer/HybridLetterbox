@@ -121,13 +121,36 @@ describe('Database Test', function(){
 
 		submissions.insert({ data: "test"}, function(err,docs) {
 
-			var objectUuid = docs[0].uuid;
+			var objectId = docs[0]._id;
 
 			var db = new Database();
-			db.changes.findOne({ uuid: objectUuid}, function(err,doc) {
-				assert.equal(objectUuid,doc.uuid);
+			db.changes.findOne({ _id : objectId}, function(err,doc) {
+				assert.equal(objectId,doc._id);
+				assert.equal('insert',doc.action);
 				done();
 			});
+		});
+	});
+
+	it("should reflect removes in the changes db", function(done) {
+
+		var uuid = require('node-uuid');
+		var Database = r_require('models/database.js');
+
+		submissions.insert({ data: "test"}, function(err,docs) {
+
+			var objectId = docs[0]._id;
+
+			submissions.remove(objectId, function(err) {
+				var db = new Database();
+				db.changes.findOne({ _id: objectId}, function(err,doc) {
+					assert.equal(objectId,doc._id);
+					//assert.equal('remove',doc.action);
+					done();
+				});
+			})
+
+			
 		});
 	});
 })
