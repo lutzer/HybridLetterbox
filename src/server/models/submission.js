@@ -12,7 +12,11 @@ var submissionSchema = mongoose.Schema({
 	_id: { type: String, default: uuid.v4 }, //use uuid
 
     message : { type: String, default: false },
-    files : Array,
+    files : [{
+    	name: String,
+    	path: String,
+    	filetype: String
+    }],
     author: { type: {
     	name: String,
     	id: String

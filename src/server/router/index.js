@@ -15,9 +15,9 @@ var options = {
 
 module.exports = function (app) {
 
-	// serve static content from public directory
-    if (Config.servePublicDir)
-	   app.use(Config.baseUrl,express.static('public',options));
+	// serve static content
+    if (Config.publicDir)
+	   app.use(Config.baseUrl,express.static(Config.publicDir,options));
 
     app.use(Config.baseUrl+'api/submissions', bodyParser.json());
     app.use(Config.baseUrl+'api/submissions', bodyParser.urlencoded({ extended: true }));

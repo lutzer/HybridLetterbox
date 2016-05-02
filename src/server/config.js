@@ -2,15 +2,13 @@
 
 var Config = {
 
-	boxId : 'box1',
-
 	/* DATABASE */
 	database: "mongodb://localhost/letterbox",
 	submissionCollection: "submissions",
 
 	/* SERVER CONFIG */
 	baseUrl : '/', // with trailing /
-	servePublicDir : true,
+	publicDir : '../www/src/',
 	hostname : false, // 127.0.0.1 = private, false = public
 	port : '8081',
 

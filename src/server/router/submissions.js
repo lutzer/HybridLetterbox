@@ -12,9 +12,9 @@ var router = express.Router();
 /*
  * GET /api/submissions/
  */ 
-router.get('/',function(req,res){
+router.get('/',(req,res) => {
 
-    Submission.find({},function(err,models) {
+    Submission.find({}, (err,models) => {
         Utils.handleError(err,res);
         res.send(models);
     });
@@ -23,8 +23,8 @@ router.get('/',function(req,res){
 /*
  * GET /api/submissions/:id
  */ 
-router.get('/:id',function(req,res){
-    Submission.findOne({ _id: req.params.id} , function(err,model) {
+router.get('/:id',(req,res) => {
+    Submission.findOne({ _id: req.params.id} , (err,model) => {
         res.send(model);
     });
 });
@@ -32,14 +32,14 @@ router.get('/:id',function(req,res){
 /*
  * POST /api/submissions/
  */ 
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
 
     print('Received new Submission');
 
     var submission = new Submission (req.body);
 
     //insert data
-    submission.save(function(err, model) {
+    submission.save((err, model) => {
         Utils.handleError(err);
 
         print('Submission added to database');
@@ -54,8 +54,8 @@ router.post('/', function (req, res) {
 /*
  * DELETE /api/submissions/:id
  */
-router.delete('/:id', function(req, res) {
-    Submission.remove({ _id: req.params.id }, function(err, obj) {
+router.delete('/:id', (req, res) => {
+    Submission.remove({ _id: req.params.id }, (err, obj) => {
         Utils.handleError(err);
 
         if (obj.result.n > 0) {

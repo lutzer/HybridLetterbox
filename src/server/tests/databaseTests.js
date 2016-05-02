@@ -29,7 +29,7 @@ describe('Database Test', function(){
 				text: "Test Category"
 			},
 			message : 'Test Nachricht',
-			files: [ "test.jpg" ]
+			files: [ { name: "test.jpg", path: "data/images", filetype: "image" } ]
 		})
 
 		submission.save(function(err, model) {
