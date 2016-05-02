@@ -11,8 +11,8 @@ var Database = function() {
 	var db = new Tingodb.Db(Config.databaseDirectory, {});
 
 	this.databases = {
-		submissions : db.collection(Config.databaseSubmissions), //saves the submissions
-		changes : db.collection(Config.databaseChanges) //saves changes done to the databases
+		submissions : db.collection(Config.databaseSubmissions+".db"), //saves the submissions
+		changes : db.collection(Config.databaseChanges+".db") //saves changes done to the databases
 	};
 
 	this.submissions = {
@@ -72,13 +72,8 @@ Database.prototype.addChange = function(docs,database,action,callback) {
 		}
 	});
 
-	ids = _.map(docs, function(doc) {
-		return doc._id
-	});
 
-
-	this.databases.changes.update( { _id : { $in : ids } }, data, { upsert: true, multiple: true }, function(err,docs) {
-		print(docs)
+	this.databases.changes.insert( data, function(err) {
 		callback(err,docs);
 	});
 };

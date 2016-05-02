@@ -1,7 +1,7 @@
 var exec = require('child_process').exec;
 var _ = require('underscore')
 
-var Database = r_require('/models/database');
+var Database = r_require('/models/mongoDatabase');
 var utils = r_require('/utils/utils');
 
 var Submissions = {
