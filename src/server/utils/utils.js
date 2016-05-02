@@ -11,7 +11,6 @@ module.exports = {
 	        	res.status(500).send(err);
 
 	        throw(err);
-	        
 	        return true;
 	    }
 	    return false;

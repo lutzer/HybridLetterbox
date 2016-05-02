@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-04-27 11:49:42
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-04-28 11:11:43
+* @Last Modified time: 2016-05-02 12:56:32
 */
 
 /* use absolute paths for require */
@@ -17,9 +17,9 @@ global.print = function(string) {
 global.Config = r_require('/config.js');
 
 // change to test database
-Config.databaseDirectory = __dirname + "/data/"
-Config.port = '8881'
+Config.databaseName = Config.testDatabase;
+Config.port = Config.testPort;
 
 r_require("/tests/databaseTests.js")
-//r_require("/tests/apiTests.js")
-//r_require("/tests/socketTests.js")
+r_require("/tests/apiTests.js")
+r_require("/tests/socketTests.js")

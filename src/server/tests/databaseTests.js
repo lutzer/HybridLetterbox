@@ -3,8 +3,9 @@ var assert = require('assert');
 var fs = require('fs')
 var _ = require('underscore')
 
-var submissions = r_require('models/submissions')
+var Utils = r_require('utils/utils');
 
+var Submission = r_require('models/submission')
 
 describe('Database Test', function(){
 
@@ -13,41 +14,47 @@ describe('Database Test', function(){
 
   	beforeEach(function(done) {
   		// delete database file before each test call
-  		submissions.drop(done);
+  		Submission.removeAll(done);
   	});
 
 	it('should create a database file and add one submission', function(done){
 
-		data = {
-			category : 0,
-			image: "test.jpg"
-		}
+		var submission = new Submission({
+			author : { 
+				name : "letterbox_test",
+				id : "box1"
+			},
+			category : {
+				id: 0,
+				text: "Test Category"
+			},
+			message : 'Test Nachricht',
+			files: [ "test.jpg" ]
+		})
 
-		submissions.insert(data,function(err, docs) {
-			assert(err == null);
+		submission.save(function(err, model) {
+			Utils.handleError(err);
 			done();
 		});
 	})
 
 	it('should add a submission and return it', function(done){
 
-		var uuid = require('node-uuid');
+		message = require('node-uuid').v4()
 
-		randomNumber = uuid.v4()
+		var submission = new Submission({
+			message: message
+		});
 
-		data = {
-			category : 2,
-			image : "test.jpg",
-			rand: randomNumber
-		}
+		submission.save(function(err, model) {
+			Utils.handleError(err);
+			objectId = model._id;
 
-		submissions.insert(data,function(err, docs) {
-
-			objectId = docs[0]._id;
-			submissions.get(objectId, function(err, doc) {
-	        	assert.equal(randomNumber,doc.rand)
+			// check if model exists
+			Submission.find({ _id: objectId} , function(err, models) {
+	        	assert.equal(message,models[0].message)
 	        	done();
-			})
+			});
 
 		});
 	})
@@ -55,17 +62,17 @@ describe('Database Test', function(){
 	it('should match the correct submission count', function(done) {
 
 		// insert some models
+		
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'something',
-				number: i
+				message: 'model'+i,
 			}
 		});
 
-		submissions.insert(array, function(err,docs) {
-			submissions.count(function(err,n) {
-				assert.equal(n,size) // check correct size
+		Submission.create(array, function(err,models) {
+			Submission.count({}, function(err, count) {
+				assert.equal(count,size) // check correct size
 				done();
 			});
 		});
@@ -73,82 +80,66 @@ describe('Database Test', function(){
 
 	it('should be able to remove an item', function(done) {
 
-		// insert some models
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'something',
-				number: i
+				message: 'model'+i,
 			}
 		});
 
-		submissions.insert(array, function(err,docs) {
-
-			submissions.remove(docs[0]._id, function(err) {
-				submissions.count(function(err,n) {
-					assert.equal(n,size-1) // check if one item was removed
+		Submission.create(array, function(err,models) {
+			Submission.remove({ _id: models[0]._id} , function(err) {
+				Submission.count({}, function(err,count) {
+					assert.equal(count,size-1) // check if one item was removed
 					done();
 				});
-			})
-			
+			});
 		});
 	})
 
 	it('should list all models', function(done) {
 
-		// insert some models
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'something',
-				number: i
+				message: 'model'+i,
 			}
 		});
 
-		submissions.insert(array, function(err,docs) {
-			submissions.list({}, function(err,docs) {
-				assert.equal(docs.length,size)
+		Submission.create(array, function(err) {
+			Submission.find({}, function(err,models) {
+				assert.equal(models.length,size)
 				done();
 			})
 			
 		});
 	})
 
-	it("should reflect inserts in the changes db", function(done) {
+	it.skip("should reflect inserts in the changes db", function(done) {
 
-		var uuid = require('node-uuid');
+		/*var uuid = require('node-uuid');
 
 		submissions.insert({ data: "test"}, function(err,docs) {
 
 			var objectId = docs[0]._id;
 
-			/*var db = new Database();
-			db.changes.findOne({ _id : objectId}, function(err,doc) {
-				assert.equal(objectId,doc._id);
-				assert.equal('insert',doc.action);
-				done();
-			});*/
-		});
+			
+		});*/
 	});
 
-	it("should reflect removes in the changes db", function(done) {
+	it.skip("should reflect removes in the changes db", function(done) {
 
-		var uuid = require('node-uuid');
+		/*var uuid = require('node-uuid');
 
 		submissions.insert({ data: "test"}, function(err,docs) {
 
 			var objectId = docs[0]._id;
 
 			submissions.remove(objectId, function(err) {
-				/*var db = new Database();
-				db.changes.findOne({ _id: objectId}, function(err,doc) {
-					assert.equal(objectId,doc._id);
-					//assert.equal('remove',doc.action);
-					done();
-				});*/
+				
 			})
 
 			
-		});
+		});*/
 	});
 })

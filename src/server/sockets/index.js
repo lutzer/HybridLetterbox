@@ -1,13 +1,12 @@
 var socketio = require('socket.io');
-var submissions = r_require('/models/submissions');
 
 var appEvents = r_require('/utils/appEvents');
 
 module.exports = function (http) {
 
-	var io = socketio(http);
+	var sio = socketio(http);
 
-	io.on('connection', function(socket){
+	sio.on('connection', function(socket){
 
 	    print('Socket: Client connected');
 
@@ -20,19 +19,19 @@ module.exports = function (http) {
 	    /* ALL NAMESPACES */
 
 	    function submissionAddedHandler(model) {
-		    socket.emit('submission:new',{model: model}); // this will send a signal to the interface and central webserver
+		    sio.emit('submission:new', {model: model}, socket.id); // this will send a signal to the interface and central webserver
 	    }
 		appEvents.on('submission:new', submissionAddedHandler);
 
 		function submissionRemovedHandler(id) {
-			socket.emit('submission:removed',{id: id});
+			sio.emit('submission:removed', {id: id}, socket.id);
 		}
 		appEvents.on('submission:removed', submissionRemovedHandler);
 
 		/* TABLET NAMESPACE */
 
 		function feedbackScanningHandler(progress) {
-			socket.emit('feedback:scanning',{progress: progress});
+			sio.emit('feedback:scanning',{progress: progress}, socket.id);
 		}
 		socket.on('feedback:scanning',feedbackScanningHandler)
 		appEvents.on('feedback:scanning', feedbackScanningHandler);

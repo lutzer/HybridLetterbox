@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-01-25 11:08:47
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-04-28 11:12:37
+* @Last Modified time: 2016-05-02 10:09:12
 */
 
 /* use absolute paths for require */
@@ -20,8 +20,8 @@ global.print = function(string) {
 
 /* if startet as test server, change to test database */
 if (process.argv[2] == 'test') { 
-	Config.databaseDirectory = __dirname + "/tests/data/";
-	Config.port = '8881'
+	Config.databaseName = Config.testDatabase
+	Config.port = Config.testPort
 	//print = function() {}; //turn of printing
 }
 

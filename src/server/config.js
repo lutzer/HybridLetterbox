@@ -1,15 +1,22 @@
 /* CONFIG FILE */
 
 var Config = {
-	
-	databaseDirectory : __dirname + "/data/", //chmod this path 777
-	databaseSubmissions : "submissions",
-	databaseChanges : "changes",
 
+	boxId : 'box1',
+
+	/* DATABASE */
+	database: "mongodb://localhost/letterbox",
+	submissionCollection: "submissions",
+
+	/* SERVER CONFIG */
 	baseUrl : '/', // with trailing /
 	servePublicDir : true,
 	hostname : false, // 127.0.0.1 = private, false = public
-	port : '8081'
+	port : '8081',
+
+	/* TEST CONFIG */
+	testDatabase :"mongodb://localhost/letterbox_test",
+	testPort: '8881'
 
 };
 

@@ -2,9 +2,10 @@ var express = require('express');
 var _ = require('underscore');
 var htmlspecialchars = require('htmlspecialchars');
 
-var submissions = r_require('/models/submissions');
 var appEvents = r_require('/utils/appEvents.js');
-var utils = r_require('/utils/utils');
+var Utils = r_require('/utils/utils');
+
+var Submission = r_require('/models/submission');
 
 var router = express.Router();
 
@@ -13,9 +14,9 @@ var router = express.Router();
  */ 
 router.get('/',function(req,res){
 
-    submissions.list({},function(err,docs) {
-        utils.handleError(err,res);
-        res.send(docs);
+    Submission.find({},function(err,models) {
+        Utils.handleError(err,res);
+        res.send(models);
     });
 });
 
@@ -23,9 +24,8 @@ router.get('/',function(req,res){
  * GET /api/submissions/:id
  */ 
 router.get('/:id',function(req,res){
-    submissions.get(req.params.id, function(err,doc) {
-        utils.handleError(err);
-        res.send(doc);
+    Submission.findOne({ _id: req.params.id} , function(err,model) {
+        res.send(model);
     });
 });
 
@@ -36,25 +36,17 @@ router.post('/', function (req, res) {
 
     print('Received new Submission');
 
-    var data = {
-        message : req.body.message
-    };
+    var submission = new Submission (req.body);
 
     //insert data
-    submissions.insert(data, function(err, docs) {
-
-        utils.handleError(err);
+    submission.save(function(err, model) {
+        Utils.handleError(err);
 
         print('Submission added to database');
 
-        object = docs[0];
-        var objectId = object._id;
-
         // trigger socket event and send message to web app
-        appEvents.emit('submission:new',object)
-
-        // send answer
-        res.send(object);
+        appEvents.emit('submission:new',model)
+        res.send(model);
     });
     
 });
@@ -63,15 +55,15 @@ router.post('/', function (req, res) {
  * DELETE /api/submissions/:id
  */
 router.delete('/:id', function(req, res) {
-    submissions.remove(req.params.id, function(err,doc) {
+    Submission.remove({ _id: req.params.id }, function(err, obj) {
+        Utils.handleError(err);
 
-        utils.handleError(err);
+        if (obj.result.n > 0) {
+            print("Submission "+req.params.id+" deleted from database");
+            appEvents.emit('submission:removed',req.params.id)
+        }
 
-        print("Submission "+req.params.id+" deleted from database");
-
-        appEvents.emit('submission:removed',req.params.id)
-
-        res.sendStatus(doc);
+        res.send( {removed: obj.result.n} );
     });
 });
 

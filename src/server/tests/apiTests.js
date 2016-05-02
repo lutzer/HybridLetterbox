@@ -1,36 +1,33 @@
 
 var assert = require('assert');
-var fs = require('fs')
-var _ = require('underscore')
+var fs = require('fs');
+var _ = require('underscore');
 
-var submissions = r_require('models/submissions')
+var Utils = r_require('utils/utils');
+var Submission = r_require('models/submission');
 
-var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
-console.log(BASE_URL)
-var MODEL_ID = 2
+var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl;
+var MODEL_ID = null;
 
 describe('API Routes', function(){
-
-	var randomNumber = Math.floor(Math.random() * 1000);
 
   	beforeEach(function(done) {
 
   		// delete database file before each test call
-  		submissions.drop(function() {
+  		Submission.removeAll(function() {
 
-  			// insert some models
-			var size = 10
+	  		// Add some Models
+	  		var size = Math.floor(5 + Math.random() * 10)
 			array = _.map(_.range(size), function(i) {
 				return {
-					message: randomNumber,
-					number: i
+					message: 'model'+i,
 				}
 			});
-
-			submissions.insert(array, function(err,docs) {
+			Submission.create(array, function(err,models) {
+				MODEL_ID = models[0]._id;
 				done();
-			});
-  		});
+	  		});
+		});
   		
   	});
 
@@ -39,12 +36,11 @@ describe('API Routes', function(){
 		var request = require('supertest');
 
 		data = {
-			message: "unittest"
+			message: "unittest_" + require('node-uuid').v4()
 		}
+
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
-			if (err) {
-				throw err;
-			}
+			Utils.handleError(err);
 			assert.equal(res.body.message, data.message);
 			done()
         });
@@ -55,10 +51,7 @@ describe('API Routes', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).get('api/submissions').expect(200).end(function(err, res) {
-			if (err) {
-				throw err;
-			}
-			assert.equal(res.body[0].message,randomNumber)
+			Utils.handleError(err);
 			done();
         });
 	})
@@ -68,10 +61,8 @@ describe('API Routes', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
-			if (err) {
-				throw err;
-			}
-			assert.equal(res.body._id,2)
+			Utils.handleError(err);
+			assert.equal(res.body._id,MODEL_ID)
 			done();
         });
 	})
@@ -81,17 +72,14 @@ describe('API Routes', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).delete('api/submissions/'+MODEL_ID).end(function(err, res) {
-			if (err) {
-				throw err;
-			}
+			Utils.handleError(err);
+			assert.equal(res.body.removed, 1);
 			
 			//check if model is really deleted
 			request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
-				if (err) {
-					throw err;
-				}
+				Utils.handleError(err);
 				assert(_.isEmpty(res.body));
-				done()
+				done();
 	        });
 	    });
 	});
