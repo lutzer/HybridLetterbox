@@ -5,7 +5,7 @@ import Controller from 'controller';
 
 var App = new Backbone.Marionette.Application();
 
-module.exports = { 
+export default { 
 
 	initialize: function() {
 	
