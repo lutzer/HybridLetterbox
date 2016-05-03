@@ -1,5 +1,12 @@
+# Hybrid Letterbox Webapp
+
+This directory contains the javascript backbone app that is run on the Letterbox tablet screen
+
+## Build
+
+build src files: `npm run build`
+
 ## Development
 
 * enable es6 in chrome: visit `chrome://flags/#enable-javascript-harmon` and enable **Experimental JavaScript**
-* build es6 to es5: `npm run build`
-* auto compile src folder: `npm run watch`
+* auto compile src folder when making changes to the src files: `npm run watch`

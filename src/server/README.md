@@ -1,5 +1,7 @@
 # Hybrid Letterbox Node Server
 
+Node Server for saving the submissions thrown into the letterbox
+
 ## Setup
 
 * run `npm install`
