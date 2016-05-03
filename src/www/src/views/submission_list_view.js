@@ -1,7 +1,7 @@
 import Marionette from 'marionette'
 import _ from 'underscore'
 
-export default class SubmissionListView extends Marionette.ItemView {
+class SubmissionListView extends Marionette.ItemView {
 
 	get template() { return _.template('<div>Hello World</div') }
 
@@ -11,3 +11,5 @@ export default class SubmissionListView extends Marionette.ItemView {
 		console.log(options)
 	}
 };
+
+export default SubmissionListView
