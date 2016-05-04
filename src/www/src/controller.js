@@ -1,5 +1,14 @@
+/*
+* @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
+* @Date:   2016-05-04 11:38:41
+* @Last Modified by:   lutzer
+* @Last Modified time: 2016-05-04 12:06:07
+*/
+
 import Backbone from 'backbone';
 import Marionette from 'marionette';
+import SIO from 'socketio';
+import Config from 'config';
 
 import SubmissionListView from 'views/submission_list_view';
 
@@ -21,14 +30,10 @@ class Controller extends Marionette.Controller {
 			Backbone.on('dialog:close', this.closeDialog, this);
 
 			//register socket events
-			/*var socket = io(config.web_socket_url);
+			var socket = SIO(Config.web_socket_url);
             socket.on('submissions:added', function(data) {
                 Backbone.trigger('submissions:added',data);
-            });*/
-
-            //fetch settings
-            /*Backbone.settings = new AppModel({id: 1});
-            Backbone.settings.fetch();*/
+            });
 		}
 			
 		/* ROUTES */
@@ -39,6 +44,14 @@ class Controller extends Marionette.Controller {
 
 		showScanningDialog() {
 			alert("ScanningDialog")
+		}
+
+		openDialog() {
+
+		}
+
+		closeDialog() {
+
 		}
 
 		

@@ -2,32 +2,36 @@
 var assert = require('assert');
 var fs = require('fs');
 var _ = require('underscore');
+var async = require('async')
 
 var Utils = r_require('utils/utils');
 var Submission = r_require('models/submission');
+var Comment = r_require('models/comment')
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl;
 var MODEL_ID = null;
 
-describe('API Routes', function(){
+describe('API Routes /submissions/', function(){
 
   	beforeEach(function(done) {
 
   		// delete database file before each test call
-  		Submission.removeAll(function() {
-
-	  		// Add some Models
+  		async.parallel([
+  			(callback) => { Submission.removeAll(callback) },
+  			(callback) => { Comment.removeAll(callback) },
+  		],() => {
+  			// Add some Models
 	  		var size = Math.floor(5 + Math.random() * 10)
 			array = _.map(_.range(size), function(i) {
 				return {
-					message: 'model'+i,
+					text: 'model'+i,
 				}
 			});
 			Submission.create(array, function(err,models) {
 				MODEL_ID = models[0]._id;
 				done();
 	  		});
-		});
+  		});
   		
   	});
 
@@ -36,12 +40,12 @@ describe('API Routes', function(){
 		var request = require('supertest');
 
 		data = {
-			message: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4()
 		}
 
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
 			Utils.handleError(err);
-			assert.equal(res.body.message, data.message);
+			assert.equal(res.body.text, data.text);
 			done()
         });
 	})
@@ -83,7 +87,108 @@ describe('API Routes', function(){
 	        });
 	    });
 	});
+});
 
-	
+describe('API Routes /comments/', function(){
 
-})
+	var addComment = function(data,callback) {
+		var request = require('supertest');
+
+		//add comment
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(data).end(callback);
+	}
+
+	beforeEach(function(done) {
+
+  		// delete database file before each test call
+  		async.series([
+  			(callback) => { Submission.removeAll(callback) },
+  			(callback) => { Comment.removeAll(callback) }
+  		],() => {
+  			// Add some Models
+	  		var size = Math.floor(5 + Math.random() * 10)
+			array = _.map(_.range(size), function(i) {
+				return {
+					text: 'model'+i,
+				}
+			});
+			Submission.create(array, function(err,models) {
+				MODEL_ID = models[0]._id;
+				done();
+	  		});
+  		});
+  	});
+
+  	it('should POST on api/comments/:submissionId', function(done){
+
+		var request = require('supertest');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(data).end(function(err, res) {
+			Utils.handleError(err);
+			assert(res.body.comments.length > 0);
+			done()
+        });
+	});
+
+
+  	it('should GET on api/comments/:id', function(done) {
+
+  		var request = require('supertest');
+
+  		comment_data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//add comment
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).end(function(err, res) {
+			Utils.handleError(err);
+			
+			request(BASE_URL).get('api/comments/'+res.body.comments[0]).end(function(err, res) {
+				assert.equal(res.body.text, comment_data.text);
+				done();
+			});
+        });
+  	});
+
+  	it('should DELETE on api/comments/:id', function(done) {
+
+  		var request = require('supertest');
+
+  		comment_data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//add comment
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).end(function(err, res) {
+			Utils.handleError(err);
+			
+			// delete comment
+			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).end(function(err, res) {
+				assert.equal(res.body.removed,1);
+				done();
+			});
+        });
+  	});
+
+  	it('should GET on api/comments', function(done){
+
+		var request = require('supertest');
+
+		async.parallel([
+			(callback) => { addComment({ text: 'test' },callback) },
+			(callback) => { addComment({ text: 'test' },callback) },
+			(callback) => { addComment({ text: 'test' },callback) }
+		],() => {
+			request(BASE_URL).get('api/comments').expect(200).end(function(err, res) {
+				Utils.handleError(err);
+				assert(res.body.length == 3)
+				done();
+	        });
+		});
+	});
+
+});

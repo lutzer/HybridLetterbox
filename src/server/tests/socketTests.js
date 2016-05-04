@@ -26,7 +26,7 @@ describe('Socket Tests', function(){
             var size = Math.floor(5 + Math.random() * 10)
             array = _.map(_.range(size), function(i) {
                 return {
-                  message: 'model'+i,
+                  text: 'model'+i,
                 }
             });
 
@@ -56,13 +56,13 @@ describe('Socket Tests', function(){
 
         socket = socketIoClient.connect(SOCKET_SERVER_URL)
         socket.on('submission:new', function (data) {
-            assert.equal(randomNumber, data.model.message)
+            assert.equal(randomNumber, data.model.text)
             socket.disconnect();
             done();
         });
 
         // post message
-        request(BASE_URL).post('api/submissions').send({ message: randomNumber }).end(function(err, res) {
+        request(BASE_URL).post('api/submissions').send({ text: randomNumber }).end(function(err, res) {
         	Utils.handleError(err);
         });
     });

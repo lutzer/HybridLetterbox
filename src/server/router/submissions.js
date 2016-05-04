@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
 
     print('Received new Submission');
 
-    var submission = new Submission (req.body);
+    var submission = new Submission(req.body);
 
     //insert data
     submission.save((err, model) => {
