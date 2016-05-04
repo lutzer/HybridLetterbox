@@ -18,8 +18,8 @@
   "scripts": {
     "test": "./test.sh",
     "start": "node app.js",
-    "baretest": "./node_modules/.bin/mocha tests/main.js --reporter spec",
-    "build": "babel --presets es2015 public/src/main.js -o public/build/main.bundle.js"
+    "test-server" : "node app.js test",
+    "bare-test": "./node_modules/.bin/mocha tests/main.js --reporter spec"
   },
   "author": "Lutz Reiter, Design Research Lab, University of Arts Berlin",
   "devDependencies": {

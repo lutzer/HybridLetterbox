@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 12:43:57
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-04 16:31:52
+* @Last Modified time: 2016-05-04 17:40:38
 */
 
 var express = require('express');
@@ -33,6 +33,7 @@ router.get('',(req,res) => {
  */ 
 router.get('/:id',(req,res) => {
     Comment.findOne({ _id: req.params.id} , (err,model) => {
+        Utils.handleError(err,res);
         res.send(model);
     });
 });
@@ -47,10 +48,10 @@ router.post('/:submissionId', (req, res) => {
     var comment = new Comment(req.body)
 
     Submission.findOne({ _id: req.params.submissionId }, (err,model) => {
-    	Utils.handleError(err);
+    	Utils.handleError(err,res);
 
     	model.addComment(comment, (err,model) => {
-    		Utils.handleError(err);
+    		Utils.handleError(err,res);
     		appEvents.emit('comment:new',model)
     		res.send(model);
     	});

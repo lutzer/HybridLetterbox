@@ -3,8 +3,6 @@ var mongoose = require('mongoose');
 var uuid = require('node-uuid');
 
 var Utils = r_require('/utils/utils');
-r_require('/database/database').connect();
-
 var Comment = r_require('/models/comment')
 
 // Define Model Schema
@@ -59,7 +57,10 @@ submissionSchema.methods.removeComment = function(comment_id,callback) {
     var self = this;
 
     Comment.remove({ _id : comment_id}, function(err) {
-        Utils.handleError(err);
+        if (err) {
+            callback(err)
+            return;
+        }
 
         self.comments = _.reject(self.comments, function(comment) {
             return comment._id == comment_id;

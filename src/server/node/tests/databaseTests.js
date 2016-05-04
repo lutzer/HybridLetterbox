@@ -18,12 +18,19 @@ describe('Database Submission Test', function(){
   	this.timeout(500);
 
   	beforeEach(function(done) {
+
+  		r_require('database/database').connect();
+
   		// delete databases entries before each test call
   		async.parallel([
   			(callback) => { Submission.removeAll(callback) },
   			(callback) => { Comment.removeAll(callback) },
   		],done)
   	});
+
+  	afterEach(function() {
+        r_require('database/database').disconnect();
+    });
 
 	it('should create a database file and add one submission', function(done){
 
@@ -189,6 +196,9 @@ describe('Database Comments Test', function(){
   	this.timeout(500);
 
   	beforeEach(function(done) {
+
+  		r_require('database/database').connect();
+
   		// delete databases entries before each test call
   		async.parallel([
   			(callback) => { Submission.removeAll(callback) },
@@ -198,6 +208,9 @@ describe('Database Comments Test', function(){
   		})
   	});
 
+  	afterEach(function() {
+        r_require('database/database').disconnect();
+    });
 
 	it("should be able to add a comment", (done) => {	
 		addComment("comment_text",() => { done() });

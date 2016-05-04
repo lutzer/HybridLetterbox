@@ -10,10 +10,8 @@ module.exports = {
 	        if (res)
 	        	res.status(500).send(err);
 
-	        throw(err);
-	        return true;
+	        //throw(err);
 	    }
-	    return false;
 	},
 
 	deleteFile: function(filepath) {

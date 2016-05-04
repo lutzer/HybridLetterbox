@@ -2,8 +2,6 @@ var _ = require('underscore')
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
 
-r_require('/database/database').connect();
-
 // Define Model Schema
 var commentSchema = mongoose.Schema({
 

@@ -19,6 +19,8 @@ describe('Socket Tests', function(){
 
     beforeEach(function(done) {
 
+        r_require('database/database').connect();
+
   		// delete database file before each test call
         Submission.removeAll(function() {
 
@@ -36,6 +38,10 @@ describe('Socket Tests', function(){
             });
         });
 
+    });
+
+    afterEach(function() {
+        r_require('database/database').disconnect();
     });
 
     it("should connect to socket server", function(done) {

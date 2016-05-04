@@ -25,6 +25,7 @@ router.get('/',(req,res) => {
  */ 
 router.get('/:id',(req,res) => {
     Submission.findOne({ _id: req.params.id} , (err,model) => {
+        Utils.handleError(err,res);
         res.send(model);
     });
 });
@@ -40,7 +41,7 @@ router.post('/', (req, res) => {
 
     //insert data
     submission.save((err, model) => {
-        Utils.handleError(err);
+        Utils.handleError(err,res);
 
         print('Submission added to database');
 
@@ -56,7 +57,7 @@ router.post('/', (req, res) => {
  */
 router.delete('/:id', (req, res) => {
     Submission.remove({ _id: req.params.id }, (err, obj) => {
-        Utils.handleError(err);
+        Utils.handleError(err,res);
 
         if (obj.result.n > 0) {
             print("Submission "+req.params.id+" deleted from database");

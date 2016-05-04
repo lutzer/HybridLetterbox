@@ -15,6 +15,8 @@ describe('API Routes /submissions/', function(){
 
   	beforeEach(function(done) {
 
+  		r_require('database/database').connect();
+
   		// delete database file before each test call
   		async.parallel([
   			(callback) => { Submission.removeAll(callback) },
@@ -34,6 +36,10 @@ describe('API Routes /submissions/', function(){
   		});
   		
   	});
+
+  	afterEach(function() {
+        r_require('database/database').disconnect();
+    });
 
 	it('should POST on api/submissions', function(done){
 
@@ -100,6 +106,8 @@ describe('API Routes /comments/', function(){
 
 	beforeEach(function(done) {
 
+		r_require('database/database').connect();
+
   		// delete database file before each test call
   		async.series([
   			(callback) => { Submission.removeAll(callback) },
@@ -118,6 +126,10 @@ describe('API Routes /comments/', function(){
 	  		});
   		});
   	});
+
+  	afterEach(function() {
+        r_require('database/database').disconnect();
+    });
 
   	it('should POST on api/comments/:submissionId', function(done){
 
