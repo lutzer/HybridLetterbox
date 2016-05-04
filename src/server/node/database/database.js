@@ -13,12 +13,12 @@ module.exports = {
 
 	db : false,
 
-	connect : function() {
+	connect : function(callback) {
 		if (mongoose.connection.readyState == 0) { //not yet connected
 			db = mongoose.connect(Config.database, function(err) {
-				Utils.handleError(err);
+				if (callback)
+					callback(err);
 			});
-
 		}
 	},
 

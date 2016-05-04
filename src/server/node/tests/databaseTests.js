@@ -14,15 +14,12 @@ var Comment = r_require('models/comment')
 
 describe('Database Submission Test', function(){
 
-	// sets thest timeout to 500 ms
-  	this.timeout(500);
-
   	beforeEach(function(done) {
 
   		r_require('database/database').connect();
 
   		// delete databases entries before each test call
-  		async.parallel([
+  		async.series([
   			(callback) => { Submission.removeAll(callback) },
   			(callback) => { Comment.removeAll(callback) },
   		],done)
@@ -191,9 +188,6 @@ describe('Database Comments Test', function(){
 			})
 		});
 	}
-
-	// sets thest timeout to 500 ms
-  	this.timeout(500);
 
   	beforeEach(function(done) {
 
