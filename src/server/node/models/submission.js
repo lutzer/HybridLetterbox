@@ -33,6 +33,14 @@ submissionSchema.static.findOne = function(query,callback) {
     this.findOne(query).populate('comments').exec(callback);
 };
 
+submissionSchema.pre('remove', function(next) {
+
+    // also remove all the assigned comments
+    Comment.remove({ submission_id: this._id }, next);
+
+    // TODO: clean files
+});
+
 // Remove All entries
 submissionSchema.statics.removeAll = function(callback) {
 	this.remove({}, callback);
@@ -42,12 +50,14 @@ submissionSchema.methods.addComment = function(comment,callback) {
 
     comment.submission_id = this._id;
 
+    //save comment
     comment.save((err) => {
         if (err) {
             callback(err)
             return;
         }
 
+        //add ref to model
         this.comments.push(comment);
         this.save(callback);
     })
@@ -56,12 +66,14 @@ submissionSchema.methods.addComment = function(comment,callback) {
 submissionSchema.methods.removeComment = function(comment_id,callback) {
     var self = this;
 
+    // first remove comment from database
     Comment.remove({ _id : comment_id}, function(err) {
         if (err) {
             callback(err)
             return;
         }
 
+        // remove comment ref from model
         self.comments = _.reject(self.comments, function(comment) {
             return comment._id == comment_id;
         });
