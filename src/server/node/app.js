@@ -43,11 +43,6 @@ module.exports = {
 
 		var router = r_require('/router')(app);
 
-		/* Error Handling */
-		app.use(function(err, req, res, next) {
-		    res.status(err.status || 500);
-		});
-
 		/* Run the server */
 
 		http.listen(Config.port,Config.hostname,function(){

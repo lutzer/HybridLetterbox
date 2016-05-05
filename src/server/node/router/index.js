@@ -3,15 +3,6 @@ var bodyParser = require('body-parser');
 
 /* Configure express */
 
-var options = {
-    root: __dirname,
-    dotfiles: 'deny',
-    headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
-	}
-};
-
 module.exports = function (app) {
 
     var handleDbConnection = function(req, res, next) {
@@ -30,23 +21,41 @@ module.exports = function (app) {
         next();
     };
 
+    var publicOptions = {
+        root: __dirname,
+        dotfiles: 'deny',
+        headers: {
+            'x-timestamp': Date.now(),
+            'x-sent': true
+        }
+    };
+
+    /* Error Handling */
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+    });
+
 	// serve static content
     if (Config.publicDir)
-	   app.use(Config.baseUrl,express.static(Config.publicDir,options));
+	   app.use(Config.baseUrl,express.static(Config.publicDir,publicOptions));
 
     // connect to database when accessing api routes
     app.use(Config.baseUrl+'api/',handleDbConnection);
 
+    // submission routes
     app.use(Config.baseUrl+'api/submissions', bodyParser.json());
     app.use(Config.baseUrl+'api/submissions', bodyParser.urlencoded({ extended: true }));
     app.use(Config.baseUrl+'api/submissions', require('./submissions'));
 
+    // comment routes
     app.use(Config.baseUrl+'api/comments', bodyParser.json());
     app.use(Config.baseUrl+'api/comments', bodyParser.urlencoded({ extended: true }));
     app.use(Config.baseUrl+'api/comments', require('./comments'));
 
+    // feedback routes
     app.use(Config.baseUrl+'api/feedback', require('./feedback'));
 
+    // file routes
     app.use(Config.baseUrl+'api/file', bodyParser({ keepExtensions: true, uploadDir: Config.uploadDirTmp }));
     app.use(Config.baseUrl+'api/file', require('./file'));
 };
