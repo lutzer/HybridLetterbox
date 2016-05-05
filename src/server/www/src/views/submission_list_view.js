@@ -23,7 +23,6 @@ class SubmissionListView extends Marionette.CompositeView {
 	initialize(options) {
 		
 		this.collection = new SubmissionCollection();
-
 		this.collection.fetch();
 	}
 };

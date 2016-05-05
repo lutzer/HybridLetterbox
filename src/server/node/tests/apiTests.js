@@ -11,7 +11,7 @@ var Comment = r_require('models/comment')
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl;
 var MODEL_ID = null;
 
-describe('API Routes /submissions/', function(){
+describe.skip('API Routes /submissions/', function(){
 
   	beforeEach(function(done) {
 
@@ -95,7 +95,7 @@ describe('API Routes /submissions/', function(){
 	});
 });
 
-describe('API Routes /comments/', function(){
+describe.skip('API Routes /comments/', function(){
 
 	var addComment = function(data,callback) {
 		var request = require('supertest');
@@ -201,6 +201,42 @@ describe('API Routes /comments/', function(){
 				done();
 	        });
 		});
+	});
+
+});
+
+describe('API Routes /file/', function() {
+
+	beforeEach(function(done) {
+		r_require('database/database').connect(done);
+  	});
+
+  	afterEach(function() {
+        r_require('database/database').disconnect();
+    });
+
+	it('should POST a file on api/file/attach/:submissionId', function(done) {
+
+		var request = require('supertest');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//create submission
+		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
+			Utils.handleError(err);
+			submissionId = res.body._id;
+
+			//attach file
+			request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', 'tests/files/img1.jpg').end(function(err, res) {
+				console.log(res.body);
+				done();
+			});
+
+			
+        });
+
 	});
 
 });

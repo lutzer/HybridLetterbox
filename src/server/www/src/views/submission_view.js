@@ -17,7 +17,6 @@ class SubmissionView extends Marionette.ItemView {
     initialize(options) {
         console.log(this.model);
     }
-    
 }
 
 export default SubmissionView;

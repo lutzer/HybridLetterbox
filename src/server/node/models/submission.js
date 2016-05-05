@@ -83,4 +83,8 @@ submissionSchema.methods.removeComment = function(comment_id,callback) {
     });
 }
 
+submissionSchema.methods.addFiles = function(file,callback) {
+    callback(null,file);
+}
+
 module.exports = mongoose.model('Submission', submissionSchema, Config.submissionCollection);

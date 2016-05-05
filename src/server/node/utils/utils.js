@@ -4,14 +4,15 @@ module.exports = {
 
 	handleError: function(err,res) {
 		if(err) {
-	        print('error occured: ' + err);
+	        print('ERROR: ' + err);
 
 	        //if res defined, also give server answer
 	        if (res)
 	        	res.status(500).send(err);
 
-	        //throw(err);
+	        return true;
 	    }
+	    return false;
 	},
 
 	deleteFile: function(filepath) {
@@ -22,5 +23,9 @@ module.exports = {
 		} catch (e) {
 			// do nothing
 		}
+	},
+
+	copyFile: function(srcPath,dstPath,callback) {
+
 	}
 }

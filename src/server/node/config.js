@@ -6,11 +6,15 @@ var Config = {
 	database: "mongodb://localhost/letterbox",
 	submissionCollection: "submissions",
 
+	/* FILE UPLOAD */
+	uploadDirTmp: __dirname + '/_tmp',
+
 	/* SERVER CONFIG */
 	baseUrl : '/', // with trailing /
 	publicDir : '../www/',
 	hostname : false, // 127.0.0.1 = private, false = public
 	port : '8081',
+
 
 	/* TEST CONFIG */
 	testDatabase :"mongodb://localhost/letterbox_test",

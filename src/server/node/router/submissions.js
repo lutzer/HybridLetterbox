@@ -14,7 +14,8 @@ var router = express.Router();
  */ 
 router.get('/',(req,res) => {
     Submission.find({}, (err,models) => {
-        Utils.handleError(err,res);
+        if (Utils.handleError(err,res))
+            return;
         res.send(models);
     });
 });
@@ -24,7 +25,8 @@ router.get('/',(req,res) => {
  */ 
 router.get('/:id',(req,res) => {
     Submission.findOne({ _id: req.params.id} , (err,model) => {
-        Utils.handleError(err,res);
+        if (Utils.handleError(err,res))
+            return;
         res.send(model);
     });
 });
@@ -38,7 +40,8 @@ router.post('/', (req, res) => {
     var submission = new Submission(req.body);
     //insert data
     submission.save((err, model) => {
-        Utils.handleError(err,res);
+        if (Utils.handleError(err,res))
+            return;
 
         print('Submission added to database');
 
@@ -53,7 +56,8 @@ router.post('/', (req, res) => {
  */
 router.delete('/:id', (req, res) => {
     Submission.remove({ _id: req.params.id }, (err, obj) => {
-        Utils.handleError(err,res);
+        if (Utils.handleError(err,res))
+            return;
 
         if (obj.result.n > 0) {
             print("Submission "+req.params.id+" deleted from database");
