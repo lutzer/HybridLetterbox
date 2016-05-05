@@ -9,6 +9,21 @@ var Utils = r_require('utils/utils');
 var Submission = r_require('models/submission')
 var Comment = r_require('models/comment')
 
+describe('Database Connection Test', function() {
+
+	it('should connect to mongoDB', function(done) {
+
+		var Database = r_require('database/database')
+
+		Database.connect((err) => {
+			if (err)
+				throw err;
+			Database.disconnect();
+			done();
+		});
+	});
+
+});
 
 /* SUBMISSION TESTS */
 

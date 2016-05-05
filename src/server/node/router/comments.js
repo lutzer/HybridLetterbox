@@ -42,11 +42,10 @@ router.get('/:id',(req,res) => {
  * POST /api/comments/:id
  */ 
 router.post('/:submissionId', (req, res) => {
-
     print('Received new Comment');
 
     var comment = new Comment(req.body)
-
+    // insert comment
     Submission.findOne({ _id: req.params.submissionId }, (err,model) => {
     	Utils.handleError(err,res);
 
@@ -69,7 +68,6 @@ router.delete('/:id', (req, res) => {
             print("Comment "+req.params.id+" deleted from database");
             appEvents.emit('submission:removed',req.params.id)
         }
-
         res.send( {removed: obj.result.n} );
     });
 });

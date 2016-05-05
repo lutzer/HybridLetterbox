@@ -35,7 +35,7 @@ module.exports = function (app) {
 	   app.use(Config.baseUrl,express.static(Config.publicDir,options));
 
     // connect to database when accessing api routes
-    app.use(Config.baseUrl+'api',handleDbConnection);
+    app.use(Config.baseUrl+'api/',handleDbConnection);
 
     app.use(Config.baseUrl+'api/submissions', bodyParser.json());
     app.use(Config.baseUrl+'api/submissions', bodyParser.urlencoded({ extended: true }));

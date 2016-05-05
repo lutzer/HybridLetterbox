@@ -13,7 +13,6 @@ var router = express.Router();
  * GET /api/submissions/
  */ 
 router.get('/',(req,res) => {
-
     Submission.find({}, (err,models) => {
         Utils.handleError(err,res);
         res.send(models);
@@ -34,11 +33,9 @@ router.get('/:id',(req,res) => {
  * POST /api/submissions/
  */ 
 router.post('/', (req, res) => {
-
     print('Received new Submission');
 
     var submission = new Submission(req.body);
-
     //insert data
     submission.save((err, model) => {
         Utils.handleError(err,res);
@@ -49,7 +46,6 @@ router.post('/', (req, res) => {
         appEvents.emit('submission:new',model)
         res.send(model);
     });
-    
 });
 
 /*
@@ -63,7 +59,6 @@ router.delete('/:id', (req, res) => {
             print("Submission "+req.params.id+" deleted from database");
             appEvents.emit('submission:removed',req.params.id)
         }
-
         res.send( {removed: obj.result.n} );
     });
 });
