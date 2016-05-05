@@ -17,8 +17,8 @@
   },
   "scripts": {
     "test": "./test.sh",
-    "start": "node app.js",
-    "test-server" : "node app.js test",
+    "start": "node main.js",
+    "test-server" : "node main.js test",
     "bare-test": "./node_modules/.bin/mocha tests/main.js --reporter spec"
   },
   "author": "Lutz Reiter, Design Research Lab, University of Arts Berlin",

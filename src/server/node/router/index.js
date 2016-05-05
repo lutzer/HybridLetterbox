@@ -15,8 +15,8 @@ var options = {
 module.exports = function (app) {
 
     var handleDbConnection = function(req, res, next) {
+
         var db = r_require('/database/database')
-        print('before');
         db.connect();
 
         // action after response
@@ -34,7 +34,8 @@ module.exports = function (app) {
     if (Config.publicDir)
 	   app.use(Config.baseUrl,express.static(Config.publicDir,options));
 
-    app.use(handleDbConnection);
+    // connect to database when accessing api routes
+    app.use(Config.baseUrl+'api',handleDbConnection);
 
     app.use(Config.baseUrl+'api/submissions', bodyParser.json());
     app.use(Config.baseUrl+'api/submissions', bodyParser.urlencoded({ extended: true }));

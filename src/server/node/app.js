@@ -5,47 +5,55 @@
 * @Last Modified time: 2016-05-04 16:42:36
 */
 
-/* use absolute paths for require */
-global.r_require = function(name) {
-    return require(__dirname + name);
+module.exports = {
+
+	initialize: function() {
+
+		/* use absolute paths for require */
+		global.r_require = function(name) {
+		    return require(__dirname + name);
+		}
+
+		/* register config as global var */
+		global.Config = r_require('/config.js');
+
+		/* alias for printing */
+		global.print = function(string) {
+			console.log(string);
+		}
+
+		/* if startet as test server, change to test database */
+		if (process.argv[2] == 'test') { 
+			Config.database = Config.testDatabase
+			Config.port = Config.testPort
+			//print = function() {}; //turn of printing
+		}
+
+		/*Define dependencies.*/
+
+		var express = require('express');
+		var app = express();
+		var http = require('http').Server(app);
+
+		/* Load Sockets */
+
+		var sockets = r_require('/sockets')(http);
+
+		/* Load Router */
+
+		var router = r_require('/router')(app);
+
+		/* Error Handling */
+		app.use(function(err, req, res, next) {
+		    res.status(err.status || 500);
+		});
+
+		/* Run the server */
+
+		http.listen(Config.port,Config.hostname,function(){
+		    print("Node Server listening on "+Config.hostname+":"+Config.port);
+		});
+
+	}
 }
 
-/* register config as global var */
-global.Config = r_require('/config.js');
-
-/* alias for printing */
-global.print = function(string) {
-	console.log(string);
-}
-
-/* if startet as test server, change to test database */
-if (process.argv[2] == 'test') { 
-	Config.database = Config.testDatabase
-	Config.port = Config.testPort
-	//print = function() {}; //turn of printing
-}
-
-/*Define dependencies.*/
-
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-
-/* Load Sockets */
-
-var sockets = r_require('/sockets')(http);
-
-/* Load Router */
-
-var router = r_require('/router')(app);
-
-/* Error Handling */
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-});
-
-/* Run the server */
-
-http.listen(Config.port,Config.hostname,function(){
-    print("Node Server listening on "+Config.hostname+":"+Config.port);
-});

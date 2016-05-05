@@ -38,7 +38,7 @@ submissionSchema.pre('remove', function(next) {
     // also remove all the assigned comments
     Comment.remove({ submission_id: this._id }, next);
 
-    // TODO: clean files
+    // TODO: remove assiciated files
 });
 
 // Remove All entries
