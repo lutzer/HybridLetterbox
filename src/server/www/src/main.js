@@ -7,4 +7,5 @@
 
 import App from 'app';
 
-App.initialize();
+var app = new App();
+app.start();

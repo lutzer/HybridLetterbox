@@ -10,13 +10,13 @@ import Backbone from 'backbone';
 import Marionette from 'marionette';
 import Controller from 'controller';
 
-var App = new Backbone.Marionette.Application();
+class App extends Backbone.Marionette.Application {
 
-export default { 
+	constructor() {
+		super();
 
-	initialize: function() {
-	
-		App.addInitializer( function(options){
+		//add app initializer
+		this.addInitializer( function(options){
 			  Backbone.history.start();
 			  
 			  // support cross origin sharing
@@ -27,15 +27,16 @@ export default {
 			  }
 			  
 		});
-		
-		// define app routes
-		App.Router = new Marionette.AppRouter({
-			controller: new Controller(App),
+
+		//init router
+		this.Router = new Marionette.AppRouter({
+			controller: new Controller(this),
 			appRoutes: {
 				'scanning' : 'showScanningDialog',
 				'*actions': 'showSubmissionList'
 			}
 		});
-		App.start();
-	} 
-};
+	}
+}
+
+export default App;
