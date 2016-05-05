@@ -16,7 +16,7 @@ class SubmissionListView extends Marionette.CompositeView {
 
 	get className() { return 'page' }
 
-	get chiildViewContainer() { return '#submission-list' }
+	get childViewContainer() { return '#submission-list' }
 
 	get childView() { return SubmissionView }
 
