@@ -42,7 +42,6 @@ router.get('/:id',(req,res) => {
  * POST /api/comments/:id
  */ 
 router.post('/:submissionId', (req, res) => {
-    print('Received new Comment');
 
     var comment = new Comment(req.body)
     // insert comment
@@ -59,6 +58,7 @@ router.post('/:submissionId', (req, res) => {
     		if (Utils.handleError(err,res))
                 return;
 
+            print('Added new Comment');
     		appEvents.emit('submission:changed',submission);
     		res.send(submission);
     	});

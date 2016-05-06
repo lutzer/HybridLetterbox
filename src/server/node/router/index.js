@@ -56,6 +56,6 @@ module.exports = function (app) {
     app.use(Config.baseUrl+'api/feedback', require('./feedback'));
 
     // file routes
-    app.use(Config.baseUrl+'api/file', bodyParser({ keepExtensions: true, uploadDir: Config.uploadDirTmp }));
+    app.use(Config.baseUrl+'api/file', bodyParser.json());
     app.use(Config.baseUrl+'api/file', require('./file'));
 };

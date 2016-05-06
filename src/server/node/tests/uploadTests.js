@@ -1,12 +1,12 @@
 var assert = require('assert');
-var fs = require('fs');
 var _ = require('underscore');
 
 var Utils = r_require('utils/utils');
+var Submission = r_require('models/submission');
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
 var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.png']
-var DST_PATH = 'tests/files/dst.jpg'
+var DST_PATH = 'tests/files/test.jpg'
 
 describe('File upload', function() {
 
@@ -14,12 +14,19 @@ describe('File upload', function() {
 		r_require('database/database').connect(done);
   	});
 
-  	afterEach(function() {
-        r_require('database/database').disconnect();
+  	afterEach(function(done) {
+
+		Submission.removeAll(() => {
+			r_require('database/database').disconnect();
+			done();
+		});
     });
 
-    it('Utils.moveFile should move a file', function(done) {
-    	Utils.moveFile(TEST_FILES[0],DST_PATH, (err) => {
+    it('should be able to copy file', function(done) {
+
+		var fse = require('fs-extra');
+
+    	fse.copy(TEST_FILES[0],DST_PATH, (err) => {
     		if (err)
     			throw err;
 
@@ -27,9 +34,49 @@ describe('File upload', function() {
     	});
     });
 
+    it('should be able to remove file', function(done) {
+
+    	var fse = require('fs-extra');
+
+    	//copy file
+    	fse.copy(TEST_FILES[0],DST_PATH, (err) => {
+    		if (err)
+    			throw err;
+
+    		//remove file
+    		fse.remove(DST_PATH, (err) => {
+    			if (err)
+    				throw err;
+    			done();
+    		});
+    	});
+    });
+
+    var postFile = function(submissionId,file,callback) {
+
+    	var request = require('supertest');
+    	var fs = require('fs');
+
+    	request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', file).end(function(err, res) {
+			if (err)
+				throw err;
+
+			submission = res.body;
+
+			//check if file exists
+			fs.access(submission.files[0].path, fs.F_OK, (err) => {
+				if (err)
+					throw err;
+				callback(submission);
+			});
+		});
+
+    };
+
 	it('should POST a file on api/file/attach/:submissionId', function(done) {
 
 		var request = require('supertest');
+		var fs = require('fs');
 
 		data = {
 			text: "unittest_" + require('node-uuid').v4()
@@ -42,12 +89,44 @@ describe('File upload', function() {
 			submissionId = res.body._id;
 
 			//attach file
-			request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', TEST_FILES[0]).end(function(err, res) {
-				console.log(res.body);
+			postFile(submissionId,TEST_FILES[0], function() {
 				done();
 			});
+        });
 
-			
+	});
+
+	it('should delete uploaded file on DELETE api/submissions/:submissionId', function(done) {
+
+		var request = require('supertest');
+		var fs = require('fs');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//create submission
+		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+			var submissionId = res.body._id;
+
+			//attach file
+			postFile(submissionId,TEST_FILES[0], function(submission) {
+				//delete submission
+				request(BASE_URL).delete('api/submissions/'+submissionId).end(function(err, res) {
+					if (err)
+    					throw err;
+
+    				console.log(submission);
+
+    				//test if file exists
+					fs.access(submission.files[0].path, fs.F_OK, (err) => {
+						assert(err != null); //expect an error
+					});
+				});
+				done();
+			});	
         });
 
 	});

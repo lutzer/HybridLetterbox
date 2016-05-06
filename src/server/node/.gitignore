@@ -1,3 +1,5 @@
 node_modules
 *.db
 public/.sass-cache
+_tmp/*
+_tmp/!.keep

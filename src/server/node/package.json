@@ -4,8 +4,10 @@
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "^1.14.0",
+    "connect-multiparty": "^2.0.0",
     "events": "^1.0.2",
     "express": "^4.0.0",
+    "fs-extra": "^0.30.0",
     "htmlspecialchars": "^1.0.5",
     "mocha": "^2.4.5",
     "mongoose": "^4.4.14",
@@ -18,7 +20,7 @@
   "scripts": {
     "test": "./test.sh",
     "start": "node main.js",
-    "test-server" : "node main.js test",
+    "test-server": "node main.js test",
     "bare-test": "./node_modules/.bin/mocha tests/main.js --reporter spec"
   },
   "author": "Lutz Reiter, Design Research Lab, University of Arts Berlin",

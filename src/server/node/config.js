@@ -7,7 +7,8 @@ var Config = {
 	submissionCollection: "submissions",
 
 	/* FILE UPLOAD */
-	uploadDirTmp: __dirname + '/_tmp',
+	uploadDirTmp: __dirname + '/_tmp/',
+	fileDir: __dirname + '/../files/',
 
 	/* SERVER CONFIG */
 	baseUrl : '/', // with trailing /

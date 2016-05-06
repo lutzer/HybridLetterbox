@@ -35,7 +35,6 @@ router.get('/:id',(req,res) => {
  * POST /api/submissions/
  */ 
 router.post('/', (req, res) => {
-    print('Received new Submission');
 
     var submission = new Submission(req.body);
     //insert data

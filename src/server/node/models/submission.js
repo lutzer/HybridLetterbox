@@ -1,9 +1,11 @@
 var _ = require('underscore')
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
+var fse = require('fs-extra');
+var async = require('async');
 
 var Utils = r_require('/utils/utils');
-var Comment = r_require('/models/comment')
+var Comment = r_require('/models/comment');
 
 // Define Model Schema
 var submissionSchema = mongoose.Schema({
@@ -17,7 +19,6 @@ var submissionSchema = mongoose.Schema({
     files : [{
         name: String,
         path: String,
-        url: String,
         filetype: String
     }],
     location : { type: [ Number ], default: [ 0 ] }, // [ longitude, latitude ]
@@ -36,14 +37,25 @@ submissionSchema.static.findOne = function(query,callback) {
 submissionSchema.pre('remove', function(next) {
 
     // also remove all the assigned comments
-    Comment.remove({ submission_id: this._id }, next);
+    Comment.remove({ submission_id: this._id }, (err) => {
+        Utils.handleError(err);
 
-    // TODO: remove assiciated files
+         //remove file directory
+        var dir = Config.fileDir + '/' + this._id + '/';
+        fse.remove(dir, (err) => {
+            Utils.handleError(err);
+            next();
+        });
+    });
 });
 
 // Remove All entries
 submissionSchema.statics.removeAll = function(callback) {
-	this.remove({}, callback);
+	this.find({}, function(err,models) {
+        async.each(models, (model,callback) => {
+            model.remove(callback);
+        }, callback);
+    });
 };
 
 submissionSchema.methods.addComment = function(comment,callback) {
@@ -83,8 +95,36 @@ submissionSchema.methods.removeComment = function(comment_id,callback) {
     });
 }
 
-submissionSchema.methods.addFiles = function(file,callback) {
-    callback(null,file);
+submissionSchema.methods.addFile = function(file,callback) {
+
+    var self = this;
+    var dir = Config.fileDir + this._id + '/'
+
+    //create dir
+    fse.ensureDir(dir, (err) => {
+        if (err) {
+            callback(err)
+            return;
+        }
+
+        //move file
+        fse.move(file.path,dir+file.originalFilename, (err) => {
+            if (err) {
+                callback(err)
+                return;
+            }
+
+            //add to submission
+            var newfile = {
+                name: file.originalFilename,
+                path: dir+file.originalFilename,
+                filetype: file.type
+            };
+
+            self.files.push(newfile);
+            self.save(callback);
+        });
+    });
 }
 
 module.exports = mongoose.model('Submission', submissionSchema, Config.submissionCollection);

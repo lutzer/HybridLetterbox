@@ -13,19 +13,5 @@ module.exports = {
 	        return true;
 	    }
 	    return false;
-	},
-
-	deleteFile: function(filepath) {
-		try {
-			stats = fs.statSync(filepath);
-			if (stats.isFile())
-			fs.unlinkSync(filepath);
-		} catch (e) {
-			// do nothing
-		}
-	},
-
-	moveFile: function(srcPath,dstPath,callback) {
-		callback(new Error('could not move file'));
 	}
 }
