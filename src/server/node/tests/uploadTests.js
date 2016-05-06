@@ -64,7 +64,7 @@ describe('File upload', function() {
 			submission = res.body;
 
 			//check if file exists
-			fs.access(submission.files[0].path, fs.F_OK, (err) => {
+			fs.access(_.last(submission.files).path, fs.F_OK, (err) => {
 				if (err)
 					throw err;
 				callback(submission);
@@ -118,17 +118,75 @@ describe('File upload', function() {
 					if (err)
     					throw err;
 
-    				console.log(submission);
-
     				//test if file exists
 					fs.access(submission.files[0].path, fs.F_OK, (err) => {
 						assert(err != null); //expect an error
+						done();
 					});
 				});
-				done();
 			});	
         });
 
+	});
+
+	it('should check if file url is accesible', function(done) {
+
+		var request = require('supertest');
+		var fs = require('fs');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//create submission
+		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+			var submissionId = res.body._id;
+
+			//attach file
+			postFile(submissionId,TEST_FILES[0], function(submission) {
+
+				//check if file exists
+				request(BASE_URL).get('files/'+submission._id+'/'+submission.files[0].name).expect(200).end(function(err, res) {
+					if (err)
+    					throw err;
+    				done();
+				});
+			});
+        });
+
+	});
+
+	it('should be able to post multiple files to one submission', function(done) {
+		var request = require('supertest');
+		var fs = require('fs');
+		var async = require('async');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//create submission
+		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+			var submissionId = res.body._id;
+
+			//attach files
+			async.eachSeries(TEST_FILES, (file,callback) => {
+				postFile(submissionId,file, function(submission) {
+					callback();
+				});
+			} ,() => {
+				//get answer
+				request(BASE_URL).get('api/submissions/'+submissionId).end(function(err, res) {
+					assert.equal(submission.files.length,TEST_FILES.length)
+					done();
+				})
+				
+			})
+		});	
 	});
 
 });

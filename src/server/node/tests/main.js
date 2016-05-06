@@ -20,7 +20,7 @@ global.Config = r_require('/config.js');
 Config.database = Config.testDatabase;
 Config.port = Config.testPort;
 
-//require("./databaseTests.js");
-//require("./apiTests.js");
-//require("./socketTests.js");
+require("./databaseTests.js");
+require("./apiTests.js");
+require("./socketTests.js");
 require("./uploadTests.js")

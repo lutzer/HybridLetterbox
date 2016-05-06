@@ -36,8 +36,12 @@ module.exports = function (app) {
     });
 
 	// serve static content
-    if (Config.publicDir)
-	   app.use(Config.baseUrl,express.static(Config.publicDir,publicOptions));
+    if (Config.publicDir) {
+        // serve backbone app
+        app.use(Config.baseUrl,express.static(Config.publicDir,publicOptions));
+        // serve files
+        app.use(Config.baseUrl+'files/',express.static(Config.fileDir,publicOptions));
+    }
 
     // connect to database when accessing api routes
     app.use(Config.baseUrl+'api/',handleDbConnection);

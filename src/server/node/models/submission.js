@@ -51,10 +51,22 @@ submissionSchema.pre('remove', function(next) {
 
 // Remove All entries
 submissionSchema.statics.removeAll = function(callback) {
-	this.find({}, function(err,models) {
-        async.each(models, (model,callback) => {
-            model.remove(callback);
-        }, callback);
+    this.remove({},callback);
+};
+
+submissionSchema.statics.remove = function(query,callback) {
+	this.find(query, function(err,models) {
+
+        if (models.length < 1) {
+            callback(err,models);
+            return;
+        }
+
+        async.each(models, (model,done) => {
+            model.remove(done);
+        }, () => {
+            callback(null,{ result: {n: models.length }});
+        });
     });
 };
 
@@ -120,8 +132,9 @@ submissionSchema.methods.addFile = function(file,callback) {
                 path: dir+file.originalFilename,
                 filetype: file.type
             };
-
             self.files.push(newfile);
+
+            //save submission
             self.save(callback);
         });
     });
