@@ -11,7 +11,7 @@ var Comment = r_require('models/comment')
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl;
 var MODEL_ID = null;
 
-describe.skip('API Routes /submissions/', function(){
+describe('API Routes /submissions/', function(){
 
   	beforeEach(function(done) {
 
@@ -50,7 +50,8 @@ describe.skip('API Routes /submissions/', function(){
 		}
 
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			assert.equal(res.body.text, data.text);
 			done()
         });
@@ -61,7 +62,8 @@ describe.skip('API Routes /submissions/', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).get('api/submissions').expect(200).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			done();
         });
 	})
@@ -71,7 +73,8 @@ describe.skip('API Routes /submissions/', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			assert.equal(res.body._id,MODEL_ID)
 			done();
         });
@@ -82,12 +85,14 @@ describe.skip('API Routes /submissions/', function(){
 		var request = require('supertest');
 
 		request(BASE_URL).delete('api/submissions/'+MODEL_ID).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			assert.equal(res.body.removed, 1);
 			
 			//check if model is really deleted
 			request(BASE_URL).get('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
-				Utils.handleError(err);
+				if (err)
+    				throw err;
 				assert(_.isEmpty(res.body));
 				done();
 	        });
@@ -95,7 +100,7 @@ describe.skip('API Routes /submissions/', function(){
 	});
 });
 
-describe.skip('API Routes /comments/', function(){
+describe('API Routes /comments/', function(){
 
 	var addComment = function(data,callback) {
 		var request = require('supertest');
@@ -140,7 +145,8 @@ describe.skip('API Routes /comments/', function(){
 		}
 
 		request(BASE_URL).post('api/comments/'+MODEL_ID).send(data).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			assert(res.body.comments.length > 0);
 			done()
         });
@@ -157,7 +163,8 @@ describe.skip('API Routes /comments/', function(){
 
 		//add comment
 		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			
 			request(BASE_URL).get('api/comments/'+res.body.comments[0]).end(function(err, res) {
 				assert.equal(res.body.text, comment_data.text);
@@ -176,7 +183,8 @@ describe.skip('API Routes /comments/', function(){
 
 		//add comment
 		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).end(function(err, res) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			
 			// delete comment
 			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).end(function(err, res) {
@@ -196,7 +204,8 @@ describe.skip('API Routes /comments/', function(){
 			(callback) => { addComment({ text: 'test' },callback) }
 		],() => {
 			request(BASE_URL).get('api/comments').expect(200).end(function(err, res) {
-				Utils.handleError(err);
+				if (err)
+    				throw err;	
 				assert(res.body.length == 3)
 				done();
 	        });
@@ -205,38 +214,3 @@ describe.skip('API Routes /comments/', function(){
 
 });
 
-describe('API Routes /file/', function() {
-
-	beforeEach(function(done) {
-		r_require('database/database').connect(done);
-  	});
-
-  	afterEach(function() {
-        r_require('database/database').disconnect();
-    });
-
-	it('should POST a file on api/file/attach/:submissionId', function(done) {
-
-		var request = require('supertest');
-
-		data = {
-			text: "unittest_" + require('node-uuid').v4()
-		}
-
-		//create submission
-		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
-			Utils.handleError(err);
-			submissionId = res.body._id;
-
-			//attach file
-			request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', 'tests/files/img1.jpg').end(function(err, res) {
-				console.log(res.body);
-				done();
-			});
-
-			
-        });
-
-	});
-
-});

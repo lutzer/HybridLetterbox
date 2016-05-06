@@ -25,7 +25,7 @@ module.exports = {
 		}
 	},
 
-	copyFile: function(srcPath,dstPath,callback) {
-
+	moveFile: function(srcPath,dstPath,callback) {
+		callback(new Error('could not move file'));
 	}
 }

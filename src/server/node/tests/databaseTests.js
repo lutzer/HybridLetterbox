@@ -56,7 +56,8 @@ describe('Database Submission Test', function(){
 		})
 
 		submission.save(function(err, model) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			done();
 		});
 	})
@@ -70,7 +71,8 @@ describe('Database Submission Test', function(){
 		});
 
 		submission.save(function(err, model) {
-			Utils.handleError(err);
+			if (err)
+    			throw err;
 			objectId = model._id;
 
 			// check if model exists
