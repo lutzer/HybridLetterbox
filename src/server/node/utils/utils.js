@@ -4,7 +4,7 @@ module.exports = {
 
 	handleError: function(err,res) {
 		if(err) {
-	        print('ERROR: ' + err);
+	        print(err,'ERROR');
 
 	        //if res defined, also give server answer
 	        if (res)

@@ -2,7 +2,6 @@
 var assert = require('assert');
 var _ = require('underscore')
 
-var Utils = r_require('utils/utils');
 var Submission = r_require('models/submission');
 
 var SOCKET_SERVER_URL = "http://localhost:"+Config.port
@@ -68,7 +67,7 @@ describe('Socket Tests', function(){
 
         // post message
         request(BASE_URL).post('api/submissions').send({ text: randomNumber }).end(function(err, res) {
-        	Utils.handleError(err);
+        	if (err) throw err;
         });
     });
 
@@ -86,7 +85,7 @@ describe('Socket Tests', function(){
 
         // post message
         request(BASE_URL).post('api/submissions').send({ message: randomNumber }).end(function(err, res) {
-            Utils.handleError(err);
+           if (err) throw err;
         });
     });
 
@@ -104,7 +103,7 @@ describe('Socket Tests', function(){
 
         // delete submission
         request(BASE_URL).delete('api/submissions/'+MODEL_ID).end(function(err, res) {
-           Utils.handleError(err);
+           if (err) throw err;
         });
     });
 

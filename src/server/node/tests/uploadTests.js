@@ -1,7 +1,6 @@
 var assert = require('assert');
 var _ = require('underscore');
 
-var Utils = r_require('utils/utils');
 var Submission = r_require('models/submission');
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
@@ -27,8 +26,7 @@ describe('File upload', function() {
 		var fse = require('fs-extra');
 
     	fse.copy(TEST_FILES[0],DST_PATH, (err) => {
-    		if (err)
-    			throw err;
+    		if (err) throw err;
 
     		done();
     	});
@@ -40,13 +38,11 @@ describe('File upload', function() {
 
     	//copy file
     	fse.copy(TEST_FILES[0],DST_PATH, (err) => {
-    		if (err)
-    			throw err;
+    		if (err) throw err;
 
     		//remove file
     		fse.remove(DST_PATH, (err) => {
-    			if (err)
-    				throw err;
+    			if (err) throw err;
     			done();
     		});
     	});
@@ -58,15 +54,13 @@ describe('File upload', function() {
     	var fs = require('fs');
 
     	request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', file).end(function(err, res) {
-			if (err)
-				throw err;
+			if (err) throw err;
 
 			submission = res.body;
 
 			//check if file exists
 			fs.access(_.last(submission.files).path, fs.F_OK, (err) => {
-				if (err)
-					throw err;
+				if (err) throw err;
 				callback(submission);
 			});
 		});

@@ -4,7 +4,6 @@ var uuid = require('node-uuid');
 var fse = require('fs-extra');
 var async = require('async');
 
-var Utils = r_require('/utils/utils');
 var Comment = r_require('/models/comment');
 
 // Define Model Schema
@@ -38,13 +37,13 @@ submissionSchema.pre('remove', function(next) {
 
     // also remove all the assigned comments
     Comment.remove({ submission_id: this._id }, (err) => {
-        Utils.handleError(err);
+        if (err)
+            next(err);
 
          //remove file directory
         var dir = Config.fileDir + '/' + this._id + '/';
         fse.remove(dir, (err) => {
-            Utils.handleError(err);
-            next();
+            next(err);
         });
     });
 });
@@ -56,16 +55,14 @@ submissionSchema.statics.removeAll = function(callback) {
 
 submissionSchema.statics.remove = function(query,callback) {
 	this.find(query, function(err,models) {
-
-        if (models.length < 1) {
-            callback(err,models);
+        if (err) {
+            callback(err);
             return;
         }
-
         async.each(models, (model,done) => {
             model.remove(done);
-        }, () => {
-            callback(null,{ result: {n: models.length }});
+        }, (err) => {
+            callback(err,{ result: {n: models.length }});
         });
     });
 };

@@ -8,7 +8,7 @@ module.exports = function (http) {
 
 	sio.on('connection', function(socket){
 
-	    print('Socket: Client connected');
+	    print('Client connected','SOCKET');
 
 		socket.on('error', function(err) {
 	    	print(err);
@@ -38,7 +38,7 @@ module.exports = function (http) {
 
 	    // Clean up after disconnect
 	    socket.on('disconnect', function(){
-	        print('Socket: Client disconnected');
+	        print('Client disconnected','SOCKET');
 
 	        //remove server events
 	        appEvents.removeListener('submission:new',submissionAddedHandler);

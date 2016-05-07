@@ -58,7 +58,7 @@ router.post('/:submissionId', (req, res) => {
     		if (Utils.handleError(err,res))
                 return;
 
-            print('Added new Comment');
+            print('Comment added to Database');
     		appEvents.emit('submission:changed',submission);
     		res.send(submission);
     	});

@@ -18,8 +18,10 @@ module.exports = {
 		global.Config = r_require('/config.js');
 
 		/* alias for printing */
-		global.print = function(string) {
-			console.log(string);
+		global.print = function(string,namespace) {
+			var namespace = (typeof namespace !== 'undefined') ?  namespace : 'INFO';
+			
+			console.log(namespace+':'+string);
 		}
 
 		/* if startet as test server, change to test database */

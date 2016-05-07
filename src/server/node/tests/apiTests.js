@@ -4,7 +4,6 @@ var fs = require('fs');
 var _ = require('underscore');
 var async = require('async')
 
-var Utils = r_require('utils/utils');
 var Submission = r_require('models/submission');
 var Comment = r_require('models/comment')
 

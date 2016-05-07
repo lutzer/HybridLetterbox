@@ -4,8 +4,6 @@ var fs = require('fs')
 var _ = require('underscore')
 var async = require('async')
 
-var Utils = r_require('utils/utils');
-
 var Submission = r_require('models/submission')
 var Comment = r_require('models/comment')
 
@@ -56,8 +54,7 @@ describe('Database Submission Test', function(){
 		})
 
 		submission.save(function(err, model) {
-			if (err)
-    			throw err;
+			if (err) throw err;
 			done();
 		});
 	})
@@ -71,8 +68,7 @@ describe('Database Submission Test', function(){
 		});
 
 		submission.save(function(err, model) {
-			if (err)
-    			throw err;
+			if (err) throw err;
 			objectId = model._id;
 
 			// check if model exists
@@ -186,7 +182,7 @@ describe('Database Comments Test', function(){
 
 		//first insert submission
 		submission.save((err, model) => {
-			Utils.handleError(err);
+			if (err) throw err;
 
 			//create comment
 			var comment = new Comment({
@@ -199,7 +195,7 @@ describe('Database Comments Test', function(){
 
 			//add comment
 			model.addComment(comment,(err) => {
-				Utils.handleError(err);
+				if (err) throw err;
 
 				callback(model._id);
 			})
@@ -233,7 +229,7 @@ describe('Database Comments Test', function(){
 
 		addComment(comment_text,(submissionId) => {
 			Submission.findOne({ _id : submissionId }).populate('comments').exec(function(err,model) {
-				Utils.handleError(err);
+				if (err) throw err;
 				assert.equal(model.comments[0].text,comment_text);
 				done();
 			})
@@ -246,13 +242,13 @@ describe('Database Comments Test', function(){
 
 		addComment(comment_text,(submissionId) => {
 			Submission.findOne({ _id : submissionId }).populate('comments').exec(function(err,model) {
-				Utils.handleError(err);
+				if (err) throw err;
 
 				commentId = model.comments[0]._id
 				assert(model.comments.length == 1)
 
 				model.removeComment(commentId,(err,model) => {
-					Utils.handleError(err);
+					if (err) throw err;
 					assert(model.comments.length == 0)
 					done();
 
