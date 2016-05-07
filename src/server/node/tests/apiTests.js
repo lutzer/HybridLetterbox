@@ -15,28 +15,29 @@ describe('API Routes /submissions/', function(){
   	beforeEach(function(done) {
 
   		r_require('database/database').connect((err) => {
-			// delete database file before each test call
-			async.parallel([
-				(callback) => { Submission.removeAll(callback) },
-				(callback) => { Comment.removeAll(callback) },
-			],() => {
-				// Add some Models
-				var size = Math.floor(5 + Math.random() * 10)
-				array = _.map(_.range(size), function(i) {
-					return {
-						text: 'model'+i,
-					}
-				});
-				Submission.create(array, function(err,models) {
-					MODEL_ID = models[0]._id;
-					done();
-				});
+			
+			// Add some Models
+			var size = Math.floor(5 + Math.random() * 10)
+			array = _.map(_.range(size), function(i) {
+				return {
+					text: 'model'+i,
+				}
+			});
+			Submission.create(array, function(err,models) {
+				MODEL_ID = models[0]._id;
+				done();
 			});
   		});
   	});
 
-  	afterEach(function() {
-        r_require('database/database').disconnect();
+  	afterEach(function(done) {
+  		async.parallel([
+			(callback) => { Submission.removeAll(callback) },
+			(callback) => { Comment.removeAll(callback) },
+		],() => {
+        	r_require('database/database').disconnect();
+        	done();
+        }); 
     });
 
 	it('should POST on api/submissions', function(done){
@@ -109,29 +110,30 @@ describe('API Routes /comments/', function(){
 
 	beforeEach(function(done) {
 
-		r_require('database/database').connect((err) => {
-	  		// delete database file before each test call
-	  		async.series([
-	  			(callback) => { Submission.removeAll(callback) },
-	  			(callback) => { Comment.removeAll(callback) }
-	  		],() => {
-	  			// Add some Models
-		  		var size = Math.floor(5 + Math.random() * 10)
-				array = _.map(_.range(size), function(i) {
-					return {
-						text: 'model'+i,
-					}
-				});
-				Submission.create(array, function(err,models) {
-					MODEL_ID = models[0]._id;
-					done();
-		  		});
-	  		});
-		});
+  		r_require('database/database').connect((err) => {
+			
+			// Add some Models
+			var size = Math.floor(5 + Math.random() * 10)
+			array = _.map(_.range(size), function(i) {
+				return {
+					text: 'model'+i,
+				}
+			});
+			Submission.create(array, function(err,models) {
+				MODEL_ID = models[0]._id;
+				done();
+			});
+  		});
   	});
 
-  	afterEach(function() {
-        r_require('database/database').disconnect();
+  	afterEach(function(done) {
+  		async.parallel([
+			(callback) => { Submission.removeAll(callback) },
+			(callback) => { Comment.removeAll(callback) },
+		],() => {
+        	r_require('database/database').disconnect();
+        	done();
+        }); 
     });
 
   	it('should POST on api/comments/:submissionId', function(done){

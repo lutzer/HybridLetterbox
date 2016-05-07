@@ -29,17 +29,17 @@ describe('Database Submission Test', function(){
 
   	beforeEach(function(done) {
 
-  		r_require('database/database').connect((err) => {
-  			// delete databases entries before each test call
-	  		async.series([
-	  			(callback) => { Submission.removeAll(callback) },
-	  			(callback) => { Comment.removeAll(callback) },
-	  		],done)
-  		});
+  		r_require('database/database').connect(done);
   	});
 
-  	afterEach(function() {
-        r_require('database/database').disconnect();
+  	afterEach(function(done) {
+  		async.parallel([
+			(callback) => { Submission.removeAll(callback) },
+			(callback) => { Comment.removeAll(callback) },
+		],() => {
+        	r_require('database/database').disconnect();
+        	done();
+        }); 
     });
 
 	it('should create a database file and add one submission', function(done){
@@ -134,34 +134,6 @@ describe('Database Submission Test', function(){
 			})
 			
 		});
-	})
-
-	it.skip("should reflect inserts in the changes db", function(done) {
-
-		/*var uuid = require('node-uuid');
-
-		submissions.insert({ data: "test"}, function(err,docs) {
-
-			var objectId = docs[0]._id;
-
-			
-		});*/
-	});
-
-	it.skip("should reflect removes in the changes db", function(done) {
-
-		/*var uuid = require('node-uuid');
-
-		submissions.insert({ data: "test"}, function(err,docs) {
-
-			var objectId = docs[0]._id;
-
-			submissions.remove(objectId, function(err) {
-				
-			})
-
-			
-		});*/
 	});
 })
 

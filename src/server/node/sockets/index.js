@@ -28,6 +28,11 @@ module.exports = function (http) {
 		}
 		appEvents.on('submission:removed', submissionRemovedHandler);
 
+		function submissionChangedHandler(model) {
+			sio.emit('submission:changed', {model: model}, socket.id);
+		}
+		appEvents.on('submission:changed', submissionChangedHandler);
+
 		/* TABLET NAMESPACE */
 
 		function feedbackScanningHandler(progress) {
