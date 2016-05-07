@@ -10,11 +10,11 @@ var DST_PATH = 'tests/files/test.jpg'
 
 describe('File upload', function() {
 
-	beforeEach(function(done) {
+	before(function(done) {
 		r_require('database/database').connect(done);
   	});
 
-  	afterEach(function(done) {
+  	after(function(done) {
 
 		Submission.removeAll(() => {
 			r_require('database/database').disconnect();

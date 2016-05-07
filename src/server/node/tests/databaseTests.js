@@ -31,13 +31,13 @@ describe('Database Submission Test', function(){
 
   	beforeEach(function(done) {
 
-  		r_require('database/database').connect();
-
-  		// delete databases entries before each test call
-  		async.series([
-  			(callback) => { Submission.removeAll(callback) },
-  			(callback) => { Comment.removeAll(callback) },
-  		],done)
+  		r_require('database/database').connect((err) => {
+  			// delete databases entries before each test call
+	  		async.series([
+	  			(callback) => { Submission.removeAll(callback) },
+	  			(callback) => { Comment.removeAll(callback) },
+	  		],done)
+  		});
   	});
 
   	afterEach(function() {

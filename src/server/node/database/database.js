@@ -19,6 +19,8 @@ module.exports = {
 				if (callback)
 					callback(err);
 			});
+		} else {
+			callback();
 		}
 	},
 

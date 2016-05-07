@@ -17,30 +17,29 @@ describe('Socket Tests', function(){
 
     var randomNumber = Math.floor(Math.random() * 1000);
 
-    beforeEach(function(done) {
+    before(function(done) {
 
-        r_require('database/database').connect();
+        r_require('database/database').connect((err) => {
+            // delete database file before each test call
+            Submission.removeAll(function() {
 
-  		// delete database file before each test call
-        Submission.removeAll(function() {
+                // Add some Models
+                var size = Math.floor(5 + Math.random() * 10)
+                array = _.map(_.range(size), function(i) {
+                    return {
+                      text: 'model'+i,
+                    }
+                });
 
-            // Add some Models
-            var size = Math.floor(5 + Math.random() * 10)
-            array = _.map(_.range(size), function(i) {
-                return {
-                  text: 'model'+i,
-                }
-            });
-
-            Submission.create(array, function(err,models) {
-                MODEL_ID = models[0]._id;
-                done();
+                Submission.create(array, function(err,models) {
+                    MODEL_ID = models[0]._id;
+                    done();
+                });
             });
         });
-
     });
 
-    afterEach(function() {
+    after(function() {
         r_require('database/database').disconnect();
     });
 
