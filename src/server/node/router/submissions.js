@@ -66,28 +66,11 @@ router.post('/', (req, res) => {
  * PUT /api/submissions/:id with AUTH
  */
 router.put('/:id', Auth.authentificate, (req, res) => {
-
-    /*var data = req.body;
-    data._id = req.params.id;
-
-    var submission = new Submission(data);
-
-    submission.save((err, model) => {
-        if (Utils.handleError(err,res))
-            return;
-
-        print('Submission changed in database');
-
-        // trigger socket event and send message to web app
-        appEvents.emit('submission:changed',model)
-        res.send(model);
-    });*/
-
-    
+ 
     var data = req.body;
 
     //insert data
-    Submission.findOneAndUpdate({ _id : req.params.id }, { text : "dlkfhskdf" }, (err, model) => {
+    Submission.findOneAndUpdate({ _id : req.params.id }, data, {new: true}, (err, model) => {
         if (Utils.handleError(err,res))
             return;
 

@@ -83,8 +83,8 @@ describe('API Routes /submissions/', function(){
 
 		var request = require('supertest');
 
-		request(BASE_URL).delete('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
-			assert.notEqual(err,null);
+		request(BASE_URL).delete('api/submissions/'+MODEL_ID).expect(401).end(function(err, res) {
+			if (err) throw err;
 			done();
 	    });
 	});
@@ -122,24 +122,53 @@ describe('API Routes /submissions/', function(){
 			tags: ['tag1','tag2','tag3']
 		}
 
+		//insert submission
 		request(BASE_URL).post('api/submissions').send(data1).end(function(err, res) {
 			if (err)
     			throw err;
 
     		submissionId = res.body._id;
 
-			assert.equal(res.body.tags.length, 2);
-			console.log(res.body);
+			assert.equal(res.body.tags.length, data1.tags.length);
+			assert.equal(res.body.text, data1.text);
 
+			//update submission
 			request(BASE_URL).put('api/submissions/'+submissionId).auth(Config.authName, Config.authPassword).send(data2).expect(200).end(function(err, res) {
 				if (err)
 	    			throw err;
-
-	    		console.log(res.body);
 	    		
-				assert.equal(res.body.tags.length, 3);
-				assert.equal(res.body.text, "text2");
+				assert.equal(res.body.tags.length, data2.tags.length);
+				assert.equal(res.body.text, data2.text);
 				done()
+	        });
+        });
+	});
+
+	it('should not PUT on api/submissions/:id without auth', function(done){
+
+		var request = require('supertest');
+
+		var data1 = {
+			text: "text1",
+			tags: ['tag1','tag2']
+		}
+
+		var data2 = {
+			text: "text2",
+			tags: ['tag1','tag2','tag3']
+		}
+
+		//insert submission
+		request(BASE_URL).post('api/submissions').send(data1).end(function(err, res) {
+			if (err)
+    			throw err;
+
+    		submissionId = res.body._id;
+
+			//update submission, expect 401
+			request(BASE_URL).put('api/submissions/'+submissionId).send(data2).expect(401).end(function(err, res) {
+				if (err) throw err;
+				done();
 	        });
         });
 	});

@@ -100,8 +100,8 @@ describe('API Routes /comments/', function(){
     			throw err;
 			
 			// delete comment
-			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).expect(200).end(function(err, res) {
-				assert.notEqual(err,null);
+			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).expect(401).end(function(err, res) {
+				if (err) throw err;
 				done();
 			});
         });
