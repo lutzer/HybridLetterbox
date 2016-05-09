@@ -7,7 +7,7 @@ var Utils = r_require('/utils/utils');
 
 var Submission = r_require('/models/submission');
 
-var Auth = r_require('/router/authentification');
+var Auth = r_require('/router/_authentification');
 
 var router = express.Router();
 
@@ -15,7 +15,12 @@ var router = express.Router();
  * GET /api/submissions/
  */ 
 router.get('/',(req,res) => {
-    Submission.find({}, (err,models) => {
+
+    query = {}
+    if (_.has(req.query,'tag'))
+        query.tags = req.query.tag;
+
+    Submission.find(query).populate('Comments').exec((err,models) => {
         if (Utils.handleError(err,res))
             return;
         res.send(models);
@@ -26,7 +31,7 @@ router.get('/',(req,res) => {
  * GET /api/submissions/:id
  */ 
 router.get('/:id',(req,res) => {
-    Submission.findOne({ _id: req.params.id} , (err,model) => {
+    Submission.findOne({ _id: req.params.id}).populate('Comments').exec((err,model) => {
         if (Utils.handleError(err,res))
             return;
         res.send(model);

@@ -9,11 +9,12 @@ var Comment = r_require('models/comment');
 var SOCKET_SERVER_URL = "http://localhost:"+Config.port
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
 var MODEL_NUMBER = 10
+var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.png']
 
 describe('Socket Tests', function(){
 
     // sets thest timeout to 500 ms
-    this.timeout(500);
+    this.timeout(2000);
 
     var randomNumber = Math.floor(Math.random() * 1000);
 
@@ -49,11 +50,11 @@ describe('Socket Tests', function(){
 
         var socketIoClient = require('socket.io-client')
 
-        socket = socketIoClient.connect(SOCKET_SERVER_URL)
+        var socket = socketIoClient.connect(SOCKET_SERVER_URL)
         socket.on('connect', function () { 
           socket.disconnect();
-          done();
         });
+        socket.on('disconnect', () => { done(null) });
     });
 
     it("should receive submission:new message", function(done) {
@@ -61,12 +62,12 @@ describe('Socket Tests', function(){
         var socketIoClient = require('socket.io-client')
         var request = require('supertest');
 
-        socket = socketIoClient.connect(SOCKET_SERVER_URL)
+        var socket = socketIoClient.connect(SOCKET_SERVER_URL)
         socket.on('submission:new', function (data) {
             assert.equal(randomNumber, data.model.text)
             socket.disconnect();
-            done();
         });
+        socket.on('disconnect', () => { done(null) });
 
         // post message
         request(BASE_URL).post('api/submissions').send({ text: randomNumber }).end(function(err, res) {
@@ -84,12 +85,12 @@ describe('Socket Tests', function(){
 
             submissionId = res.body[0]._id;
 
-            socket = socketIoClient.connect(SOCKET_SERVER_URL)
+            var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:removed', function (data) {
                assert.equal(data.id, submissionId)
                socket.disconnect();
-               done();
             });
+            socket.on('disconnect', () => { done(null) });
 
             // delete submission
             request(BASE_URL).delete('api/submissions/'+submissionId).auth(Config.authName, Config.authPassword).end(function(err, res) {
@@ -100,7 +101,7 @@ describe('Socket Tests', function(){
         
     });
 
-    it.skip("should receive submission:changed message", function(done) {
+    it("should receive submission:changed message on new comment", function(done) {
         var socketIoClient = require('socket.io-client')
         var request = require('supertest');
 
@@ -108,18 +109,76 @@ describe('Socket Tests', function(){
             if (err) throw err;
 
             submissionId = res.body[0]._id;
+            nComments = res.body[0].comments.length
 
-            socket = socketIoClient.connect(SOCKET_SERVER_URL)
+            var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {
-                console.log(data);
-                assert.equal(data.model._id, submissionId)
-                done();
+                assert.equal(data.model.comments.length, nComments + 1);
                 socket.disconnect();
             });
+            socket.on('disconnect', () => { done(null) });
 
             // add comment
-            request(BASE_URL).post('api/comment/'+submissionId).send({ text: 'sockettest' }).end(function(err, res) {
+            request(BASE_URL).post('api/comments/').send({ text: 'sockettest', submission: submissionId}).end(function(err, res) {
                if (err) throw err;
+            });
+        });
+    });
+
+    it("should receive submission:changed message on new file post", function(done) {
+        var socketIoClient = require('socket.io-client')
+        var request = require('supertest');
+
+        //create submission
+        request(BASE_URL).get('api/submissions/').end(function(err, res) {
+            if (err) throw err;
+
+            submissionId = res.body[0]._id;
+
+            var socket = socketIoClient.connect(SOCKET_SERVER_URL)
+            socket.on('submission:changed', function (data) {
+                assert.equal(data.model.files.length, 1);
+                socket.disconnect();
+            });
+            socket.on('disconnect', () => { done(null) });
+
+            request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', TEST_FILES[0]).end(function(err, res) {
+                if (err) throw err;
+            });
+        });
+    });
+
+    it("should receive submission:changed message on comment deletion", function(done) {
+        var socketIoClient = require('socket.io-client')
+        var request = require('supertest');
+
+        var first = true;
+
+        //create submission
+        request(BASE_URL).get('api/submissions/').end(function(err, res) {
+            if (err) throw err;
+
+            var submissionId = res.body[0]._id;
+            var nComments = res.body[0].comments.length
+
+            var socket = socketIoClient.connect(SOCKET_SERVER_URL)
+            socket.on('submission:changed', function (data) {
+                if (nComments == data.model.comments.length)
+                    socket.disconnect();
+            });
+            socket.on('disconnect', () => { done(null) });
+
+            // add one comment
+            request(BASE_URL).post('api/comments/').send({ text: 'sockettest', submission: submissionId}).end(function(err, res) {
+               if (err) throw err;
+
+               submissionData = res.body;
+
+               //remove one comment
+               request(BASE_URL).delete('api/comments/'+submissionData.comments[0]).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
+                   if (err) throw err;
+                });
+
             });
         });
     });
@@ -129,12 +188,12 @@ describe('Socket Tests', function(){
         var socketIoClient = require('socket.io-client')
         var request = require('supertest');
 
-        socket = socketIoClient.connect(SOCKET_SERVER_URL+"/tablet")
+        var socket = socketIoClient.connect(SOCKET_SERVER_URL+"/tablet")
         socket.on('submission:new', function (data) {
             assert.equal(randomNumber, data.model.message)
             socket.disconnect();
-            done();
         });
+        socket.on('disconnect', () => { done(null) });
 
         // post message
         request(BASE_URL).post('api/submissions').send({ message: randomNumber }).end(function(err, res) {
@@ -149,13 +208,12 @@ describe('Socket Tests', function(){
 
         var PROGRESS_VALUE = Math.floor(Math.random() * 100)
 
-        socket = socketIoClient.connect(SOCKET_SERVER_URL);
-
+        var socket = socketIoClient.connect(SOCKET_SERVER_URL);
         socket.on('feedback:scanning', function (data) {
            assert.equal(data.progress, PROGRESS_VALUE);
            socket.disconnect();
-           done();
         });
+        socket.on('disconnect', () => { done(null) });
 
 		// send message to server
 		socket.emit('feedback:scanning',PROGRESS_VALUE);
@@ -168,13 +226,12 @@ describe('Socket Tests', function(){
 
     var PROGRESS_VALUE = Math.floor(Math.random() * 100)
 
-    socket = socketIoClient.connect(SOCKET_SERVER_URL);
-
+    var socket = socketIoClient.connect(SOCKET_SERVER_URL);
     socket.on('feedback:scanning', function (data) {
         assert(false); // fails when receiving message
         socket.disconnect();
-        done();
     });
+    socket.on('disconnect', () => { done(null) });
 
       // send message to server
       socket.emit('feedback:scanning',PROGRESS_VALUE);

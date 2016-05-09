@@ -14,7 +14,7 @@ var submissionSchema = mongoose.Schema({
     text : { type: String, default: false },
     author: String,
     device: String,
-    tags : Array,
+    tags : [ String ],
     files : [{
         name: String,
         path: String,
@@ -25,18 +25,18 @@ var submissionSchema = mongoose.Schema({
 
 }, { timestamps: true });
 
-submissionSchema.static.find = function(query,callback) {
-    this.find(query).populate('comments').exec(callback);
+/*submissionSchema.static.find = function(query,callback) {
+    this.find(query).exec(callback);
 };
 
 submissionSchema.static.findOne = function(query,callback) {
-    this.findOne(query).populate('comments').exec(callback);
-};
+    this.findOne(query).exec(callback);
+};*/
 
 submissionSchema.pre('remove', function(next) {
 
     // also remove all the assigned comments
-    Comment.remove({ submission_id: this._id }, (err) => {
+    Comment.remove({ submission: this._id }, (err) => {
         if (err)
             next(err);
 
@@ -59,6 +59,7 @@ submissionSchema.statics.remove = function(query,callback) {
             callback(err);
             return;
         }
+
         async.each(models, (model,done) => {
             model.remove(done);
         }, (err) => {
@@ -69,17 +70,17 @@ submissionSchema.statics.remove = function(query,callback) {
 
 submissionSchema.methods.addComment = function(comment,callback) {
 
-    comment.submission_id = this._id;
+    comment.submission = this._id;
 
     //save comment
-    comment.save((err) => {
+    comment.save((err,comment) => {
         if (err) {
             callback(err)
             return;
         }
 
         //add ref to model
-        this.comments.push(comment);
+        this.comments.push(comment._id);
         this.save(callback);
     })
 }
@@ -96,7 +97,7 @@ submissionSchema.methods.removeComment = function(comment_id,callback) {
 
         // remove comment ref from model
         self.comments = _.reject(self.comments, function(comment) {
-            return comment._id == comment_id;
+            return comment == comment_id;
         });
 
         //save model

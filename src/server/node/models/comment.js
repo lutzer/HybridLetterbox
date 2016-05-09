@@ -2,11 +2,13 @@ var _ = require('underscore')
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
 
+var Submission = r_require('/models/submission');
+
 // Define Model Schema
 var commentSchema = mongoose.Schema({
 
 	_id: { type: String, default: uuid.v4 }, //use uuid
-	submission_id: { type: String, ref: 'Submission' },
+	submission: { type: String, ref: 'Submission' },
 
     text : { type: String, default: false },
     author: String

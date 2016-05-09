@@ -59,6 +59,9 @@ module.exports = function (app) {
     // feedback routes
     app.use(Config.baseUrl+'api/feedback', require('./feedback'));
 
+    // tags routes
+    app.use(Config.baseUrl+'api/tags', require('./tags'));
+
     // file routes
     app.use(Config.baseUrl+'api/file', bodyParser.json());
     app.use(Config.baseUrl+'api/file', require('./file'));

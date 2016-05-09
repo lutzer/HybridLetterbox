@@ -213,10 +213,10 @@ describe('Database Comments Test', function(){
 		var comment_text = "Lorem";
 
 		addComment(comment_text,(submissionId) => {
-			Submission.findOne({ _id : submissionId }).populate('comments').exec(function(err,model) {
+			Submission.findOne({ _id : submissionId }).exec(function(err,model) {
 				if (err) throw err;
 
-				commentId = model.comments[0]._id
+				commentId = model.comments[0]
 				assert(model.comments.length == 1)
 
 				model.removeComment(commentId,(err,model) => {

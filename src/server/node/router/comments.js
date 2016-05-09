@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 12:43:57
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-09 14:07:56
+* @Last Modified time: 2016-05-09 16:43:35
 */
 
 var express = require('express');
@@ -15,7 +15,7 @@ var Utils = r_require('/utils/utils');
 var Comment = r_require('/models/comment');
 var Submission = r_require('/models/submission');
 
-var Auth = r_require('/router/authentification');
+var Auth = r_require('/router/_authentification');
 
 var router = express.Router();
 
@@ -43,7 +43,7 @@ router.get('/:id',(req,res) => {
 /*
  * POST /api/comments/:id
  */ 
-router.post('/:submissionId', (req, res) => {
+router.post('/', (req, res) => {
 
     var comment = new Comment(req.body)
 
@@ -51,16 +51,16 @@ router.post('/:submissionId', (req, res) => {
     delete comment['_id'];
 
     // insert comment
-    Submission.findOne({ _id: req.params.submissionId }, (err,submission) => {
+    Submission.findOne({ _id: req.body.submission }, (err,submission) => {
     	if (Utils.handleError(err,res))
             return;
 
         if (!submission) {
-            res.send({error: 'submission not found'});
+            res.status(404).send({error: 'submission not found'});
             return;
         }
 
-    	submission.addComment(comment, (err) => {
+    	submission.addComment(comment, (err,submission) => {
     		if (Utils.handleError(err,res))
                 return;
 
@@ -75,16 +75,28 @@ router.post('/:submissionId', (req, res) => {
  * DELETE /api/comments/:id with AUTH
  */
 router.delete('/:id', Auth.authentificate, (req, res) => {
-    Comment.remove({ _id: req.params.id }, (err, obj) => {
+
+    //find comment for id
+    Comment.findOne({ _id: req.params.id }).populate('submission').exec((err,comment) => {
         if (Utils.handleError(err,res))
             return;
 
-        if (obj.result.n > 0) {
-            print("Comment "+req.params.id+" deleted from database");
-            //appEvents.emit('submission:changed',model);
+        if (!comment) {
+            res.status(404).send({error: 'comment not found'});
+            return;
         }
-        res.send( {removed: obj.result.n} );
+
+        var submission = new Submission(comment.submission);
+
+        submission.removeComment(req.params.id, (err, newSubmission) => {
+            if (Utils.handleError(err,res))
+                return;
+            appEvents.emit('submission:changed',newSubmission);
+            print("Comment "+req.params.id+" deleted from database");
+            res.send( {removed: 1} );
+        });
     });
+
 });
 
 module.exports = router;
