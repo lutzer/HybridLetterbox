@@ -1,4 +1,4 @@
 *.pyc
 src/server/files
-!.keep
+!src/server/files.keep
 
