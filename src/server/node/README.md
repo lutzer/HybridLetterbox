@@ -6,6 +6,7 @@ Node Server for saving the submissions thrown into the letterbox
 
 * run `npm install`
 * install pm2 globally : `npm install pm2 -g
+* `cp config.default.js config.js` and change database credentials and username and password in auth section
 
 ## Testing
 

@@ -27,7 +27,6 @@ describe('File upload', function() {
 
     	fse.copy(TEST_FILES[0],DST_PATH, (err) => {
     		if (err) throw err;
-
     		done();
     	});
     });

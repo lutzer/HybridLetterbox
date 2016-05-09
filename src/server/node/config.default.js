@@ -16,6 +16,9 @@ var Config = {
 	hostname : false, // 127.0.0.1 = private, false = public
 	port : '8081',
 
+	/* AUTH DATA */
+	authName: 'admin',
+	authPassword: 'password',
 
 	/* TEST CONFIG */
 	testDatabase :"mongodb://localhost/letterbox_test",
