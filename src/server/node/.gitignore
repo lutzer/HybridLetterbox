@@ -1,6 +1,6 @@
 node_modules
 *.db
 public/.sass-cache
-_tmp/*
-_tmp/!.keep
+_tmp/
+!_tmp/.keep
 *.log
