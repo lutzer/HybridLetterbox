@@ -107,5 +107,41 @@ describe('API Routes /submissions/', function(){
 	        });
 	    });
 	});
+
+	it('should PUT on api/submissions/:id with auth', function(done){
+
+		var request = require('supertest');
+
+		var data1 = {
+			text: "text1",
+			tags: ['tag1','tag2']
+		}
+
+		var data2 = {
+			text: "text2",
+			tags: ['tag1','tag2','tag3']
+		}
+
+		request(BASE_URL).post('api/submissions').send(data1).end(function(err, res) {
+			if (err)
+    			throw err;
+
+    		submissionId = res.body._id;
+
+			assert.equal(res.body.tags.length, 2);
+			console.log(res.body);
+
+			request(BASE_URL).put('api/submissions/'+submissionId).auth(Config.authName, Config.authPassword).send(data2).expect(200).end(function(err, res) {
+				if (err)
+	    			throw err;
+
+	    		console.log(res.body);
+	    		
+				assert.equal(res.body.tags.length, 3);
+				assert.equal(res.body.text, "text2");
+				done()
+	        });
+        });
+	});
 });
 

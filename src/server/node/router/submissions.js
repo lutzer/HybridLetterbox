@@ -16,6 +16,7 @@ var router = express.Router();
  */ 
 router.get('/',(req,res) => {
 
+    // filter by tags
     query = {}
     if (_.has(req.query,'tag'))
         query.tags = req.query.tag;
@@ -57,6 +58,43 @@ router.post('/', (req, res) => {
 
         // trigger socket event and send message to web app
         appEvents.emit('submission:new',model)
+        res.send(model);
+    });
+});
+
+/*
+ * PUT /api/submissions/:id with AUTH
+ */
+router.put('/:id', Auth.authentificate, (req, res) => {
+
+    /*var data = req.body;
+    data._id = req.params.id;
+
+    var submission = new Submission(data);
+
+    submission.save((err, model) => {
+        if (Utils.handleError(err,res))
+            return;
+
+        print('Submission changed in database');
+
+        // trigger socket event and send message to web app
+        appEvents.emit('submission:changed',model)
+        res.send(model);
+    });*/
+
+    
+    var data = req.body;
+
+    //insert data
+    Submission.findOneAndUpdate({ _id : req.params.id }, { text : "dlkfhskdf" }, (err, model) => {
+        if (Utils.handleError(err,res))
+            return;
+
+        print('Submission changed in database');
+
+        // trigger socket event and send message to web app
+        appEvents.emit('submission:changed',model)
         res.send(model);
     });
 });
