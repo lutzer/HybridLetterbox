@@ -79,11 +79,21 @@ describe('API Routes /submissions/', function(){
         });
 	})
 
-	it('should DELETE on api/submissions/'+MODEL_ID, function(done){
+	it('should NOT be able to DELETE on api/submissions/:id without auth', function(done){
 
 		var request = require('supertest');
 
-		request(BASE_URL).delete('api/submissions/'+MODEL_ID).end(function(err, res) {
+		request(BASE_URL).delete('api/submissions/'+MODEL_ID).expect(200).end(function(err, res) {
+			assert.notEqual(err,null);
+			done();
+	    });
+	});
+
+	it('should DELETE on api/submissions/:id with auth', function(done){
+
+		var request = require('supertest');
+
+		request(BASE_URL).delete('api/submissions/'+MODEL_ID).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
 			if (err)
     			throw err;
 			assert.equal(res.body.removed, 1);
@@ -173,7 +183,7 @@ describe('API Routes /comments/', function(){
         });
   	});
 
-  	it('should DELETE on api/comments/:id', function(done) {
+  	it('should NOT be able to DELETE on api/comments/:id  without auth', function(done) {
 
   		var request = require('supertest');
 
@@ -182,12 +192,36 @@ describe('API Routes /comments/', function(){
 		}
 
 		//add comment
-		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).end(function(err, res) {
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).expect(200).end(function(err, res) {
 			if (err)
     			throw err;
 			
 			// delete comment
-			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).end(function(err, res) {
+			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).expect(200).end(function(err, res) {
+				assert.notEqual(err,null);
+				done();
+			});
+        });
+  	});
+
+  	it('should DELETE on api/comments/:id with auth', function(done) {
+
+  		var request = require('supertest');
+
+  		comment_data = {
+			text: "unittest_" + require('node-uuid').v4()
+		}
+
+		//add comment
+		request(BASE_URL).post('api/comments/'+MODEL_ID).send(comment_data).expect(200).end(function(err, res) {
+			if (err)
+    			throw err;
+			
+			// delete comment
+			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
+				if (err)
+    				throw err;
+
 				assert.equal(res.body.removed,1);
 				done();
 			});

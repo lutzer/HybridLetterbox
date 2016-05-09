@@ -9,6 +9,7 @@
     "express": "^4.0.0",
     "fs-extra": "^0.30.0",
     "htmlspecialchars": "^1.0.5",
+    "http-auth": "^2.3.3",
     "mocha": "^2.4.5",
     "mongoose": "^4.4.14",
     "node-uuid": "^1.4.7",

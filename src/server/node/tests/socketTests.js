@@ -92,7 +92,7 @@ describe('Socket Tests', function(){
             });
 
             // delete submission
-            request(BASE_URL).delete('api/submissions/'+submissionId).end(function(err, res) {
+            request(BASE_URL).delete('api/submissions/'+submissionId).auth(Config.authName, Config.authPassword).end(function(err, res) {
                if (err) throw err;
             });
         });

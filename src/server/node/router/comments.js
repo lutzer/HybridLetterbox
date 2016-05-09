@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 12:43:57
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-04 17:40:38
+* @Last Modified time: 2016-05-09 14:07:56
 */
 
 var express = require('express');
@@ -14,6 +14,8 @@ var Utils = r_require('/utils/utils');
 
 var Comment = r_require('/models/comment');
 var Submission = r_require('/models/submission');
+
+var Auth = r_require('/router/authentification');
 
 var router = express.Router();
 
@@ -44,6 +46,10 @@ router.get('/:id',(req,res) => {
 router.post('/:submissionId', (req, res) => {
 
     var comment = new Comment(req.body)
+
+    //only allow new comments
+    delete comment['_id'];
+
     // insert comment
     Submission.findOne({ _id: req.params.submissionId }, (err,submission) => {
     	if (Utils.handleError(err,res))
@@ -66,9 +72,9 @@ router.post('/:submissionId', (req, res) => {
 });
 
 /*
- * DELETE /api/comments/:id
+ * DELETE /api/comments/:id with AUTH
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', Auth.authentificate, (req, res) => {
     Comment.remove({ _id: req.params.id }, (err, obj) => {
         if (Utils.handleError(err,res))
             return;

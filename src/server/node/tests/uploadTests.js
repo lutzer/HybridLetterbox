@@ -107,7 +107,7 @@ describe('File upload', function() {
 			//attach file
 			postFile(submissionId,TEST_FILES[0], function(submission) {
 				//delete submission
-				request(BASE_URL).delete('api/submissions/'+submissionId).end(function(err, res) {
+				request(BASE_URL).delete('api/submissions/'+submissionId).auth(Config.authName, Config.authPassword).end(function(err, res) {
 					if (err)
     					throw err;
 

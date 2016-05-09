@@ -7,6 +7,8 @@ var Utils = r_require('/utils/utils');
 
 var Submission = r_require('/models/submission');
 
+var Auth = r_require('/router/authentification');
+
 var router = express.Router();
 
 /*
@@ -37,6 +39,10 @@ router.get('/:id',(req,res) => {
 router.post('/', (req, res) => {
 
     var submission = new Submission(req.body);
+    
+    //only allow new comments
+    delete submission['_id'];
+
     //insert data
     submission.save((err, model) => {
         if (Utils.handleError(err,res))
@@ -51,9 +57,9 @@ router.post('/', (req, res) => {
 });
 
 /*
- * DELETE /api/submissions/:id
+ * DELETE /api/submissions/:id with AUTH
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', Auth.authentificate, (req, res) => {
     Submission.remove({ _id: req.params.id }, (err, obj) => {
         if (Utils.handleError(err,res))
             return;
