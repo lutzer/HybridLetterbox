@@ -19,6 +19,11 @@ router.get('/',function(req,res){
 
         // extract all tags, remove duplicates
         tags = _.unique(_.flatten(_.pluck(models,'tags')));
+        
+        tags = _.map(tags, function(tag) {
+        	return { name: tag }
+        })
+
         res.send(tags);
 	});
 

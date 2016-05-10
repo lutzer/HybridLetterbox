@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-04-27 11:49:42
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 12:28:51
+* @Last Modified time: 2016-05-10 16:10:21
 */
 
 /* use absolute paths for require */
@@ -28,5 +28,4 @@ require("./uploadTests.js")
 require("./socketTests.js");
 
 // uncomment to create test database
-// require("./createTestDatabase.js");
-// require("./createTestDatabase.js");
+require("./createTestDatabase.js");

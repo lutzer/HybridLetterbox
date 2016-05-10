@@ -68,9 +68,9 @@ describe('API Routes /tags/', function(){
 
     		assert.equal(tags.length,tags.length);
 
-    		assert.equal(tags[0],TAGS[0]);
-    		assert.equal(tags[1],TAGS[1]);
-    		assert.equal(tags[2],TAGS[2]);
+    		assert.equal(tags[0].name,TAGS[0]);
+    		assert.equal(tags[1].name,TAGS[1]);
+    		assert.equal(tags[2].name,TAGS[2]);
 
 			done();
         });

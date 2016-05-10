@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-10 11:51:25
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 12:22:34
+* @Last Modified time: 2016-05-10 16:32:04
 */
 
 
@@ -87,7 +87,7 @@ describe('Create Test Database', function(){
 			author : "Letterbox",
 			device : "letterbox_1",
 			tags : [ 'tag1', 'tag2'],
-			text : 'Test Nachricht',
+			text : 'Ut eleifend tellus ut tellus euismod bibendum. Nam id urna blandit, dignissim massa in, ultrices diam. Curabitur a malesuada eros, nec maximus orci. Sed at maximus eros.',
 			files: [],
 			location : [45.3989, 34.399]
 		})
@@ -98,8 +98,8 @@ describe('Create Test Database', function(){
 			var submission = new Submission({
 				author : "Letterbox",
 				device : "letterbox_1",
-				tags : [ 'tag1', 'tag2'],
-				text : 'Lorem ipsum',
+				tags : [ 'tag1', 'testtag'],
+				text : 'Suspendisse malesuada commodo sapien tempus laoreet',
 				files: [],
 				location : [45.3989, 34.399]
 			})
@@ -115,9 +115,11 @@ describe('Create Test Database', function(){
 
 	it('should add several submission with comments', function(done){
 
-		addSubmissionWithComment('Kommentar 1', () => {
-			addSubmissionWithComment('Kommentar 2', () => {
-				done();
+		addSubmissionWithComment('Nunc blandit aliquam tempus. Ut quis dolor odio. Suspendisse malesuada commodo sapien tempus laoreet. Aliquam blandit eleifend sem', () => {
+			addSubmissionWithComment('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque velit lectus, cursus porta mi a, lobortis facilisis purus. Mauris in magna ac orci rhoncus bibendum et eu leo', () => {
+				addSubmissionWithComment('Nullam consectetur purus sit amet elementum gravida.', () => {
+					done();
+				});
 			});
 		});
 	});
@@ -128,7 +130,10 @@ describe('Create Test Database', function(){
 
 			submissionId = models[0]._id;
 			postFile(submissionId,TEST_FILES[0], function(submission) {
-				done();
+				submissionId = models[3]._id;
+				postFile(submissionId,TEST_FILES[1], function(submission) {
+					done();
+				});
 			});
 		})
 	});

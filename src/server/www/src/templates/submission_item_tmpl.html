@@ -1,0 +1,25 @@
+<h2><%= _id %></h2>
+<% if (files.length > 0) { %>
+	<img src="<%= filesUrl+files[0].name %>">
+<% } %>
+<div class="tags"> Tags: 
+<% _.each(tags, function(tag) { %>
+		<%= tag %>
+	<% }) %>
+</div>
+<div class="text">Text: <%= text %> </div>
+<div class="author">Author: <%= author %></div>
+<div class="comment-number">Kommentare: <%= comments.length %></div>
+<div class="comments">
+	<ul class="comment-list">
+	<% _.each(comments, function(comment) { %>
+		<li><%= comment.author %>: <%= comment.text %></li>
+		<button id="delete-comment-button" data-id="<%= comment._id %>">Delete</button>
+	<% }) %>
+	</ul>
+	<div class="new-comment">
+		Author: <input id="new-comment-author" type="text">
+		Text: <input id="new-comment-text" type="text">
+		<button id="new-comment-button">Submit</button>
+	</div>
+</div>

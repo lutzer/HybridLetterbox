@@ -30,6 +30,7 @@ module.exports = function (http) {
 
 		function submissionChangedHandler(model) {
 			sio.emit('submission:changed', {model: model}, socket.id);
+			print("submission changed",'DEBUG');
 		}
 		appEvents.on('submission:changed', submissionChangedHandler);
 
@@ -48,6 +49,7 @@ module.exports = function (http) {
 	        //remove server events
 	        appEvents.removeListener('submission:new',submissionAddedHandler);
 	        appEvents.removeListener('submission:removed',submissionRemovedHandler);
+	        appEvents.removeListener('submission:changed',submissionChangedHandler);
 	        appEvents.removeListener('feedback:scanning',feedbackScanningHandler);
 	    });
 

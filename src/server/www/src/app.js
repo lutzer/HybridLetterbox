@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-04 11:41:36
+* @Last Modified time: 2016-05-10 17:31:33
 */
 
 import $ from 'jquery';
@@ -33,6 +33,8 @@ class App extends Backbone.Marionette.Application {
 			controller: new Controller(this),
 			appRoutes: {
 				'scanning' : 'showScanningDialog',
+				'tag/:tag' : 'showSubmissionList',
+				'new' : 'postSubmission',
 				'*actions': 'showSubmissionList'
 			}
 		});
