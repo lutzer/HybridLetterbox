@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 12:43:57
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-09 16:43:35
+* @Last Modified time: 2016-05-10 18:08:41
 */
 
 var express = require('express');
@@ -60,13 +60,13 @@ router.post('/', (req, res) => {
             return;
         }
 
-    	submission.addComment(comment, (err,submission) => {
+    	submission.addComment(comment, (err,comment) => {
     		if (Utils.handleError(err,res))
                 return;
 
             print('Comment added to Database');
     		appEvents.emit('submission:changed',submission);
-    		res.send(submission);
+    		res.send(comment);
     	});
     });
 });

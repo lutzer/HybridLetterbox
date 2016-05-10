@@ -172,5 +172,32 @@ describe('API Routes /submissions/', function(){
 	        });
         });
 	});
+
+	it('should escape special characters on api/submissions', function(done){
+
+		var request = require('supertest');
+
+		data = {
+			author : "<$%0921ß30></br>",
+			device : "letterbox_1",
+			tags : [ 'tag1<br>', 'tag2'],
+			text : 'Test Nachricht<p>',
+			files: [ { name: "test&<br>.jpg", path: "data/images", filetype: "image" } ],
+			location : [45.3989, 34.399]
+		}
+
+		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+    		assert.notEqual(res.body.author, data.author);
+			assert.equal(res.body.device, data.device);
+			assert.notEqual(res.body.tags[0], data.tags[0]);
+			assert.equal(res.body.tags[1], data.tags[1]);
+			assert.notEqual(res.body.text, data.text);
+			assert.notEqual(res.body.files[0].name, data.files[0].name);
+			done();
+        });
+		
+	});
 });
 

@@ -19,7 +19,7 @@ commentSchema.pre('save', function(next) {
 
     var doc = this;
     doc.schema.eachPath(function(path, schemaType) {
-        if (schemaType === String) {
+        if (schemaType.instance == 'String') {
             doc.set(path, _.escape(doc.get(path)));
         }
     });

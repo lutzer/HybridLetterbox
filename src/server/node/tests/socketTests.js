@@ -172,10 +172,8 @@ describe('Socket Tests', function(){
             request(BASE_URL).post('api/comments/').send({ text: 'sockettest', submission: submissionId}).end(function(err, res) {
                if (err) throw err;
 
-               submissionData = res.body;
-
                //remove one comment
-               request(BASE_URL).delete('api/comments/'+submissionData.comments[0]).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
+               request(BASE_URL).delete('api/comments/'+res.body._id).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
                    if (err) throw err;
                 });
 

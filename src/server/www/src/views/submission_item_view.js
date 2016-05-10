@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 17:41:32
+* @Last Modified time: 2016-05-10 18:00:33
 */
 
 import Marionette from 'marionette';
@@ -42,7 +42,7 @@ class SubmissionItemView extends Marionette.ItemView {
 
     /* methods */
     initialize(options) {
-        console.log(this.model);
+        //console.log(this.model);
     }
 
     onNewCommentButtonClick() {

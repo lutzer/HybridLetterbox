@@ -58,9 +58,9 @@ describe('API Routes /comments/', function(){
 		request(BASE_URL).post('api/comments/').send(data).end(function(err, res) {
 			if (err)
     			throw err;
-			assert(res.body.comments.length > 0);
-			done()
-        });
+			assert.equal(res.body.text,data.text);
+			done();
+		});
 	});
 
 	it('should POST on api/comments/ and be reflected in submission', function(done){
@@ -103,7 +103,7 @@ describe('API Routes /comments/', function(){
 			if (err)
     			throw err;
 			
-			request(BASE_URL).get('api/comments/'+res.body.comments[0]).end(function(err, res) {
+			request(BASE_URL).get('api/comments/'+res.body._id).end(function(err, res) {
 				assert.equal(res.body.text, comment_data.text);
 				done();
 			});
@@ -125,7 +125,7 @@ describe('API Routes /comments/', function(){
     			throw err;
 			
 			// delete comment
-			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).expect(401).end(function(err, res) {
+			request(BASE_URL).delete('api/comments/'+res.body._id).expect(401).end(function(err, res) {
 				if (err) throw err;
 				done();
 			});
@@ -149,7 +149,7 @@ describe('API Routes /comments/', function(){
     		submissionId = MODEL_ID;
 			
 			// delete comment
-			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
+			request(BASE_URL).delete('api/comments/'+res.body._id).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
 				if (err)
     				throw err;
 
@@ -183,6 +183,26 @@ describe('API Routes /comments/', function(){
 				done();
 	        });
 		});
+	});
+
+	it('should escape special characters on api/comments', function(done){
+
+		var request = require('supertest');
+
+		data = {
+			author: "<br><p>",
+			text: "<br><html>&",
+			submission: MODEL_ID
+		}
+
+		request(BASE_URL).post('api/comments/').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+			assert.notEqual(res.body.text,data.text);
+			assert.notEqual(res.body.author,data.author);
+			done()
+        });
+		
 	});
 
 });

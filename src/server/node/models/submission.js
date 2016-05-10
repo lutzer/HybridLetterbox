@@ -44,7 +44,7 @@ submissionSchema.pre('save', function(next) {
 
     var doc = this;
     doc.schema.eachPath(function(path, schemaType) {
-        if (schemaType === String) {
+        if (schemaType.instance == 'String') {
             doc.set(path, _.escape(doc.get(path)));
         }
     });
@@ -85,7 +85,13 @@ submissionSchema.methods.addComment = function(comment,callback) {
 
         //add ref to model
         this.comments.push(comment._id);
-        this.save(callback);
+        this.save((err, submission) => {
+            if (err) {
+                callback(err)
+                return;
+            } 
+            callback(null,comment);
+        });
     })
 }
 
