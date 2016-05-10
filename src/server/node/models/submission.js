@@ -25,14 +25,6 @@ var submissionSchema = mongoose.Schema({
 
 }, { timestamps: true });
 
-/*submissionSchema.static.find = function(query,callback) {
-    this.find(query).exec(callback);
-};
-
-submissionSchema.static.findOne = function(query,callback) {
-    this.findOne(query).exec(callback);
-};*/
-
 submissionSchema.pre('remove', function(next) {
 
     // also remove all the assigned comments
@@ -46,6 +38,18 @@ submissionSchema.pre('remove', function(next) {
             next(err);
         });
     });
+});
+
+submissionSchema.pre('save', function(next) {
+
+    var doc = this;
+    doc.schema.eachPath(function(path, schemaType) {
+        if (schemaType === String) {
+            doc.set(path, _.escape(doc.get(path)));
+        }
+    });
+    return next();
+
 });
 
 // Remove All entries
@@ -109,6 +113,7 @@ submissionSchema.methods.addFile = function(file,callback) {
 
     var self = this;
     var dir = Config.fileDir + this._id + '/'
+    var fileName = _.escape(file.originalFilename);
 
     //create dir
     fse.ensureDir(dir, (err) => {
@@ -118,22 +123,24 @@ submissionSchema.methods.addFile = function(file,callback) {
         }
 
         //move file
-        fse.move(file.path,dir+file.originalFilename, (err) => {
-            if (err) {
-                callback(err)
-                return;
+        fse.move(file.path,dir+fileName, (err) => {
+            if (err) { // cannot copy file
+                fse.remove(file.path, () => {
+                    callback(err)
+                    return;
+                })
+            } else {
+                //add to submission
+                var newfile = {
+                    name: fileName,
+                    path: dir+file.originalFilename,
+                    filetype: file.type
+                };
+                self.files.push(newfile);
+
+                //save submission
+                self.save(callback);
             }
-
-            //add to submission
-            var newfile = {
-                name: file.originalFilename,
-                path: dir+file.originalFilename,
-                filetype: file.type
-            };
-            self.files.push(newfile);
-
-            //save submission
-            self.save(callback);
         });
     });
 }

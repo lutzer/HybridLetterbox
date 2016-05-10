@@ -162,9 +162,7 @@ describe('Database Comments Test', function(){
 				author: "Peter",
 				submission_id: model._id
 			})
-
-
-
+			
 			//add comment
 			model.addComment(comment,(err) => {
 				if (err) throw err;

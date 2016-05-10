@@ -21,7 +21,7 @@ router.get('/',(req,res) => {
     if (_.has(req.query,'tag'))
         query.tags = req.query.tag;
 
-    Submission.find(query).populate('Comments').exec((err,models) => {
+    Submission.find(query).populate('comments').exec((err,models) => {
         if (Utils.handleError(err,res))
             return;
         res.send(models);
@@ -32,7 +32,7 @@ router.get('/',(req,res) => {
  * GET /api/submissions/:id
  */ 
 router.get('/:id',(req,res) => {
-    Submission.findOne({ _id: req.params.id}).populate('Comments').exec((err,model) => {
+    Submission.findOne({ _id: req.params.id}).populate('comments').exec((err,model) => {
         if (Utils.handleError(err,res))
             return;
         res.send(model);

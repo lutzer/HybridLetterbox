@@ -63,6 +63,31 @@ describe('API Routes /comments/', function(){
         });
 	});
 
+	it('should POST on api/comments/ and be reflected in submission', function(done){
+
+		var request = require('supertest');
+
+		data = {
+			text: "unittest_" + require('node-uuid').v4(),
+			submission: MODEL_ID
+		}
+
+		request(BASE_URL).post('api/comments/').send(data).end(function(err, res) {
+			if (err)
+    			throw err;
+			
+			//fetch submission
+			request(BASE_URL).get('api/submissions/'+MODEL_ID).end(function(err, res) {
+				if (err)
+    				throw err;
+
+				assert.equal(res.body.comments[0].text, data.text);
+				done();
+			});
+
+        });
+	});
+
 
   	it('should GET on api/comments/:id', function(done) {
 
@@ -85,7 +110,7 @@ describe('API Routes /comments/', function(){
         });
   	});
 
-  	it('should NOT be able to DELETE on api/comments/:id  without auth', function(done) {
+  	it('should not DELETE on api/comments/:id  without auth', function(done) {
 
   		var request = require('supertest');
 
@@ -120,14 +145,23 @@ describe('API Routes /comments/', function(){
 		request(BASE_URL).post('api/comments/').send(comment_data).expect(200).end(function(err, res) {
 			if (err)
     			throw err;
+
+    		submissionId = MODEL_ID;
 			
 			// delete comment
 			request(BASE_URL).delete('api/comments/'+res.body.comments[0]).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
 				if (err)
     				throw err;
 
+
 				assert.equal(res.body.removed,1);
-				done();
+
+    			//fetch submission
+    			request(BASE_URL).get('api/submissions/'+submissionId).end(function(err, res) {
+					assert.equal(res.body.comments.length, 0);
+					done();
+				});
+
 			});
         });
   	});

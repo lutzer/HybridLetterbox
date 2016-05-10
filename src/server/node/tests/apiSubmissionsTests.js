@@ -79,7 +79,7 @@ describe('API Routes /submissions/', function(){
         });
 	})
 
-	it('should NOT be able to DELETE on api/submissions/:id without auth', function(done){
+	it('should not DELETE on api/submissions/:id without auth', function(done){
 
 		var request = require('supertest');
 
