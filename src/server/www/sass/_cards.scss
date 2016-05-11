@@ -1,0 +1,53 @@
+.cards {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	@include justify-content(space-between);
+
+	.card {
+		position: relative;
+		@include flex-basis(20em);
+		@include flex-grow(1);
+		margin: $card-margin;
+		@include background($card-background);
+		padding-bottom: 2.5em;
+	}
+
+	.card-image {
+		height: 15em;
+		background: whitesmoke;
+		overflow: hidden;
+		margin: $text-padding;
+
+		img {
+			width: 100%;
+		}
+	}
+
+	.card-header {
+
+		padding: $text-padding;
+
+		.author {
+			float: right;
+			font-style: italic;
+		}
+
+		.tags {
+			font-weight: bold;
+		}
+	}
+
+	.card-text {
+		padding: $text-padding;
+	}
+
+	.card-comments {
+		padding: $text-padding;
+	}
+
+	.card-bottom {
+		position: absolute;
+		bottom: 0;
+		padding: $text-padding;
+	}
+}

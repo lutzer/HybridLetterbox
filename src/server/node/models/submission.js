@@ -46,7 +46,6 @@ submissionSchema.pre('save', function(next) {
     Utils.escapePath(this,'text');
     Utils.escapePath(this,'author');
     Utils.escapePath(this,'device');
-    Utils.escapePath(this,'tags');
 
     return next();
 

@@ -1,25 +1,45 @@
-<h2><%= _id %></h2>
 <% if (files.length > 0) { %>
+<div class="card-image">
 	<img src="<%= filesUrl+files[0].name %>">
-<% } %>
-<div class="tags"> Tags: 
-<% _.each(tags, function(tag) { %>
-		<%= tag %>
-	<% }) %>
 </div>
-<div class="text">Text: <%= text %> </div>
-<div class="author">Author: <%= author %></div>
-<div class="comment-number">Kommentare: <%= comments.length %></div>
-<div class="comments">
-	<ul class="comment-list">
-	<% _.each(comments, function(comment) { %>
-		<li><%= comment.author %>: <%= comment.text %></li>
-		<button id="delete-comment-button" data-id="<%= comment._id %>">Delete</button>
-	<% }) %>
-	</ul>
-	<div class="new-comment">
-		Author: <input id="new-comment-author" type="text">
-		Text: <input id="new-comment-text" type="text">
-		<button id="new-comment-button">Submit</button>
+<% } %>
+<div class="card-header">
+	<div class="author"><%= author %></div>
+	<div class="tags"> 
+	<% _.each(tags, function(tag) { %>
+			<%= tag %>
+		<% }) %>
 	</div>
+</div>
+<div class="card-text">
+	<%= text %>
+</div>
+<div class="card-comments">
+	<div class="comments">
+		<% _.each(comments, function(comment) { %>
+			<div class="comment">
+				<div class="comment-image">
+				    <img src="https://raw.githubusercontent.com/thoughtbot/empties/master/source/images/placeholder.png">
+				 </div>
+				<div class="comment-content">
+				<h4><%= comment.author %></h4>
+				<p><%= comment.text %></p>
+				</div>
+				<% if (isAdmin) { %>
+				<button id="delete-comment-button" data-id="<%= comment._id %>">Delete</button>
+				<% } %>
+			</div>
+		<% }) %>
+		<div class="comment new">
+			<div class="comment-content">
+				<h3>Add Comment</h3>
+				<p><input id="new-comment-author" type="text" placeholder="author"></p>
+				<p><input id="new-comment-text" type="text" placeholder="text"></p>
+				<p><button id="new-comment-button">Submit</button></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card-bottom">
+	<div class="comment-number"><%= comments.length %> Kommentare</div>
 </div>

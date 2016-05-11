@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 18:00:33
+* @Last Modified time: 2016-05-11 16:47:29
 */
 
 import Marionette from 'marionette';
@@ -19,18 +19,20 @@ class SubmissionItemView extends Marionette.ItemView {
 	/* properties */
     get template() { return _.template(template) }
 
-    get className() { return 'item-view' }
+    get className() { return 'item-view card' }
 
     get templateHelpers() {
 		return {
-			filesUrl : Config.files_url + this.model.get('_id') + '/'
+			filesUrl : Config.files_url + this.model.get('_id') + '/',
+            isAdmin : false
 		}
     }
 
     events() {
     	return {
+            'click .comment-number' : 'onShowCommentsButtonClick',
     		'click #new-comment-button' : 'onNewCommentButtonClick',
-    		'click #delete-comment-button' : 'onDeleteCommentButtonClick'
+    		'click #delete-comment-button' : 'onDeleteCommentButtonClick',
     	}
     }
 
@@ -43,6 +45,15 @@ class SubmissionItemView extends Marionette.ItemView {
     /* methods */
     initialize(options) {
         //console.log(this.model);
+        
+        this.commentsHidden = true;
+    }
+
+    onShow() {
+        if (this.commentsHidden)
+            this.$('.card-comments').addClass('hidden');
+        else
+            this.$('.card-comments').removeClass('hidden');
     }
 
     onNewCommentButtonClick() {
@@ -52,7 +63,16 @@ class SubmissionItemView extends Marionette.ItemView {
     		author : this.$('#new-comment-author').val(),
     		submission: this.model.get('_id')
     	})
-    	comment.save();
+    	comment.save(comment.attributes,{
+            error: (model, res) => {
+                Backbone.trigger('error','http',res.responseJSON);
+            }
+        });
+    }
+
+    onShowCommentsButtonClick() {
+        this.commentsHidden = !this.commentsHidden;
+        this.$('.card-comments').toggleClass('hidden');
     }
 
     onDeleteCommentButtonClick(event) {

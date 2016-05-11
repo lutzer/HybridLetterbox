@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 17:30:03
+* @Last Modified time: 2016-05-11 15:36:10
 */
 
 import Marionette from 'marionette';
@@ -18,7 +18,7 @@ class SubmissionListView extends Marionette.CompositeView {
 	/* properties */
 	get template() { return _.template(template) }
 
-	get className() { return 'list-view' }
+	get className() { return 'composite-view' }
 
 	get childViewContainer() { return '#submission-list' }
 

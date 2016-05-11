@@ -1,0 +1,24 @@
+.submission-input {
+	margin: $card-margin;
+
+
+	.input-box {
+		background-color: $card-background;
+		padding: $text-padding;
+
+		span {
+			display: block;
+		    overflow: hidden;
+		    padding-right:$text-padding;
+		}
+
+	    button {
+			float:right;
+			margin: 0;
+			height: 100%;
+		}
+	}
+
+	
+
+}
