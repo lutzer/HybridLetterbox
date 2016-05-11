@@ -30,7 +30,6 @@ module.exports = function (http) {
 
 		function submissionChangedHandler(model) {
 			sio.emit('submission:changed', {model: model}, socket.id);
-			print("submission changed",'DEBUG');
 		}
 		appEvents.on('submission:changed', submissionChangedHandler);
 

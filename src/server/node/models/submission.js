@@ -4,6 +4,7 @@ var uuid = require('node-uuid');
 var fse = require('fs-extra');
 var async = require('async');
 
+var Utils = r_require('/utils/utils');
 var Comment = r_require('/models/comment');
 
 // Define Model Schema
@@ -11,10 +12,10 @@ var submissionSchema = mongoose.Schema({
 
 	_id: { type: String, default: uuid.v4 }, //use uuid
 
-    text : { type: String, default: false },
-    author: String,
-    device: String,
-    tags : [ String ],
+    text : { type: String, default: '' },
+    author: { type: String, default: false },
+    device: { type: String, default: false },
+    tags : [ { type: String, match: /^\w+$/ } ], //only allow numbers and chars and _ without spaces
     files : [{
         name: String,
         path: String,
@@ -42,12 +43,11 @@ submissionSchema.pre('remove', function(next) {
 
 submissionSchema.pre('save', function(next) {
 
-    var doc = this;
-    doc.schema.eachPath(function(path, schemaType) {
-        if (schemaType.instance == 'String') {
-            doc.set(path, _.escape(doc.get(path)));
-        }
-    });
+    Utils.escapePath(this,'text');
+    Utils.escapePath(this,'author');
+    Utils.escapePath(this,'device');
+    Utils.escapePath(this,'tags');
+
     return next();
 
 });

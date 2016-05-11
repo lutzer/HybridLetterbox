@@ -47,7 +47,7 @@ describe('Database Submission Test', function(){
 		var submission = new Submission({
 			author : "Letterbox",
 			device : "letterbox_1",
-			tags : [ 'tag1', 'tag2'],
+			tags : [ 'tag_1', 'tag_2'],
 			text : 'Test Nachricht',
 			files: [ { name: "test.jpg", path: "data/images", filetype: "image" } ],
 			location : [45.3989, 34.399]
@@ -146,7 +146,7 @@ describe('Database Comments Test', function(){
 		var submission = new Submission({
 			author : "Letterbox",
 			device : "letterbox_1",
-			tags : [ 'tag1', 'tag2'],
+			tags : [ 'tag1', 'tag_2'],
 			text : 'Test Nachricht',
 			files: [ { name: "test.jpg", path: "data/images", filetype: "image" } ],
 			location : [45.3989, 34.399]

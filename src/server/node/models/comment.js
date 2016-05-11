@@ -2,6 +2,7 @@ var _ = require('underscore')
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');
 
+var Utils = r_require('/utils/utils');
 var Submission = r_require('/models/submission');
 
 // Define Model Schema
@@ -10,19 +11,16 @@ var commentSchema = mongoose.Schema({
 	_id: { type: String, default: uuid.v4 }, //use uuid
 	submission: { type: String, ref: 'Submission' },
 
-    text : { type: String, default: false },
-    author: String
+    text : { type: String, required: true },
+    author: { type: String, default: false }
 
 }, { timestamps: true });
 
 commentSchema.pre('save', function(next) {
 
-    var doc = this;
-    doc.schema.eachPath(function(path, schemaType) {
-        if (schemaType.instance == 'String') {
-            doc.set(path, _.escape(doc.get(path)));
-        }
-    });
+    Utils.escapePath(this,'text');
+    Utils.escapePath(this,'author');
+
     return next();
 
 });
