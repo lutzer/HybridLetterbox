@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-11 16:57:41
+* @Last Modified time: 2016-05-12 16:19:18
 */
 
 import Backbone from 'backbone';
@@ -38,6 +38,12 @@ class Controller extends Marionette.Controller {
             socket.on('submission:changed', function(data) {
             	Backbone.trigger('submission:changed',data);
             });
+            socket.on('submission:new', function(data) {
+            	Backbone.trigger('submission:new',data);
+            });
+            socket.on('submission:removed', function(data) {
+            	Backbone.trigger('submission:new',data);
+            });
 
             //load mainview
             this.mainView = new MainView();
@@ -50,7 +56,7 @@ class Controller extends Marionette.Controller {
 
 			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
 			this.mainView.topRegion.show(new SubmissionInputView());
-			this.mainView.tagsRegion.show(new TagListView());
+			this.mainView.sideRegion.show(new TagListView({ tag: tag }));
 		}
 
 		postSubmission() {

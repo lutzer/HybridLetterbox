@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-11 15:54:18
+* @Last Modified time: 2016-05-12 11:28:37
 */
 
 import Marionette from 'marionette'
@@ -20,7 +20,7 @@ class MainView extends Marionette.LayoutView {
     regions() { return {
         topRegion: '#top',
     	contentRegion: '#content',
-        tagsRegion: '#tags'
+        sideRegion: '#side'
     }}
 
     /* methods */

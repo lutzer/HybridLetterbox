@@ -27,6 +27,7 @@ describe('API Routes /comments/', function(){
 			array = _.map(_.range(size), function(i) {
 				return {
 					text: 'model'+i,
+					author: 'Test Peter'
 				}
 			});
 			Submission.create(array, function(err,models) {

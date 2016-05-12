@@ -72,7 +72,8 @@ describe('File upload', function() {
 		var fs = require('fs');
 
 		data = {
-			text: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4(),
+			author: 'Test Peter'
 		}
 
 		//create submission
@@ -95,7 +96,8 @@ describe('File upload', function() {
 		var fs = require('fs');
 
 		data = {
-			text: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4(),
+			author: 'Test Peter'
 		}
 
 		//create submission
@@ -128,7 +130,8 @@ describe('File upload', function() {
 		var fs = require('fs');
 
 		data = {
-			text: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4(),
+			author: 'Test Peter'
 		}
 
 		//create submission
@@ -157,7 +160,8 @@ describe('File upload', function() {
 		var async = require('async');
 
 		data = {
-			text: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4(),
+			author: 'Test Peter'
 		}
 
 		//create submission

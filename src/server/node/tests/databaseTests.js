@@ -64,7 +64,8 @@ describe('Database Submission Test', function(){
 		message = require('node-uuid').v4()
 
 		var submission = new Submission({
-			text: message
+			text: message,
+			author: 'test'
 		});
 
 		submission.save(function(err, model) {
@@ -87,7 +88,8 @@ describe('Database Submission Test', function(){
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'model'+i,
+				text: 'model'+i,
+				author: 'test'
 			}
 		});
 
@@ -104,7 +106,8 @@ describe('Database Submission Test', function(){
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'model'+i,
+				text: 'model'+i,
+				author: 'test'
 			}
 		});
 
@@ -123,7 +126,8 @@ describe('Database Submission Test', function(){
 		var size = Math.floor(2 + Math.random() * 10)
 		array = _.map(_.range(size), function(i) {
 			return {
-				message: 'model'+i,
+				text: 'model'+i,
+				author: 'test'
 			}
 		});
 
@@ -147,6 +151,7 @@ describe('Database Comments Test', function(){
 			author : "Letterbox",
 			device : "letterbox_1",
 			tags : [ 'tag1', 'tag_2'],
+			text: 'test',
 			text : 'Test Nachricht',
 			files: [ { name: "test.jpg", path: "data/images", filetype: "image" } ],
 			location : [45.3989, 34.399]

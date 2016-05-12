@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-11 16:47:29
+* @Last Modified time: 2016-05-12 16:14:24
 */
 
 import Marionette from 'marionette';
@@ -30,7 +30,7 @@ class SubmissionItemView extends Marionette.ItemView {
 
     events() {
     	return {
-            'click .comment-number' : 'onShowCommentsButtonClick',
+            'click .card-bottom' : 'onViewClicked',
     		'click #new-comment-button' : 'onNewCommentButtonClick',
     		'click #delete-comment-button' : 'onDeleteCommentButtonClick',
     	}
@@ -46,14 +46,23 @@ class SubmissionItemView extends Marionette.ItemView {
     initialize(options) {
         //console.log(this.model);
         
-        this.commentsHidden = true;
+        this.showComments = false;
     }
 
     onShow() {
-        if (this.commentsHidden)
-            this.$('.card-comments').addClass('hidden');
-        else
+        if (this.showComments)
             this.$('.card-comments').removeClass('hidden');
+        else
+            this.$('.card-comments').addClass('hidden');
+    }
+
+    showDetails(show) {
+        this.showComments = show;
+        this.$('.card-comments').toggleClass('hidden');
+    }
+
+    onViewClicked() {
+        this.showDetails(!this.showComments);
     }
 
     onNewCommentButtonClick() {
@@ -63,16 +72,11 @@ class SubmissionItemView extends Marionette.ItemView {
     		author : this.$('#new-comment-author').val(),
     		submission: this.model.get('_id')
     	})
-    	comment.save(comment.attributes,{
+    	comment.save(null,{
             error: (model, res) => {
                 Backbone.trigger('error','http',res.responseJSON);
             }
         });
-    }
-
-    onShowCommentsButtonClick() {
-        this.commentsHidden = !this.commentsHidden;
-        this.$('.card-comments').toggleClass('hidden');
     }
 
     onDeleteCommentButtonClick(event) {

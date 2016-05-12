@@ -21,6 +21,7 @@ describe('API Routes /submissions/', function(){
 			array = _.map(_.range(size), function(i) {
 				return {
 					text: 'model'+i,
+					author: 'Test Peter'
 				}
 			});
 			Submission.create(array, function(err,models) {
@@ -45,7 +46,8 @@ describe('API Routes /submissions/', function(){
 		var request = require('supertest');
 
 		data = {
-			text: "unittest_" + require('node-uuid').v4()
+			text: "unittest_" + require('node-uuid').v4(),
+			author: 'Test Peter'
 		}
 
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
@@ -114,12 +116,14 @@ describe('API Routes /submissions/', function(){
 
 		var data1 = {
 			text: "text1",
-			tags: ['tag1','tag2']
+			tags: ['tag1','tag2'],
+			author: 'Test Peter'
 		}
 
 		var data2 = {
 			text: "text2",
-			tags: ['tag1','tag2','tag3']
+			tags: ['tag1','tag2','tag3'],
+			author: 'Test Peter'
 		}
 
 		//insert submission

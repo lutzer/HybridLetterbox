@@ -28,6 +28,7 @@ describe('Socket Tests', function(){
             array = _.map(_.range(size), function(i) {
                 return {
                   text: 'model'+i,
+                  author: 'Test Peter'
                 }
             });
             Submission.create(array, function(err,models) {
@@ -70,7 +71,7 @@ describe('Socket Tests', function(){
         socket.on('disconnect', () => { done(null) });
 
         // post message
-        request(BASE_URL).post('api/submissions').send({ text: randomNumber }).end(function(err, res) {
+        request(BASE_URL).post('api/submissions').send({ text: randomNumber, author: 'Test Peter' }).end(function(err, res) {
         	if (err) throw err;
         });
     });

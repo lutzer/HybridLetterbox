@@ -7,7 +7,7 @@
 	<div class="author"><%= author %></div>
 	<div class="tags"> 
 	<% _.each(tags, function(tag) { %>
-			<%= tag %>
+			<a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a>
 		<% }) %>
 	</div>
 </div>

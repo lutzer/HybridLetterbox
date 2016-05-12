@@ -1,10 +1,18 @@
 .submission-input {
 	margin: $card-margin;
+	clear:both;
 
 
 	.input-box {
-		background-color: $card-background;
+		border: $border-style;
 		padding: $text-padding;
+		background-color: $card-background;
+
+		textarea {
+			height: 2.4em;
+			resize: none;
+			overflow: auto;
+		}
 
 		span {
 			display: block;
@@ -12,11 +20,31 @@
 		    padding-right:$text-padding;
 		}
 
-	    button {
+	    /*button {
 			float:right;
 			margin: 0;
 			height: 100%;
+		}*/
+
+	}
+
+	.input-extra {
+		display: none;
+	}
+
+	&.expand {
+
+		.input-box {
+
+			textarea {
+				height: 10em;
+			}
 		}
+
+		.input-extra {
+			display: block;
+		}
+
 	}
 
 	

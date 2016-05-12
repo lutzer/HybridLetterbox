@@ -5,15 +5,15 @@
 
 	.card {
 		position: relative;
-		@include flex-basis(20em);
+		@include flex-basis(300px);
 		@include flex-grow(1);
 		margin: $card-margin;
-		@include background($card-background);
 		padding-bottom: 2.5em;
+		border: $border-style;
+		background-color: $card-background;
 	}
 
 	.card-image {
-		height: 15em;
 		background: whitesmoke;
 		overflow: hidden;
 		margin: $text-padding;
@@ -33,7 +33,8 @@
 		}
 
 		.tags {
-			font-weight: bold;
+
+			
 		}
 	}
 

@@ -21,7 +21,7 @@ router.get('/',(req,res) => {
     if (_.has(req.query,'tag'))
         query.tags = req.query.tag;
 
-    Submission.find(query).populate('comments').exec((err,models) => {
+    Submission.find(query).sort({'updatedAt': 'desc'}).populate('comments').exec((err,models) => {
         if (Utils.handleError(err,res))
             return;
         res.send(models);

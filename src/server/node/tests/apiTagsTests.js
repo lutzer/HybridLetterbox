@@ -19,20 +19,23 @@ describe('API Routes /tags/', function(){
 			async.series([
 				(callback) => { 
 					new Submission({
-						message: '1',
-						tags : [TAGS[0]]
+						text: '1',
+						tags : [TAGS[0]],
+						author: 'Test Peter'
 					}).save(callback) 
 				},
 				(callback) => { 
 					new Submission({
-						message: '2',
-						tags : [TAGS[0],TAGS[1]]
+						text: '2',
+						tags : [TAGS[0],TAGS[1]],
+						author: 'Test Peter'
 					}).save(callback) 
 				},
 				(callback) => { 
 					new Submission({
-						message: '3',
-						tags : [TAGS[0],TAGS[1],TAGS[2]]
+						text: '3',
+						tags : [TAGS[0],TAGS[1],TAGS[2]],
+						author: 'Test Peter'
 					}).save(callback) 
 				}
 			],() => {

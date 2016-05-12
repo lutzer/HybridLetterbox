@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 16:22:36
+* @Last Modified time: 2016-05-12 12:44:36
 */
 
 import Marionette from 'marionette'
@@ -21,7 +21,7 @@ class TagItemView extends Marionette.ItemView {
 
     events() {
     	return {
-    		'click' : 'onClick'
+    		//'click' : 'onClick'
     	}
     }
 
@@ -30,8 +30,15 @@ class TagItemView extends Marionette.ItemView {
         //console.log(options)
     }
 
+    setSelected(selected) {
+        if (selected)
+            this.$el.addClass('selected');
+        else
+            this.$el.removeClass('selected');
+    }
+
     onClick() {
-    	this.$el.toggleClass('selected');
+    	this.setSelected(true);
     }
     
 }
