@@ -6,9 +6,11 @@
 <div class="card-header">
 	<div class="author"><%= author %></div>
 	<div class="tags"> 
+		<ul class="tag-list">
 	<% _.each(tags, function(tag) { %>
-			<a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a>
+			<li><a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a></li>
 		<% }) %>
+		</ul>
 	</div>
 </div>
 <div class="card-text">

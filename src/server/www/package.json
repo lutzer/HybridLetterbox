@@ -9,6 +9,7 @@
   },
   "scripts": {
     "watch": "babel --watch src --out-dir js --source-maps inline --copy-files",
-    "build": "babel src --out-dir js --source-maps inline --copy-files"
+    "cwatch": "compass watch",
+    "build": "babel src --out-dir js --source-maps inline --copy-files; compass compile"
   }
 }

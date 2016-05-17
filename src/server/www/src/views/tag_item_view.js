@@ -15,30 +15,32 @@ class TagItemView extends Marionette.ItemView {
 	/* properties */
    	get template() { return _.template(template) }
 
-    get className() { return 'item-view' }
-
     get tagName() { return 'li' }
 
     events() {
     	return {
-    		//'click' : 'onClick'
+    		'click' : 'onClick'
     	}
     }
 
     /* methods */
     initialize(options) {
-        //console.log(options)
+        this.isSelected = false;
     }
 
     setSelected(selected) {
         if (selected)
-            this.$el.addClass('selected');
+            this.$('.badge').addClass('selected');
         else
-            this.$el.removeClass('selected');
+            this.$('.badge').removeClass('selected');
+        this.isSelected = selected;
     }
 
-    onClick() {
-    	this.setSelected(true);
+    onClick(e) {
+        if (this.isSelected) {
+            window.location.hash = '#';
+            e.preventDefault();
+        }
     }
     
 }

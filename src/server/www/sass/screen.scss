@@ -19,70 +19,88 @@
 
 @import "cards";
 @import "comments";
-@import "submission-input";
+@import "submission";
+
+/* FONTS */
 
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Regular", $file-formats: ttf);
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Bold", bold, $file-formats: ttf);
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Italic", normal, italic, $file-formats: ttf);
 
 
-body {
-    font-family: "source-sans-pro";
-    color: #444;
-}
+/* ELEMENT STYLES */
 
-#container {
-    max-width : 1000px;
-    margin: auto;
+body {
+	font-family: "source-sans-pro";
+	color: #444;
 }
 
 h4 {
-    margin: 0;
+	margin: 0;
 }
 
 h2 {
-    margin: 0.2em
+	margin: 0.2em
 }
 
 p {
-    margin: 0.2em 0 0.2em 0
+	margin: 0.2em 0 0.2em 0
 }
 
 a {
-    color: #000;
-    text-decoration:none;
+	color: #000;
+	text-decoration:none;
 }
 
 #{$all-text-inputs} {
-    font-size:80%;
-    width: 100%;
-    padding: $text-padding;
-    outline: none;
-    border: $input-border;
+	font-size:80%;
+	width: 100%;
+	padding: $text-padding;
+	outline: none;
+	border: $input-border;
 }
 
 #{$all-button-inputs} {
-    font-size:80%;
-    border-radius: $border-radius;
-    margin: $text-padding 0 $text-padding 0;
+	font-size:80%;
+	border-radius: $border-radius;
+	margin: $text-padding 0 $text-padding 0;
+}
+
+/* MAIN STYLES */
+
+#container {
+	max-width : 1000px;
+	margin: auto;
 }
 
 .hidden {
-    display:none;
+	display:none;
+}
+
+.tag-list {
+	list-style:none;
+	padding:0;
+	display: inline-block;
+	margin: 0;
+
+	li {
+		float: left;
+		padding: 0;
+	}
 }
 
 .badge {
-    background-color: $badge-background;
-    border-radius: $border-radius;
-    display: inline-block;
-    font-size: $small-font-size;
-    line-height: 1;
-    padding: 0.4em 1.2em;
-    color: $badge-text-color;
-    margin : $element-padding;
-}
+	background-color: $badge-background;
+	border-radius: $border-radius;
+	display: inline-block;
+	font-size: $small-font-size;
+	line-height: 1;
+	padding: 0.4em 1.2em;
+	color: $badge-text-color;
+	margin : $element-padding;
 
-.selected span.badge  {
-    background-color: #f00 !important; 
-} 
+	&.selected {
+		background-color: #f00 !important; 
+	}
+}
 

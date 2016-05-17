@@ -14,19 +14,38 @@ class TagListView extends Marionette.CollectionView {
 
 	/* properties */
 
-    get className() { return 'list-view' }
+    get className() { return 'tag-list' }
 
     get tagName() { return 'ul' }
 
     get childView() { return TagItemView }
 
+    collectionEvents() { 
+    	return {
+			'sync' : 'onCollectionLoaded'
+		}
+	}
+
     /* methods */
     initialize(options) {
-        
+
         this.collection = new TagCollection();
         this.collection.fetch();
     }
-    
+
+    setTag(tag) {
+    	this.tag = tag;
+    	this.children.each( (childView) => {
+    		if (childView.model.get('name') == this.tag)
+    			childView.setSelected(true);
+    		else
+    			childView.setSelected(false);
+    	});
+    }
+
+    onCollectionLoaded() {
+    	setTag(this.tag)
+    }
 }
 
 export default TagListView

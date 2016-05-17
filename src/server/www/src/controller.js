@@ -48,15 +48,18 @@ class Controller extends Marionette.Controller {
             //load mainview
             this.mainView = new MainView();
             this.app.containerRegion.show(this.mainView);
+
+            // load views
+            this.tagView = new TagListView()
+			this.mainView.sideRegion.show(this.tagView);
+			this.mainView.topRegion.show(new SubmissionInputView());
 		}
 			
 		/* ROUTES */
 
 		showSubmissionList(tag=null) {
-
 			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
-			this.mainView.topRegion.show(new SubmissionInputView());
-			this.mainView.sideRegion.show(new TagListView({ tag: tag }));
+			this.tagView.setTag(tag);
 		}
 
 		postSubmission() {
