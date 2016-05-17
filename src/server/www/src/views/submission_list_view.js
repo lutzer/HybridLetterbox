@@ -2,12 +2,13 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-12 15:56:49
+* @Last Modified time: 2016-05-17 11:01:12
 */
 
 import Marionette from 'marionette';
 import _ from 'underscore';
 import $ from 'jquery';
+import Masonry from 'masonry';
 import SubmissionItemView from 'views/submission_item_view';
 import SubmissionCollection from 'models/submission_collection';
 import SubmissionModel from 'models/submission_model';
@@ -46,6 +47,13 @@ class SubmissionListView extends Marionette.CompositeView {
         this.listenTo(Backbone,'submission:new', this.onSubmissionAdded);
         //this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
 	}
+
+    onShow() {
+        /*new Masonry('#submission-list', {
+            itemSelector : '.item-view',
+            percentPosition: true
+        })*/
+    }
 
 	// update model on data change
     onSubmissionChanged(data) {

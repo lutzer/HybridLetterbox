@@ -17,7 +17,7 @@
 @import "header";
 @import "footer";
 
-@import "cards";
+@import "item-list";
 @import "comments";
 @import "submission";
 
@@ -26,7 +26,6 @@
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Regular", $file-formats: ttf);
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Bold", bold, $file-formats: ttf);
 @include font-face("source-sans-pro", "/fonts/SourceSansPro-Italic", normal, italic, $file-formats: ttf);
-
 
 /* ELEMENT STYLES */
 
@@ -69,7 +68,7 @@ a {
 /* MAIN STYLES */
 
 #container {
-	max-width : 1000px;
+	max-width : 1400px;
 	margin: auto;
 }
 

@@ -1,4 +1,7 @@
 <% if (files.length > 0) { %>
+<div class="card-text">
+	<%= text %>
+</div>
 <div class="card-image">
 	<img src="<%= filesUrl+files[0].name %>">
 </div>
@@ -13,9 +16,7 @@
 		</ul>
 	</div>
 </div>
-<div class="card-text">
-	<%= text %>
-</div>
+
 <div class="card-comments">
 	<div class="comments">
 		<% _.each(comments, function(comment) { %>

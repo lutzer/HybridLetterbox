@@ -1,16 +1,25 @@
-.cards {
+.list-view {
 	@include display(flex);
 	@include flex-wrap(wrap);
 	@include justify-content(space-between);
+	//@include column-count(3);
+	//margin: $card-margin;
+	
 
-	.card {
+	.item-view {
 		position: relative;
 		@include flex-basis(300px);
 		@include flex-grow(1);
-		margin: $card-margin;
+		display:inline-block;
+		float:left;
 		padding-bottom: 2.5em;
+		margin: $card-margin;
 		border: $border-style;
 		background-color: $card-background;
+	}
+
+	.card-text {
+		font-size: 140%;
 	}
 
 	.card-image {

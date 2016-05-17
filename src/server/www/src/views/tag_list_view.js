@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-12 16:18:47
+* @Last Modified time: 2016-05-17 11:17:50
 */
 
 import Marionette from 'marionette';
@@ -20,17 +20,15 @@ class TagListView extends Marionette.CollectionView {
 
     get childView() { return TagItemView }
 
-    collectionEvents() { 
-    	return {
-			'sync' : 'onCollectionLoaded'
-		}
-	}
 
     /* methods */
     initialize(options) {
 
         this.collection = new TagCollection();
         this.collection.fetch();
+
+        // setup collection events
+        this.listenTo(this.collection,'sync',this.onCollectionLoaded)
     }
 
     setTag(tag) {
@@ -44,7 +42,7 @@ class TagListView extends Marionette.CollectionView {
     }
 
     onCollectionLoaded() {
-    	setTag(this.tag)
+    	this.setTag(this.tag)
     }
 }
 
