@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var _ = require('underscore');
 var htmlspecialchars = require('htmlspecialchars');
@@ -17,7 +19,7 @@ var router = express.Router();
 router.get('/',(req,res) => {
 
     // filter by tags
-    query = {}
+    var query = {}
     if (_.has(req.query,'tag'))
         query.tags = req.query.tag;
 

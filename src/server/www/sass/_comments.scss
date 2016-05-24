@@ -1,7 +1,6 @@
 .comment {
 	display: table;
-	margin-left:1em;
-	margin-right:1em;
+	margin:1em;
 
 	&.new {
 		width:90%;
@@ -11,10 +10,6 @@
 	.comment-content {
 		display: table-cell;
 		vertical-align: top;
-	}
-
-	h4 {
-		margin-top: 0;
 	}
 
 	.comment-image {
@@ -33,5 +28,23 @@
 
 	.comment-content {
 		width:100%;
+
+		h4 {
+			margin: 0 0 $text-padding 0;
+			float: right;
+		}
+
+		.date {
+			float:left;
+			font-size: 80%;
+		}
+
+		p {
+			clear: both;
+		}
+	}
+
+	textarea#new-comment-text {
+		height:5em;
 	}
 }

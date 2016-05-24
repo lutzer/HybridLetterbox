@@ -1,3 +1,4 @@
+'use strict';
 
 var assert = require('assert');
 var fs = require('fs');
@@ -18,7 +19,7 @@ describe('API Routes /submissions/', function(){
 			
 			// Add some Models
 			var size = Math.floor(5 + Math.random() * 10)
-			array = _.map(_.range(size), function(i) {
+			var array = _.map(_.range(size), function(i) {
 				return {
 					text: 'model'+i,
 					author: 'Test Peter'
@@ -45,7 +46,7 @@ describe('API Routes /submissions/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			author: 'Test Peter'
 		}
@@ -131,7 +132,7 @@ describe('API Routes /submissions/', function(){
 			if (err)
     			throw err;
 
-    		submissionId = res.body._id;
+    		var submissionId = res.body._id;
 
 			assert.equal(res.body.tags.length, data1.tags.length);
 			assert.equal(res.body.text, data1.text);
@@ -167,7 +168,7 @@ describe('API Routes /submissions/', function(){
 			if (err)
     			throw err;
 
-    		submissionId = res.body._id;
+    		var submissionId = res.body._id;
 
 			//update submission, expect 401
 			request(BASE_URL).put('api/submissions/'+submissionId).send(data2).expect(401).end(function(err, res) {
@@ -181,7 +182,7 @@ describe('API Routes /submissions/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			author : "<$%0921ß30></br>",
 			device : "letterbox_1",
 			tags : [ 'tag1', 'tag2'],

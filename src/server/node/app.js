@@ -1,3 +1,5 @@
+'use strict';
+
 /* 
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-01-25 11:08:47

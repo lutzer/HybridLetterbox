@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
@@ -29,6 +31,10 @@ class TagListView extends Marionette.CollectionView {
 
         // setup collection events
         this.listenTo(this.collection,'sync',this.onCollectionLoaded)
+
+        if (_.has(options,'tag')) {
+            this.setTag(options.tag);
+        }
     }
 
     setTag(tag) {

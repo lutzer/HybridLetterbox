@@ -1,3 +1,4 @@
+'use strict';
 
 var assert = require('assert');
 var fs = require('fs')
@@ -61,7 +62,7 @@ describe('Database Submission Test', function(){
 
 	it('should add a submission and return it', function(done){
 
-		message = require('node-uuid').v4()
+		var message = require('node-uuid').v4()
 
 		var submission = new Submission({
 			text: message,
@@ -70,7 +71,7 @@ describe('Database Submission Test', function(){
 
 		submission.save(function(err, model) {
 			if (err) throw err;
-			objectId = model._id;
+			var objectId = model._id;
 
 			// check if model exists
 			Submission.find({ _id: objectId} , function(err, models) {
@@ -86,7 +87,7 @@ describe('Database Submission Test', function(){
 		// insert some models
 		
 		var size = Math.floor(2 + Math.random() * 10)
-		array = _.map(_.range(size), function(i) {
+		var array = _.map(_.range(size), function(i) {
 			return {
 				text: 'model'+i,
 				author: 'test'
@@ -104,7 +105,7 @@ describe('Database Submission Test', function(){
 	it('should be able to remove an item', function(done) {
 
 		var size = Math.floor(2 + Math.random() * 10)
-		array = _.map(_.range(size), function(i) {
+		var array = _.map(_.range(size), function(i) {
 			return {
 				text: 'model'+i,
 				author: 'test'
@@ -124,7 +125,7 @@ describe('Database Submission Test', function(){
 	it('should list all models', function(done) {
 
 		var size = Math.floor(2 + Math.random() * 10)
-		array = _.map(_.range(size), function(i) {
+		var array = _.map(_.range(size), function(i) {
 			return {
 				text: 'model'+i,
 				author: 'test'
@@ -219,7 +220,7 @@ describe('Database Comments Test', function(){
 			Submission.findOne({ _id : submissionId }).exec(function(err,model) {
 				if (err) throw err;
 
-				commentId = model.comments[0]
+				var commentId = model.comments[0]
 				assert(model.comments.length == 1)
 
 				model.removeComment(commentId,(err,model) => {

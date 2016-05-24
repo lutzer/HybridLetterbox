@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('underscore')
 var mongoose = require('mongoose');
 var uuid = require('node-uuid');

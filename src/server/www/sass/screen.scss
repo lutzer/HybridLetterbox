@@ -21,17 +21,22 @@
 @import "item-list";
 @import "comments";
 @import "submission";
+@import "singleview";
 
 /* FONTS */
 
-@include font-face("source-sans-pro", "/fonts/SourceSansPro-Regular", $file-formats: ttf);
-@include font-face("source-sans-pro", "/fonts/SourceSansPro-Bold", bold, $file-formats: ttf);
-@include font-face("source-sans-pro", "/fonts/SourceSansPro-Italic", normal, italic, $file-formats: ttf);
+//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Regular", $file-formats: ttf);
+//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Bold", bold, $file-formats: ttf);
+//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Italic", normal, italic, $file-formats: ttf);
+
+@include font-face("open-sans", "/fonts/OpenSans-Regular", $file-formats: ttf);
+@include font-face("open-sans", "/fonts/OpenSans-Bold", bold, $file-formats: ttf);
+@include font-face("open-sans", "/fonts/OpenSans-Italic", normal, italic, $file-formats: ttf);
 
 /* ELEMENT STYLES */
 
 body {
-	font-family: "source-sans-pro";
+	font-family: "open-sans";
 	color: #444;
 }
 
@@ -64,6 +69,11 @@ a {
 	font-size:100%;
 	border-radius: $border-radius;
 	margin: $text-padding 0 $text-padding 0;
+}
+
+textarea {
+	resize: none;
+	overflow: auto;
 }
 
 /* MAIN STYLES */

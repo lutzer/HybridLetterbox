@@ -1,3 +1,4 @@
+'use strict';
 
 var assert = require('assert');
 var _ = require('underscore');
@@ -25,7 +26,7 @@ describe('Socket Tests', function(){
 
             // Add some Models
             var size = Math.floor(5 + Math.random() * 10)
-            array = _.map(_.range(size), function(i) {
+            var array = _.map(_.range(size), function(i) {
                 return {
                   text: 'model'+i,
                   author: 'Test Peter'
@@ -84,7 +85,7 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            submissionId = res.body[0]._id;
+            var submissionId = res.body[0]._id;
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:removed', function (data) {
@@ -109,8 +110,8 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            submissionId = res.body[0]._id;
-            nComments = res.body[0].comments.length
+            var submissionId = res.body[0]._id;
+            var nComments = res.body[0].comments.length
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {
@@ -134,7 +135,7 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            submissionId = res.body[0]._id;
+            var submissionId = res.body[0]._id;
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {

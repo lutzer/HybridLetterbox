@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
@@ -14,6 +16,7 @@ import MainView from 'views/main_view';
 import SubmissionListView from 'views/submission_list_view';
 import TagListView from 'views/tag_list_view';
 import SubmissionInputView from 'views/submission_input_view';
+import SubmissionView from 'views/submission_view';
 
 class Controller extends Marionette.Controller {
 		
@@ -48,18 +51,21 @@ class Controller extends Marionette.Controller {
             //load mainview
             this.mainView = new MainView();
             this.app.containerRegion.show(this.mainView);
-
-            // load views
-            this.tagView = new TagListView()
-			this.mainView.sideRegion.show(this.tagView);
-			this.mainView.topRegion.show(new SubmissionInputView());
+			
 		}
 			
 		/* ROUTES */
 
 		showSubmissionList(tag=null) {
 			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
-			this.tagView.setTag(tag);
+			this.mainView.sideRegion.show(new TagListView({ tag: tag }));
+			this.mainView.topRegion.show(new SubmissionInputView());
+		}
+
+		showSubmission(id) {
+			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
+			this.mainView.sideRegion.reset();
+			this.mainView.topRegion.reset();
 		}
 
 		postSubmission() {

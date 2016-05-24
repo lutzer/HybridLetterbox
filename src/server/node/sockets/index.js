@@ -1,3 +1,5 @@
+'use strict';
+
 var socketio = require('socket.io');
 
 var appEvents = r_require('/utils/appEvents');
