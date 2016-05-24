@@ -3,29 +3,39 @@
 	@include flex-wrap(wrap);
 	@include justify-content(space-between);
 	//@include column-count(3);
-	//margin: $card-margin;
+	margin: $card-margin;
 	
 
 	.item-view {
 		position: relative;
-		@include flex-basis(300px);
-		@include flex-grow(1);
-		display:inline-block;
+		display:inline-box;
 		float:left;
+		width:33.3%;
+		min-height:20em;
 		padding-bottom: 2.5em;
-		margin: $card-margin;
-		border: $border-style;
-		background-color: $card-background;
+		margin-bottom: $card-margin;
+		//background-color: $card-background;
+		overflow:hidden;
+
+		@include media($tablet) {
+			width: 50%;
+		}
+
+		@include media($mobile) {
+			width: 100%;
+		}
 	}
 
 	.card-text {
 		font-size: 140%;
+  		overflow: hidden;
 	}
 
 	.card-image {
 		background: whitesmoke;
 		overflow: hidden;
 		margin: $text-padding;
+		height: 12em;
 
 		img {
 			width: 100%;
@@ -35,15 +45,16 @@
 	.card-header {
 
 		padding: $text-padding;
-
-		.author {
-			float: right;
-			font-style: italic;
-		}
+		margin-bottom: $paragraph-padding;
 
 		.tags {
 
 			
+		}
+
+		.date {
+			float:right;
+			font-size: 80%;
 		}
 	}
 
@@ -59,5 +70,11 @@
 		position: absolute;
 		bottom: 0;
 		padding: $text-padding;
+		width:100%;
+
+		.author {
+			float: right;
+			font-style: italic;
+		}
 	}
 }

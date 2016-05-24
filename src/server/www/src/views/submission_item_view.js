@@ -2,13 +2,15 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-12 16:14:24
+* @Last Modified time: 2016-05-19 10:23:53
 */
 
 import Marionette from 'marionette';
 import Backbone from 'backbone';
 import _ from 'underscore';
+import _str from 'underscoreString';
 import $ from 'jquery';
+import Moment from 'moment';
 import Config from 'config';
 import CommentModel from 'models/comment_model';
 
@@ -24,7 +26,10 @@ class SubmissionItemView extends Marionette.ItemView {
     get templateHelpers() {
 		return {
 			filesUrl : Config.files_url + this.model.get('_id') + '/',
-            isAdmin : false
+            isAdmin : false,
+            text_truncated_short : _str.truncate(this.model.get('text'),Config.stringTruncateShort,'...'),
+            text_truncated_long : _str.truncate(this.model.get('text'),Config.stringTruncateLong,'...'),
+            dateFromNow: Moment(this.model.get('createdAt')).fromNow()
 		}
     }
 

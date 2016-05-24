@@ -11,8 +11,8 @@ var commentSchema = mongoose.Schema({
 	_id: { type: String, default: uuid.v4 }, //use uuid
 	submission: { type: String, ref: 'Submission' },
 
-    text : { type: String, required: true },
-    author: { type: String, default: false }
+    text : { type: String, required: true, maxlength: '256' },
+    author: { type: String, default: false, maxlength: '32' }
 
 }, { timestamps: true });
 

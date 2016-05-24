@@ -1,6 +1,7 @@
-$text-padding: .5em;
 $card-margin: 1em;
-$element-padding : .25em;
+$text-padding: .5em;
+$element-padding : 0.25em;
+$paragraph-padding: 1em;
 
 $border-radius:5px;
 
@@ -15,3 +16,6 @@ $badge-text-color: #eee;
 $small-font-size: 80%;
 
 $input-border: 1px solid #666;
+
+$mobile: new-breakpoint(max-width 600px 4);
+$tablet: new-breakpoint(max-width 800px 4);

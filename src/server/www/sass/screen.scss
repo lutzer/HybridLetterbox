@@ -9,6 +9,7 @@
 /* MIXINS */
 
 //@import "mixins/masonry";
+@import "mixins/multiline";
 
 /* IMPORTS */
 
@@ -52,7 +53,7 @@ a {
 }
 
 #{$all-text-inputs} {
-	font-size:80%;
+	font-size:100%;
 	width: 100%;
 	padding: $text-padding;
 	outline: none;
@@ -60,7 +61,7 @@ a {
 }
 
 #{$all-button-inputs} {
-	font-size:80%;
+	font-size:100%;
 	border-radius: $border-radius;
 	margin: $text-padding 0 $text-padding 0;
 }
@@ -68,7 +69,7 @@ a {
 /* MAIN STYLES */
 
 #container {
-	max-width : 1400px;
+	max-width : 1080px;
 	margin: auto;
 }
 

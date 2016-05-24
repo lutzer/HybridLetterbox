@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-10 11:51:25
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 16:32:04
+* @Last Modified time: 2016-05-18 17:05:05
 */
 
 
@@ -37,7 +37,7 @@ describe('Create Test Database', function(){
 			author : "Kommentar-Peter",
 			device : "mobile",
 			tags : [ 'tag1', 'comments'],
-			text : 'Test Nachricht mit Comment',
+			text : 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed nulla vel risus sodales volutpat. Vestibulum congue ex et mi venenatis facilisis. Donec venenatis molestie fermentum. Duis placerat tortor sed iaculis posuere. Duis faucibus ex sed amet.',
 			files: [],
 			location : [45.3989, 34.399]
 		})

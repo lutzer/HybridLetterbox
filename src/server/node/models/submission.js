@@ -12,8 +12,8 @@ var submissionSchema = mongoose.Schema({
 
 	_id: { type: String, default: uuid.v4 }, //use uuid
 
-    text : { type: String, required: true, maxlength: '255' },
-    author: { type: String, required: true, maxlength: '64' },
+    text : { type: String, required: true, maxlength: '512' },
+    author: { type: String, required: true, maxlength: '32' },
     device: { type: String, default: false },
     tags : [ { type: String, match: /^\w+$/ } ], //only allow numbers and chars and _ without spaces
     files : [{

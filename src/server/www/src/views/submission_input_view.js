@@ -2,7 +2,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-12 16:14:50
+* @Last Modified time: 2016-05-19 10:41:44
 */
 
 import Marionette from 'marionette'
@@ -22,7 +22,8 @@ class SubmissionInputView extends Marionette.ItemView {
     events() {
     	return {
             'focus #new-submission-text' : 'onTextareaFocus',
-            'blur #new-submission-text' : 'onTextareaBlur',
+            'click #new-submission-text' : 'onTextareaFocus',
+            'mouseleave .input-box' : 'onMouseLeave',
             'click #submit-button' : 'onSubmitButtonClick'
     	}
     }
@@ -37,8 +38,13 @@ class SubmissionInputView extends Marionette.ItemView {
     }
 
     onTextareaBlur() {
-    	if (!this.$('#new-submission-text').val())
+    	if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
     		this.$el.removeClass('expand');
+    }
+
+    onMouseLeave() {
+        if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
+            this.$el.removeClass('expand');
     }
 
     onSubmitButtonClick() {
