@@ -3,11 +3,13 @@
 	<div class="author"><h3><%= author %></h3></div>
 	<div class="date"><%= formatDate(createdAt) %></div>
 </div>
-<% if (files.length > 0) { %>
+
+<% _.each(files, function(file) { %>
 <div class="singleview-image">
-	<img src="<%= filesUrl+files[0].name %>">
+	<img src="<%= filesUrl+file.name %>">
 </div>
-<% } %>
+<% }) %>
+
 <div class="singleview-text">
 	<%= text %>
 </div>
@@ -39,12 +41,7 @@
 				<% } %>
 			</div>
 		<% }) %>
-		<div class="comment new">
-			<div class="comment-content">
-				<h3>Add Comment</h3><p><textarea id="new-comment-text" maxlength="256" placeholder="Comment"></textarea></p>
-				<p><input id="new-comment-author" type="text" placeholder="author"></p>
-				<p><button id="new-comment-button">Submit</button></p>
-			</div>
+		<div id="comment-input">
 		</div>
 	</div>
 </div>

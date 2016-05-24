@@ -13,5 +13,4 @@ export default {
 	files_url : '/files/',
 	stringTruncateShort: 50,
 	stringTruncateLong: 220
-
 }

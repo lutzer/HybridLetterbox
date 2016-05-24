@@ -1,5 +1,5 @@
 <div class="card-header">
-	<div class="date"><%= dateFromNow %></div>
+	<div class="date"><%= fromNow(createdAt) %></div>
 </div>
 <% if (files.length > 0) { %>
 <div class="card-image">
@@ -16,12 +16,12 @@
 <div class="card-tags"> 
 	<ul class="tag-list">
 	<% _.each(tags, function(tag) { %>
-		<li><a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a></li>
+		<li><span class="badge"><%= tag %></span></li>
 	<% }) %>
 	</ul>
 </div>
 <div class="card-bottom">
 
 	<div class="author"><%= author %></div>
-	<div class="comment-number"><%= comments.length %> Kommentare</div>
+	<div class="comment-number"><%= comments.length %> Comments</div>
 </div>

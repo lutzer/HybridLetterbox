@@ -57,9 +57,18 @@ class Controller extends Marionette.Controller {
 		/* ROUTES */
 
 		showSubmissionList(tag=null) {
+			//update list view
 			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
-			this.mainView.sideRegion.show(new TagListView({ tag: tag }));
-			this.mainView.topRegion.show(new SubmissionInputView());
+
+			//set input view
+			if (!(this.mainView.topRegion.currentView instanceof SubmissionInputView))
+				this.mainView.topRegion.show(new SubmissionInputView());
+
+			//set tagview
+			if (this.mainView.sideRegion.currentView instanceof TagListView)
+				this.mainView.sideRegion.currentView.setTag(tag);
+			else
+				this.mainView.sideRegion.show(new TagListView({ tag: tag }));
 		}
 
 		showSubmission(id) {

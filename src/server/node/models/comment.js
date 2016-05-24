@@ -13,7 +13,7 @@ var commentSchema = mongoose.Schema({
 	_id: { type: String, default: uuid.v4 }, //use uuid
 	submission: { type: String, ref: 'Submission' },
 
-    text : { type: String, required: true, maxlength: '256' },
+    text : { type: String, required: true, maxlength: '512' },
     author: { type: String, default: false, maxlength: '32' }
 
 }, { timestamps: true });

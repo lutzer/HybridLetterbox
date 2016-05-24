@@ -2,7 +2,7 @@
 	margin: $card-margin;
 
 	h2 {
-		margin-bottom: $paragraph-padding;
+		margin: 0 0 $paragraph-padding 0;
 	}
 	
 
@@ -14,7 +14,7 @@
 	.singleview-image {
 		text-align: center;
 		overflow: hidden;
-		margin: $text-padding;
+		margin: $text-padding 0 $text-padding 0;
 		clear: both;
 
 		img {
@@ -35,7 +35,7 @@
 
 	.singleview-header {
 
-		padding: $text-padding;
+		padding: $text-padding 0 $text-padding 0;
 		margin-bottom: $paragraph-padding;
 
 		.author {
@@ -54,15 +54,15 @@
 
 	.singleview-text {
 		clear:both;
-		padding: $text-padding;
+		padding: $text-padding 0 $text-padding 0;
 	}
 
 	.singleview-comments {
-		padding: $text-padding;
+		padding: $text-padding 0 $text-padding 0;
 	}
 
 	.singleview-bottom {
-		padding: $text-padding;
+		padding: $text-padding 0 $text-padding 0;
 		width:100%;
 
 		.author {

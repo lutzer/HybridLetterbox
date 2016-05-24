@@ -23,9 +23,10 @@ class SubmissionInputView extends Marionette.ItemView {
 
     events() {
     	return {
-            'focus #new-submission-text' : 'onTextareaFocus',
-            'click #new-submission-text' : 'onTextareaFocus',
-            'mouseleave .input-box' : 'onMouseLeave',
+            'focus #new-submission-text' : 'focus',
+            'click #new-submission-text' : 'focus',
+            'keypress #new-submission-text' : 'focus',
+            'mouseleave .input-box' : 'unfocus',
             'click #submit-button' : 'onSubmitButtonClick'
     	}
     }
@@ -35,11 +36,11 @@ class SubmissionInputView extends Marionette.ItemView {
         //console.log(options)
     }
 
-    onTextareaFocus() {
+    focus() {
     	this.$el.addClass('expand');
     }
 
-    onTextareaBlur() {
+    unfocus() {
     	if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
     		this.$el.removeClass('expand');
     }
@@ -47,6 +48,11 @@ class SubmissionInputView extends Marionette.ItemView {
     onMouseLeave() {
         if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
             this.$el.removeClass('expand');
+    }
+
+    clear() {
+        this.$('#new-submission-text').val('');
+        this.$('#new-submission-author').val('');
     }
 
     onSubmitButtonClick() {
@@ -61,8 +67,8 @@ class SubmissionInputView extends Marionette.ItemView {
             }
         });
 
-        this.render();
-        this.$el.removeClass('expand');
+        this.clear();
+        this.unfocus();
     }
     
 }

@@ -12,6 +12,7 @@
 			height: 2.4em;
 			resize: none;
 			overflow: auto;
+			@include transition(height 0.2s);
 		}
 
 		span {

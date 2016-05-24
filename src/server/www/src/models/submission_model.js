@@ -22,8 +22,7 @@ class SubmissionModel extends Backbone.Model {
 	    	comments: [],
 	    	text: '',
 	    	tags: [],
-	    	author: '',
-	    	createdAt: 0
+	    	author: ''
 		}
 	}
 }

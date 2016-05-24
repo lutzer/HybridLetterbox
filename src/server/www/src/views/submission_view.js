@@ -10,30 +10,38 @@
 import Backbone from 'backbone';
 import Marionette from 'marionette';
 import _ from 'underscore'
-import Moment from 'moment';
+import moment from 'moment';
+import 'moment_en_gb';
 import Config from 'config';
+import CommentInputView from 'views/comment_input_view';
 import SubmissionModel from 'models/submission_model';
-import CommentModel from 'models/comment_model';
 
 import template from 'text!templates/submission_tmpl.html';
 
-class SubmissionView extends Marionette.ItemView {
+class SubmissionView extends Marionette.LayoutView {
 
 	/* properties */
    	get template() { return _.template(template) }
 
     get className() { return 'singleview' }
 
+    regions() { 
+    	return {
+        	commentInputRegion: '#comment-input'
+	    }
+	}
+
     get templateHelpers() {
 		return {
 			filesUrl : Config.files_url + this.model.get('_id') + '/',
             isAdmin : false,
            	formatDate: function(date) {
-           		return Moment(date).format('LLL');
+           		return moment(date).format('LLL');
            	},
            	fromNow: function(date) {
-           		return Moment(date).fromNow(); 
-           	}
+           		return moment(date).fromNow(); 
+           	},
+           	createdAt: this.model.has('createdAt') ? this.model.get('createdAt') : 0
 		}
     }
 
@@ -44,31 +52,22 @@ class SubmissionView extends Marionette.ItemView {
         this.model.fetch();
         
         //listen to model events
-        this.listenTo(this.model,'change',this.render);
+        this.listenTo(this.model,'change',this.onModelChanged);
 
         //listen to socket events
         this.listenTo(Backbone,'submission:changed', this.onSubmissionChanged);
     }
 
+    onDomRefresh() {
+    	//console.log(this.commentInputRegion.currentView);
+    	//if (_.isUndefined(this.commentInputRegion.currentView))
+		//	this.showChildView('commentInputRegion', new CommentInputView({ submissionId : this.model.get('_id') }));
+	}
+
     events() {
     	return {
-    		'click #new-comment-button' : 'onNewCommentButtonClick',
-    		'click #delete-comment-button' : 'onDeleteCommentButtonClick',
+    		'click #delete-comment-button' : 'onDeleteCommentButtonClick'
     	}
-    }
-
-  	onNewCommentButtonClick() {
-
-    	var comment = new CommentModel({
-    		text : this.$('#new-comment-text').val(),
-    		author : this.$('#new-comment-author').val(),
-    		submission: this.model.get('_id')
-    	})
-    	comment.save(null,{
-            error: (model, res) => {
-                Backbone.trigger('error','http',res.responseJSON);
-            }
-        });
     }
 
     onDeleteCommentButtonClick(event) {
@@ -82,6 +81,17 @@ class SubmissionView extends Marionette.ItemView {
     onSubmissionChanged(data) {
     	if (data.model._id == this.model.get('_id'))
     		this.model.fetch();
+    }
+
+    onModelChanged() {
+		if (_.isUndefined(this.commentInputRegion.currentView)) {
+			this.render();
+			this.commentInputRegion.show(new CommentInputView({ submissionId : this.model.get('_id') }));
+		} else {
+			var state = this.commentInputRegion.currentView.getState();
+			this.render();
+			this.commentInputRegion.show(new CommentInputView({ submissionId : this.model.get('_id'), state: state }));
+		}
     }
     
 }

@@ -13,6 +13,7 @@ import _ from 'underscore';
 import _str from 'underscoreString';
 import $ from 'jquery';
 import Moment from 'moment';
+import 'moment_en_gb';
 import Config from 'config';
 import CommentModel from 'models/comment_model';
 
@@ -31,7 +32,9 @@ class SubmissionItemView extends Marionette.ItemView {
             isAdmin : false,
             text_truncated_short : _str.truncate(this.model.get('text'),Config.stringTruncateShort,'...'),
             text_truncated_long : _str.truncate(this.model.get('text'),Config.stringTruncateLong,'...'),
-            dateFromNow: Moment(this.model.get('createdAt')).fromNow()
+            fromNow: function(date) {
+                return Moment(date).fromNow(); 
+            }
 		}
     }
 
