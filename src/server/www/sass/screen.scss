@@ -8,8 +8,11 @@
 
 /* MIXINS */
 
+@import "compass/css3/box-shadow";
+
 //@import "mixins/masonry";
 @import "mixins/multiline";
+@import "mixins/shadows";
 
 /* IMPORTS */
 
@@ -17,6 +20,7 @@
 @import "side";
 @import "header";
 @import "footer";
+@import "buttons";
 
 @import "item-list";
 @import "comments";
@@ -65,12 +69,6 @@ a {
 	border: $input-border;
 }
 
-#{$all-button-inputs} {
-	font-size:100%;
-	border-radius: $border-radius;
-	margin: $text-padding 0 $text-padding 0;
-}
-
 textarea {
 	resize: none;
 	overflow: auto;
@@ -84,7 +82,7 @@ textarea {
 }
 
 .hidden {
-	display:none;
+	display:none !important;
 }
 
 .tag-list {

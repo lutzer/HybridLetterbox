@@ -35,6 +35,8 @@
 		overflow: hidden;
 		margin: $text-padding;
 		height: 12em;
+		border-radius: $border-radius;
+		border: $border-style;
 
 		img {
 			width: 100%;

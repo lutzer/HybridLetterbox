@@ -4,10 +4,10 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-26 10:51:47
+* @Last Modified time: 2016-05-26 16:16:13
 */
 
-import $ from 'jquery';
+import 'jquery';
 import 'iframeTransport';
 import Marionette from 'marionette'
 import Backbone from 'backbone';
@@ -30,7 +30,8 @@ class SubmissionInputView extends Marionette.ItemView {
             'click #new-submission-text' : 'focus',
             'keypress #new-submission-text' : 'focus',
             'mouseleave .input-box' : 'unfocus',
-            'click #submit-button' : 'onSubmitButtonClick'
+            'click #submit-button' : 'onSubmitButtonClick',
+            'change #new-submission-file' : 'onFileInputChanged'
     	}
     }
 
@@ -44,26 +45,18 @@ class SubmissionInputView extends Marionette.ItemView {
     }
 
     unfocus() {
-    	if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
+    	if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val() && !this.$('#new-submission-file').val())
     		this.$el.removeClass('expand');
-    }
-
-    onMouseLeave() {
-        if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
-            this.$el.removeClass('expand');
     }
 
     clear() {
         this.$('#new-submission-text').val('');
         this.$('#new-submission-author').val('');
+        this.$('#new-submission-file').val('');
+        $('#attach-text').addClass('hidden');
     }
 
     onSubmitButtonClick() {
-
-        var handleError = function(model, res) {
-            console.log(res);
-            Backbone.trigger('error','http',res.responseJSON);
-        };
 
         // upload file
         var uploadFile = function(file, model) {
@@ -72,8 +65,15 @@ class SubmissionInputView extends Marionette.ItemView {
                 method: 'POST',
                 url: Config.web_service_url+'file/attach/'+model.get('_id'),
                 iframe: true,
-                file: file,
-                error: handleError
+                files: file,
+                dataType: 'json',
+                error: (err) => {
+                    handleError(model,err);
+                },
+                success: (res) => {
+                    if (_.has(res,'error'))
+                        Backbone.trigger('error','http',res.error);
+                }
             });
         };
 
@@ -82,7 +82,9 @@ class SubmissionInputView extends Marionette.ItemView {
     		author : this.$('#new-submission-author').val()
     	})
     	submission.save(null,{
-            error: handleError,
+            error: (model,res) => {
+                Backbone.trigger('error','http',res.responseJSON.error);
+            },
             success: (model, res) => {
                 if (this.$('#new-submission-file').val())
                     uploadFile(this.$('#new-submission-file'),model);
@@ -91,6 +93,12 @@ class SubmissionInputView extends Marionette.ItemView {
             this.unfocus();
             }
         });
+    }
+
+    onFileInputChanged() {
+        var filename = _.last(this.$('#new-submission-file').val().split("\\"));
+        $('#attach-text').html('Image: '+filename);
+        $('#attach-text').removeClass('hidden');
     }
     
 }

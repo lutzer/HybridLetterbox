@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 15:17:01
+* @Last Modified time: 2016-05-26 13:37:20
 */
 
 import Marionette from 'marionette'
@@ -47,7 +47,7 @@ class CommentInputView extends Marionette.ItemView {
     	})
     	comment.save(null,{
             error: (model, res) => {
-                Backbone.trigger('error','http',res.responseJSON);
+                Backbone.trigger('error','http',res.responseJSON.error);
             },
             success: () => {
             	this.render();

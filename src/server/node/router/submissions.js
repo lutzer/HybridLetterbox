@@ -35,8 +35,8 @@ router.get('/',(req,res) => {
  */ 
 router.get('/:id',(req,res) => {
     Submission.findOne({ _id: req.params.id}).populate('comments').exec((err,model) => {
-        if (Utils.handleError(err,res))
-            return;
+        if (Utils.handleError(err,res)) return;
+
         res.send(model);
     });
 });
@@ -73,8 +73,7 @@ router.put('/:id', Auth.authentificate, (req, res) => {
 
     //insert data
     Submission.findOneAndUpdate({ _id : req.params.id }, data, {new: true}, (err, model) => {
-        if (Utils.handleError(err,res))
-            return;
+        if (Utils.handleError(err,res)) return;
 
         print('Submission changed in database');
 
@@ -89,8 +88,7 @@ router.put('/:id', Auth.authentificate, (req, res) => {
  */
 router.delete('/:id', Auth.authentificate, (req, res) => {
     Submission.remove({ _id: req.params.id }, (err, obj) => {
-        if (Utils.handleError(err,res))
-            return;
+        if (Utils.handleError(err,res)) return;
 
         if (obj.result.n > 0) {
             print("Submission "+req.params.id+" deleted from database");

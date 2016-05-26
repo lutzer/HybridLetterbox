@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-12 16:19:18
+* @Last Modified time: 2016-05-26 11:05:34
 */
 
 import Backbone from 'backbone';
@@ -85,10 +85,10 @@ class Controller extends Marionette.Controller {
 			alert("ScanningDialog");
 		}
 
-		openErrorDialog(type,data) {
+		openErrorDialog(type,error) {
 
-			var title = (type+'-error').toUpperCase()
-			var message = data.message;
+			var title = (type+'-error').toUpperCase();
+			var message = error.message;
 
 			alert(title+': '+message);
 		}

@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-17 11:01:12
+* @Last Modified time: 2016-05-26 13:32:46
 */
 
 import Marionette from 'marionette';

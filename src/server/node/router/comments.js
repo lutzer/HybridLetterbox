@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 12:43:57
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 18:08:41
+* @Last Modified time: 2016-05-26 11:17:22
 */
 
 var express = require('express');
@@ -26,7 +26,7 @@ var router = express.Router();
  */ 
 router.get('',(req,res) => {
     Comment.find({}, (err,models) => {
-        Utils.handleError(err,res);
+        if (Utils.handleError(err,res)) return;
         res.send(models);
     });
 });
@@ -36,8 +36,7 @@ router.get('',(req,res) => {
  */ 
 router.get('/:id',(req,res) => {
     Comment.findOne({ _id: req.params.id} , (err,model) => {
-        if (Utils.handleError(err,res))
-            return;
+        if (Utils.handleError(err,res)) return;
         res.send(model);
     });
 });
@@ -54,8 +53,7 @@ router.post('/', (req, res) => {
 
     // insert comment
     Submission.findOne({ _id: req.body.submission }, (err,submission) => {
-    	if (Utils.handleError(err,res))
-            return;
+    	if (Utils.handleError(err,res)) return;
 
         if (!submission) {
             res.status(404).send({error: 'submission not found'});
@@ -63,8 +61,7 @@ router.post('/', (req, res) => {
         }
 
     	submission.addComment(comment, (err,comment) => {
-    		if (Utils.handleError(err,res))
-                return;
+    		if (Utils.handleError(err,res)) return;
 
             print('Comment added to Database');
     		appEvents.emit('submission:changed',submission);
@@ -80,19 +77,18 @@ router.delete('/:id', Auth.authentificate, (req, res) => {
 
     //find comment for id
     Comment.findOne({ _id: req.params.id }).populate('submission').exec((err,comment) => {
-        if (Utils.handleError(err,res))
-            return;
+        if (Utils.handleError(err,res)) return;
 
         if (!comment) {
-            res.status(404).send({error: 'comment not found'});
+            Utils.handleError({message: 'comment not found'},res);
             return;
         }
 
         var submission = new Submission(comment.submission);
 
         submission.removeComment(req.params.id, (err, newSubmission) => {
-            if (Utils.handleError(err,res))
-                return;
+            if (Utils.handleError(err,res)) return;
+
             appEvents.emit('submission:changed',newSubmission);
             print("Comment "+req.params.id+" deleted from database");
             res.send( {removed: 1} );

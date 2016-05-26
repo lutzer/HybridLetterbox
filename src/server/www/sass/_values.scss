@@ -1,21 +1,32 @@
+/* Margins & Paddings */
+
 $card-margin: 1em;
 $text-padding: .5em;
-$element-padding : 0.25em;
+$element-padding: 0.25em;
 $paragraph-padding: 1em;
+$button-padding: 0.25em;
+$element-margin: 0.5em;
 
-$border-radius:5px;
+/* Border */
+$border-radius:3px;
+$border-style: 1px solid #aaa;
+$card-border-style: 2px solid #aaa;
+$input-border: 1px solid #aaa;
 
-$border-style: 1px solid #000;
-$card-border-style: 2px solid #000;
+/* Colors */
+$card-background: #EFEFEF;
+$badge-background: #111111;
+$badge-text-color: #EEEEEE;
+$button-background: #CCCCCC;
+$button-background-hover: #AAAAAA;
+$button-background-clicked: #FFFFFF;
 
-$card-background: #eee;
-
-$badge-background: #111;
-$badge-text-color: #eee;
-
+/* Font sizes */
 $small-font-size: 80%;
 
-$input-border: 1px solid #666;
+/* Button & Inputs */
+
+/* Responsive */
 
 $mobile: new-breakpoint(max-width 600px 4);
 $tablet: new-breakpoint(max-width 800px 4);

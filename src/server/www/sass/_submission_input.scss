@@ -2,11 +2,18 @@
 	margin: $card-margin;
 	clear:both;
 
+	.badge {
+		display: block;
+	}
+
+	h2 {
+		margin: 0;
+	}
 
 	.input-box {
-		border: $border-style;
-		padding: $text-padding;
-		background-color: $card-background;
+		//border: $border-style;
+		margin: $element-margin 0 $element-margin 0;
+		//background-color: $card-background;
 
 		textarea {
 			height: 2.4em;
@@ -15,9 +22,8 @@
 			@include transition(height 0.2s);
 		}
 
-		span {
+		span.input-field {
 			display: block;
-		    overflow: hidden;
 		    //padding-right:$text-padding;
 		}
 
@@ -46,6 +52,16 @@
 			display: block;
 		}
 
+	}
+
+	.button-right {
+		float: right;
+		display: inline;
+		padding-right:1px;
+	}
+
+	.button-left {
+		display: inline;
 	}
 
 	

@@ -17,8 +17,10 @@
 		margin: $text-padding 0 $text-padding 0;
 		clear: both;
 
+
 		img {
 			max-height:400px;
+			border-radius: $border-radius;
 
 			@include media($tablet) {
 				width: 60%;
