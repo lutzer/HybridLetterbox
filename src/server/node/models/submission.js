@@ -16,6 +16,7 @@ var submissionSchema = mongoose.Schema({
     author: { type: String, required: true, maxlength: '32' },
     device: { type: String, default: false },
     tags : [ { type: String, match: /^\w+$/ } ], //only allow numbers and chars and _ without spaces
+    dataset : { type: String, ref: 'Dataset', default: ''}, //which dataset does this post belong to?
     files : [{
         name: String,
         path: String,

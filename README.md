@@ -18,8 +18,8 @@
 
 * install pm2 `npm install pm2 -g`
 
-*  go to `cd src/www`
-   * start testscripts by calling `npm test`
+* go to `cd src/www`
+  * start testscripts by calling `npm test`
 
 ### Configure Atmega Head Board
 

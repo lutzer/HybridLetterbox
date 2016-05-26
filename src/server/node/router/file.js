@@ -18,6 +18,9 @@ var fileUploader = multipart({
  */ 
 router.post('/attach/:submissionId', fileUploader, function(req,res){
 
+    console.log('attaching file');
+    console.log(req);
+
 	Submission.findOne({ _id: req.params.submissionId }, (err, submission) => {
 		if (Utils.handleError(err,res))
             return;
