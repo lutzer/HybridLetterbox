@@ -1,15 +1,18 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-24 12:12:52
+* @Last Modified time: 2016-05-26 10:51:47
 */
 
+import $ from 'jquery';
+import 'iframeTransport';
 import Marionette from 'marionette'
 import Backbone from 'backbone';
 import _ from 'underscore'
 import SubmissionModel from 'models/submission_model';
-import iframeTransport from 'iframeTransport';
 import Config from 'config';
 
 import template from 'text!templates/submission_input_tmpl.html';
@@ -23,9 +26,10 @@ class SubmissionInputView extends Marionette.ItemView {
 
     events() {
     	return {
-            'focus #new-submission-text' : 'onTextareaFocus',
-            'click #new-submission-text' : 'onTextareaFocus',
-            'mouseleave .input-box' : 'onMouseLeave',
+            'focus #new-submission-text' : 'focus',
+            'click #new-submission-text' : 'focus',
+            'keypress #new-submission-text' : 'focus',
+            'mouseleave .input-box' : 'unfocus',
             'click #submit-button' : 'onSubmitButtonClick'
     	}
     }
@@ -35,11 +39,11 @@ class SubmissionInputView extends Marionette.ItemView {
         //console.log(options)
     }
 
-    onTextareaFocus() {
+    focus() {
     	this.$el.addClass('expand');
     }
 
-    onTextareaBlur() {
+    unfocus() {
     	if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
     		this.$el.removeClass('expand');
     }
@@ -47,6 +51,11 @@ class SubmissionInputView extends Marionette.ItemView {
     onMouseLeave() {
         if (!this.$('#new-submission-text').val() && !this.$('#new-submission-author').val())
             this.$el.removeClass('expand');
+    }
+
+    clear() {
+        this.$('#new-submission-text').val('');
+        this.$('#new-submission-author').val('');
     }
 
     onSubmitButtonClick() {
@@ -78,11 +87,10 @@ class SubmissionInputView extends Marionette.ItemView {
                 if (this.$('#new-submission-file').val())
                     uploadFile(this.$('#new-submission-file'),model);
 
-            this.render();
-            this.$el.removeClass('expand');
+            this.clear();
+            this.unfocus();
             }
         });
-
     }
     
 }

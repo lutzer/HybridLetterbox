@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var _ = require('underscore');
 
@@ -55,7 +57,7 @@ describe('File upload', function() {
     	request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', file).end(function(err, res) {
 			if (err) throw err;
 
-			submission = res.body;
+			var submission = res.body;
 
 			//check if file exists
 			fs.access(_.last(submission.files).path, fs.F_OK, (err) => {
@@ -71,7 +73,7 @@ describe('File upload', function() {
 		var request = require('supertest');
 		var fs = require('fs');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			author: 'Test Peter'
 		}
@@ -80,7 +82,7 @@ describe('File upload', function() {
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
 			if (err)
     			throw err;
-			submissionId = res.body._id;
+			var submissionId = res.body._id;
 
 			//attach file
 			postFile(submissionId,TEST_FILES[0], function() {
@@ -95,7 +97,7 @@ describe('File upload', function() {
 		var request = require('supertest');
 		var fs = require('fs');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			author: 'Test Peter'
 		}
@@ -129,7 +131,7 @@ describe('File upload', function() {
 		var request = require('supertest');
 		var fs = require('fs');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			author: 'Test Peter'
 		}
@@ -159,7 +161,7 @@ describe('File upload', function() {
 		var fs = require('fs');
 		var async = require('async');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			author: 'Test Peter'
 		}
@@ -168,16 +170,18 @@ describe('File upload', function() {
 		request(BASE_URL).post('api/submissions').send(data).end(function(err, res) {
 			if (err)
     			throw err;
-			var submissionId = res.body._id;
+			var submission = res.body;
 
 			//attach files
 			async.eachSeries(TEST_FILES, (file,callback) => {
-				postFile(submissionId,file, function(submission) {
+				postFile(submission._id,file, function() {
 					callback();
 				});
 			} ,() => {
 				//get answer
-				request(BASE_URL).get('api/submissions/'+submissionId).end(function(err, res) {
+				request(BASE_URL).get('api/submissions/'+submission._id).end(function(err, res) {
+
+					var submission = res.body;
 					assert.equal(submission.files.length,TEST_FILES.length)
 					done();
 				})

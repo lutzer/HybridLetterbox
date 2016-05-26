@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
@@ -35,6 +37,7 @@ class App extends Backbone.Marionette.Application {
 				'scanning' : 'showScanningDialog',
 				'tag/:tag' : 'showSubmissionList',
 				'new' : 'postSubmission',
+				'submission/:id' : 'showSubmission',
 				'*actions': 'showSubmissionList'
 			}
 		});

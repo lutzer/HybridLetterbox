@@ -1,0 +1,48 @@
+<div class="link-back"><a href="#">Back</a></div>
+<div class="singleview-header">
+	<div class="author"><h3><%= author %></h3></div>
+	<div class="date"><%= formatDate(createdAt) %></div>
+</div>
+
+<% _.each(files, function(file) { %>
+<div class="singleview-image">
+	<img src="<%= filesUrl+file.name %>">
+</div>
+<% }) %>
+
+<div class="singleview-text">
+	<%= text %>
+</div>
+<div class="singleview-bottom">
+	<div class="singleview-tags"> 
+		<ul class="tag-list">
+		<% _.each(tags, function(tag) { %>
+			<li><a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a></li>
+		<% }) %>
+		</ul>
+	</div>
+</div>
+
+<div class="singleview-comments">
+	<h2>Comments</h2>
+	<div class="comments">
+		<% _.each(comments, function(comment) { %>
+			<div class="comment">
+				<div class="comment-image">
+				    <img src="https://raw.githubusercontent.com/thoughtbot/empties/master/source/images/placeholder.png">
+				 </div>
+				<div class="comment-content">
+					<h4><%= comment.author %></h4>
+					<div class="date"><%= fromNow(comment.createdAt) %></div>
+					<p><%= comment.text %></p>
+				</div>
+				<% if (isAdmin) { %>
+				<button id="delete-comment-button" data-id="<%= comment._id %>">Delete</button>
+				<% } %>
+			</div>
+		<% }) %>
+		<div id="comment-input">
+		</div>
+	</div>
+</div>
+

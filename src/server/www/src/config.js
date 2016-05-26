@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
@@ -11,5 +13,4 @@ export default {
 	files_url : '/files/',
 	stringTruncateShort: 50,
 	stringTruncateLong: 220
-
 }

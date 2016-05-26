@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var _ = require('underscore');
 
@@ -18,7 +20,7 @@ router.get('/',function(req,res){
             return;
 
         // extract all tags, remove duplicates
-        tags = _.unique(_.flatten(_.pluck(models,'tags')));
+        var tags = _.unique(_.flatten(_.pluck(models,'tags')));
         
         tags = _.map(tags, function(tag) {
         	return { name: tag }

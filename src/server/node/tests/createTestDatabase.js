@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-10 11:51:25
@@ -70,7 +72,7 @@ describe('Create Test Database', function(){
     	request(BASE_URL).post('api/file/attach/'+submissionId).attach('file', file).end(function(err, res) {
 			if (err) throw err;
 
-			submission = res.body;
+			var submission = res.body;
 
 			//check if file exists
 			fs.access(_.last(submission.files).path, fs.F_OK, (err) => {
@@ -128,9 +130,9 @@ describe('Create Test Database', function(){
 
 		Submission.find({}, (err,models) => {
 
-			submissionId = models[0]._id;
+			var submissionId = models[0]._id;
 			postFile(submissionId,TEST_FILES[0], function(submission) {
-				submissionId = models[3]._id;
+				var submissionId = models[3]._id;
 				postFile(submissionId,TEST_FILES[1], function(submission) {
 					done();
 				});
@@ -142,7 +144,7 @@ describe('Create Test Database', function(){
 
 		Submission.find({}, (err,models) => {
 
-			submissionId = models[1]._id;
+			var submissionId = models[1]._id;
 			postFile(submissionId,TEST_FILES[0], function(submission) {
 				postFile(submissionId,TEST_FILES[1], function(submission) {
 					done();

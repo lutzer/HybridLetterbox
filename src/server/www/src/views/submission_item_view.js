@@ -1,3 +1,5 @@
+'use strict';
+
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
@@ -11,6 +13,7 @@ import _ from 'underscore';
 import _str from 'underscoreString';
 import $ from 'jquery';
 import Moment from 'moment';
+import 'moment_en_gb';
 import Config from 'config';
 import CommentModel from 'models/comment_model';
 
@@ -29,68 +32,28 @@ class SubmissionItemView extends Marionette.ItemView {
             isAdmin : false,
             text_truncated_short : _str.truncate(this.model.get('text'),Config.stringTruncateShort,'...'),
             text_truncated_long : _str.truncate(this.model.get('text'),Config.stringTruncateLong,'...'),
-            dateFromNow: Moment(this.model.get('createdAt')).fromNow()
+            fromNow: function(date) {
+                return Moment(date).fromNow(); 
+            }
 		}
     }
 
     events() {
-    	return {
-            'click .card-bottom' : 'onViewClicked',
-    		'click #new-comment-button' : 'onNewCommentButtonClick',
-    		'click #delete-comment-button' : 'onDeleteCommentButtonClick',
-    	}
+        return {
+            'click' : 'onClick'
+        }
     }
-
-    modelEvents() {
-    	return {
-    		'change': 'render'
-    	}
-  	}
 
     /* methods */
     initialize(options) {
         //console.log(this.model);
-        
-        this.showComments = false;
     }
 
-    onShow() {
-        if (this.showComments)
-            this.$('.card-comments').removeClass('hidden');
-        else
-            this.$('.card-comments').addClass('hidden');
+    onClick(e) {
+        window.location.hash = '#submission/'+this.model.get('_id');
+        e.preventDefault();
     }
 
-    showDetails(show) {
-        this.showComments = show;
-        this.$('.card-comments').toggleClass('hidden');
-    }
-
-    onViewClicked() {
-        this.showDetails(!this.showComments);
-    }
-
-    onNewCommentButtonClick() {
-
-    	var comment = new CommentModel({
-    		text : this.$('#new-comment-text').val(),
-    		author : this.$('#new-comment-author').val(),
-    		submission: this.model.get('_id')
-    	})
-    	comment.save(null,{
-            error: (model, res) => {
-                Backbone.trigger('error','http',res.responseJSON);
-            }
-        });
-    }
-
-    onDeleteCommentButtonClick(event) {
-    	var commentId = $(event.target).attr('data-id')
-    	var comment = new CommentModel({
-    		_id : commentId
-    	});
-    	comment.destroy();
-    }
 }
 
 export default SubmissionItemView;

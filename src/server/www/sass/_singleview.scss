@@ -1,0 +1,73 @@
+.singleview {
+	margin: $card-margin;
+
+	h2 {
+		margin: 0 0 $paragraph-padding 0;
+	}
+	
+
+	.singleview-text {
+		font-size: 130%;
+  		overflow: hidden;
+	}
+
+	.singleview-image {
+		text-align: center;
+		overflow: hidden;
+		margin: $text-padding 0 $text-padding 0;
+		clear: both;
+
+		img {
+			max-height:400px;
+
+			@include media($tablet) {
+				width: 60%;
+				max-height: none;
+			}
+
+			@include media($mobile) {
+				width: 100%;
+				max-height: none;
+			}
+		}
+
+	}
+
+	.singleview-header {
+
+		padding: $text-padding 0 $text-padding 0;
+		margin-bottom: $paragraph-padding;
+
+		.author {
+			float:right;
+
+			h3 {
+				margin:0 0 $text-padding 0;
+			}
+		}
+
+		.date {
+			float:left;
+			font-size: 80%;
+		}
+	}
+
+	.singleview-text {
+		clear:both;
+		padding: $text-padding 0 $text-padding 0;
+	}
+
+	.singleview-comments {
+		padding: $text-padding 0 $text-padding 0;
+	}
+
+	.singleview-bottom {
+		padding: $text-padding 0 $text-padding 0;
+		width:100%;
+
+		.author {
+			float: right;
+			font-style: italic;
+		}
+	}
+}

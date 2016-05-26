@@ -1,3 +1,4 @@
+'use strict';
 
 var assert = require('assert');
 var fs = require('fs');
@@ -59,7 +60,7 @@ describe('API Routes /tags/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4()
 		}
 
@@ -67,7 +68,7 @@ describe('API Routes /tags/', function(){
 			if (err)
     			throw err;
 			
-    		tags = res.body;
+    		var tags = res.body;
 
     		assert.equal(tags.length,tags.length);
 
@@ -83,7 +84,7 @@ describe('API Routes /tags/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4()
 		}
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var assert = require('assert');
 var fs = require('fs');
 var _ = require('underscore');
@@ -24,7 +26,7 @@ describe('API Routes /comments/', function(){
 			
 			// Add some Models
 			var size = Math.floor(5 + Math.random() * 10)
-			array = _.map(_.range(size), function(i) {
+			var array = _.map(_.range(size), function(i) {
 				return {
 					text: 'model'+i,
 					author: 'Test Peter'
@@ -51,7 +53,7 @@ describe('API Routes /comments/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			submission: MODEL_ID
 		}
@@ -68,7 +70,7 @@ describe('API Routes /comments/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			submission: MODEL_ID
 		}
@@ -94,7 +96,7 @@ describe('API Routes /comments/', function(){
 
   		var request = require('supertest');
 
-  		comment_data = {
+  		var comment_data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			submission: MODEL_ID
 		}
@@ -115,7 +117,7 @@ describe('API Routes /comments/', function(){
 
   		var request = require('supertest');
 
-  		comment_data = {
+  		var comment_data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			submission: MODEL_ID
 		}
@@ -137,7 +139,7 @@ describe('API Routes /comments/', function(){
 
   		var request = require('supertest');
 
-  		comment_data = {
+  		var comment_data = {
 			text: "unittest_" + require('node-uuid').v4(),
 			submission: MODEL_ID
 		}
@@ -147,7 +149,7 @@ describe('API Routes /comments/', function(){
 			if (err)
     			throw err;
 
-    		submissionId = MODEL_ID;
+    		var submissionId = MODEL_ID;
 			
 			// delete comment
 			request(BASE_URL).delete('api/comments/'+res.body._id).auth(Config.authName, Config.authPassword).expect(200).end(function(err, res) {
@@ -190,7 +192,7 @@ describe('API Routes /comments/', function(){
 
 		var request = require('supertest');
 
-		data = {
+		var data = {
 			author: "<br><p>",
 			text: "<br><html>&",
 			submission: MODEL_ID
