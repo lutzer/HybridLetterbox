@@ -2,13 +2,27 @@
 	margin: $card-margin;
 	clear:both;
 
-	.badge {
+	/*.badge {
 		display: block;
-	}
+	}*/
 
 	h2 {
 		margin: 0;
 	}
+
+	.tag-field {
+		padding: $text-padding 0 $text-padding 0;
+
+		.tag-checkbox {
+			color: $tag-text-color;
+			background-color: $tag-background;
+			padding: $element-padding;
+			border-radius: $border-radius;
+			font-size: 80%;
+		}
+	}
+
+	
 
 	.input-box {
 		//border: $border-style;
@@ -64,6 +78,8 @@
 		display: inline;
 	}
 
-	
+	#attach-text {
+		display:block;
+	}
 
 }

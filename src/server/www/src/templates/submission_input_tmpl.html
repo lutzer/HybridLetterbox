@@ -3,6 +3,11 @@
 	<span class="input-field"><textarea id="new-submission-text" maxlength="1024" placeholder="What do you have to say?"></textarea></span>
 	<div class="input-extra">
 		<span class="input-field"><input id="new-submission-author" maxlength="32" type="text" placeholder="Your Name"></span>
+		<span class="input-field tag-field">
+			<% _.each(tags, function(tag) { %>
+			<span class="tag-checkbox"><label><input type="checkbox" name="new-submission-tags" value="<%= tag %>"><%= tag %></label></span>
+			<% }) %>
+		</span>
 		<span id="attach-text" class="badge hidden"></span>
 		<div class="button-right">
 			<label for="new-submission-file"><span class="button">Attach Image</span></label>

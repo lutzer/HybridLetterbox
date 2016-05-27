@@ -19,18 +19,9 @@
 
 
 		img {
-			max-height:400px;
+			max-height:600px;
+			max-width: 100%;
 			border-radius: $border-radius;
-
-			@include media($tablet) {
-				width: 60%;
-				max-height: none;
-			}
-
-			@include media($mobile) {
-				width: 100%;
-				max-height: none;
-			}
 		}
 
 	}

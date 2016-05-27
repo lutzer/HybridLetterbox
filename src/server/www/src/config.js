@@ -12,5 +12,7 @@ export default {
 	web_socket_url : 'http://localhost:'+window.location.port,
 	files_url : '/files/',
 	stringTruncateShort: 50,
-	stringTruncateLong: 220
+	stringTruncateLong: 220,
+
+	tags: ['tag1','tag2','tag3','tag4']
 }

@@ -13,8 +13,8 @@ var router = express.Router();
 
 var fileUploader = multipart({
     uploadDir: Config.uploadDirTmp,
-    autoFiles: true,
-    maxFilesSize: Config.maxUploadFileSize
+    autoFiles: true
+    //maxFilesSize: Config.maxUploadFileSize
 });
 
 /*

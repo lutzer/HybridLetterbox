@@ -9,6 +9,8 @@ var Config = {
 	/* FILE UPLOAD */
 	uploadDirTmp: '_tmp/',
 	fileDir: '../files/',
+	maxFileSize: 1024*1024*2, //in bytes
+	allowedFileTypes: ['image/jpg','image/png','image/gif'],
 
 	/* SERVER CONFIG */
 	baseUrl : '/', // with trailing /

@@ -35,6 +35,12 @@ class SubmissionInputView extends Marionette.ItemView {
     	}
     }
 
+    get templateHelpers() {
+        return {
+            tags : Config.tags
+        }
+    }
+
     /* methods */
     initialize(options) {
         //console.log(options)
@@ -54,12 +60,13 @@ class SubmissionInputView extends Marionette.ItemView {
         this.$('#new-submission-author').val('');
         this.$('#new-submission-file').val('');
         $('#attach-text').addClass('hidden');
+        $('input[name="new-submission-tags"]:checked').attr('checked', false);
     }
 
     onSubmitButtonClick() {
 
         // upload file
-        var uploadFile = function(file, model) {
+        var uploadFile = function(file, model,callback) {
 
             $.ajax({
                 method: 'POST',
@@ -67,19 +74,26 @@ class SubmissionInputView extends Marionette.ItemView {
                 iframe: true,
                 files: file,
                 dataType: 'json',
-                error: (err) => {
-                    handleError(model,err);
+                error: (res) => {
+                    Backbone.trigger('error','http',res.responseJSON.error);
                 },
                 success: (res) => {
                     if (_.has(res,'error'))
                         Backbone.trigger('error','http',res.error);
+                    else
+                        callback();
                 }
             });
         };
 
+        var tags = _.map($('input[name="new-submission-tags"]:checked'), (element) => {
+            return element.value;
+        });
+
     	var submission = new SubmissionModel({
     		text : this.$('#new-submission-text').val(),
-    		author : this.$('#new-submission-author').val()
+    		author : this.$('#new-submission-author').val(),
+            tags: tags
     	})
     	submission.save(null,{
             error: (model,res) => {
@@ -87,10 +101,14 @@ class SubmissionInputView extends Marionette.ItemView {
             },
             success: (model, res) => {
                 if (this.$('#new-submission-file').val())
-                    uploadFile(this.$('#new-submission-file'),model);
-
-            this.clear();
-            this.unfocus();
+                    uploadFile(this.$('#new-submission-file'),model, () => {
+                        this.clear();
+                        this.unfocus();
+                    });
+                else {
+                    this.clear();
+                    this.unfocus();
+                }
             }
         });
     }
@@ -99,6 +117,7 @@ class SubmissionInputView extends Marionette.ItemView {
         var filename = _.last(this.$('#new-submission-file').val().split("\\"));
         $('#attach-text').html('Image: '+filename);
         $('#attach-text').removeClass('hidden');
+        this.focus();
     }
     
 }

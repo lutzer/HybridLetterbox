@@ -31,15 +31,17 @@
 	}
 
 	.card-image {
-		background: whitesmoke;
 		overflow: hidden;
 		margin: $text-padding;
 		height: 12em;
-		border-radius: $border-radius;
-		border: $border-style;
 
-		img {
+		.image {
 			width: 100%;
+			height:100%;
+			background-position: center center;
+  			background-repeat: no-repeat;
+  			background-size: 100% auto;
+			border-radius: $border-radius;
 		}
 	}
 

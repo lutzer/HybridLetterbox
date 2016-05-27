@@ -47,7 +47,7 @@ class SubmissionListView extends Marionette.CompositeView {
 
         this.listenTo(Backbone,'submission:changed', this.onSubmissionChanged);
         this.listenTo(Backbone,'submission:new', this.onSubmissionAdded);
-        //this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
+        this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
 	}
 
     onShow() {
