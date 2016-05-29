@@ -11,6 +11,7 @@ import Marionette from 'marionette';
 import _ from 'underscore';
 import $ from 'jquery';
 import Masonry from 'masonry';
+import Config from 'config';
 import SubmissionItemView from 'views/submission_item_view';
 import SubmissionCollection from 'models/submission_collection';
 import SubmissionModel from 'models/submission_model';
@@ -34,28 +35,47 @@ class SubmissionListView extends Marionette.CompositeView {
     	}
     }
 
+    events() {
+        return {
+            'click #load-more-button' : 'onLoadMoreButtonClick'
+        }
+    }
+
 	/* methods */
 	initialize(options) {
 
-		var fetchParams = {};
+		this.fetchParams = {};
 
 		if (options.tag != null)
-			fetchParams.tag = options.tag
+			this.fetchParams.tag = options.tag
 		
 		this.collection = new SubmissionCollection();
-		this.collection.fetch({ data: $.param(fetchParams) });
+
+        this.listenTo(this.collection,'sync',this.hideSpinner);
+        this.listenTo(this.collection,'fetching',this.showSpinner);
 
         this.listenTo(Backbone,'submission:changed', this.onSubmissionChanged);
         this.listenTo(Backbone,'submission:new', this.onSubmissionAdded);
         this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
+
+        this.loadMore = false;
+
+        this.collection.getFirstPage(this.fetchParams);
 	}
 
-    onShow() {
-        /*new Masonry('#submission-list', {
-            itemSelector : '.item-view',
-            percentPosition: true
-        })*/
+    onAttach() {
+        //bind scroll handler
+        this.winowScrollListener =  _.throttle(() => {
+            this.onWindowScroll();
+        },500);
+        $(window).on('scroll',this.winowScrollListener);
     }
+
+    onBeforeDestroy() {
+        //unbind scroll handler
+        $(window).off("scroll", this.winowScrollListener);
+    }
+
 
 	// update model on data change
     onSubmissionChanged(data) {
@@ -79,6 +99,37 @@ class SubmissionListView extends Marionette.CompositeView {
 
     onChildShowDetails() {
     	console.log(this);
+    }
+
+    onLoadMoreButtonClick(event) {
+        event.preventDefault();
+        this.collection.getNextPage(this.fetchParams);
+        this.loadMore = true;
+
+        this.$('#load-more-button').addClass('hidden');
+    }
+
+    onWindowScroll() {
+
+        if (!(this.loadMore))
+            return;
+
+        var scrollPos = $(window).scrollTop();
+        var triggerPos =  $(document).height() - $(window).height() * 1.2;
+
+        if (scrollPos > triggerPos) {
+            this.collection.getNextPage(this.fetchParams);
+        }
+    }
+
+    showSpinner() {
+        console.log('show');
+        this.$('#spinner').removeClass('gone');
+    }
+    
+    hideSpinner() {
+        console.log('hide');
+        this.$('#spinner').addClass('gone');
     }
 
 

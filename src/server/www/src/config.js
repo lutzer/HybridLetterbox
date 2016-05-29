@@ -14,5 +14,7 @@ export default {
 	stringTruncateShort: 50,
 	stringTruncateLong: 220,
 
+	recordsPerPage: 4,
+
 	tags: ['tag1','tag2','tag3','tag4']
 }

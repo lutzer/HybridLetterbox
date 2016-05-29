@@ -98,17 +98,19 @@ textarea {
 }
 
 .badge {
-	background-color: $badge-background;
+	//background-color: $badge-background;
 	border-radius: $border-radius;
 	display: inline-block;
 	font-size: $small-font-size;
 	line-height: 1;
 	padding: 0.4em 1.2em;
-	color: $badge-text-color;
+	//color: $badge-text-color;
 	margin : $element-padding;
+	font-style:italic;
+	border: $border-style;
 
 	&.selected {
-		background-color: #f00 !important; 
+		background-color: #FBADAD !important; 
 	}
 }
 

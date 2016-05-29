@@ -25,11 +25,6 @@
 		}
 	}
 
-	.card-text {
-		font-size: 130%;
-  		overflow: hidden;
-	}
-
 	.card-image {
 		overflow: hidden;
 		margin: $text-padding;
@@ -63,6 +58,12 @@
 
 	.card-text {
 		padding: $text-padding;
+		font-size: 130%;
+  		overflow: hidden;
+	}
+
+	.card-tags {
+		padding: $text-padding;
 	}
 
 	.card-comments {
@@ -80,4 +81,8 @@
 			font-style: italic;
 		}
 	}
+}
+
+.more-button-div {
+	text-align:center;
 }

@@ -18,15 +18,40 @@ var router = express.Router();
  */ 
 router.get('/',(req,res) => {
 
-    // filter by tags
-    var query = {}
-    if (_.has(req.query,'tag'))
-        query.tags = req.query.tag;
+    console.log(req.query);
 
-    Submission.find(query).sort({'updatedAt': 'desc'}).populate('comments').exec((err,models) => {
-        if (Utils.handleError(err,res))
-            return;
-        res.send(models);
+    //get qury options
+    var options = {}
+    if (_.has(req.query,'tag'))
+        options.tags = req.query.tag;
+
+    // paginate options
+    var paginateOptions = {}
+    if (_.has(req.query,'limit'))
+        paginateOptions.limit = parseInt(req.query.limit);
+
+    if (_.has(req.query,'skip'))
+        paginateOptions.skip = parseInt(req.query.skip);
+
+    // build query
+    var query = Submission.find(options);
+    query.sort({'updatedAt': -1});
+    query.limit(paginateOptions.limit);
+    query.skip(paginateOptions.skip);
+    query.populate('comments');
+
+    // execute
+    query.exec((err,models) => {
+        if (Utils.handleError(err,res)) return;
+
+        Submission.count(options, (err, count) => {
+            if (Utils.handleError(err,res)) return;
+
+            res.send({
+                docs : models,
+                total_records : count
+            });
+        });
     });
 });
 
