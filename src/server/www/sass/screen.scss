@@ -21,6 +21,7 @@
 @import "header";
 @import "footer";
 @import "buttons";
+@import "spinner";
 
 @import "item-list";
 @import "comments";
@@ -29,18 +30,15 @@
 
 /* FONTS */
 
-//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Regular", $file-formats: ttf);
-//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Bold", bold, $file-formats: ttf);
-//@include font-face("source-sans-pro", "/fonts/SourceSansPro-Italic", normal, italic, $file-formats: ttf);
-
-@include font-face("open-sans", "/fonts/OpenSans-Regular", $file-formats: ttf);
-@include font-face("open-sans", "/fonts/OpenSans-Bold", bold, $file-formats: ttf);
+@include font-face("crimson", "/fonts/CrimsonText-Roman", $file-formats: ttf);
+@include font-face("crimson", "/fonts/CrimsonText-Bold", bold, $file-formats: ttf);
+@include font-face("open-sans", "/fonts/OpenSans-Regular", normal, $file-formats: ttf);
 @include font-face("open-sans", "/fonts/OpenSans-Italic", normal, italic, $file-formats: ttf);
 
 /* ELEMENT STYLES */
 
 body {
-	font-family: "open-sans";
+	font-family: "crimson";
 	color: #444;
 }
 
@@ -50,6 +48,11 @@ h4 {
 
 h2 {
 	margin: 0.2em
+}
+
+h1 {
+	text-align:center;
+	font-size: 260%;
 }
 
 p {
@@ -62,11 +65,20 @@ a {
 }
 
 #{$all-text-inputs} {
+	font-family: 'crimson';
 	font-size:100%;
 	width: 100%;
 	padding: $text-padding;
 	outline: none;
 	border: $input-border;
+	background-color: $input-background-color;
+	color: $input-text-color;
+
+	@include placeholder {
+		font-style: italic;
+		color: #ccc;
+
+	}
 }
 
 textarea {
@@ -98,19 +110,20 @@ textarea {
 }
 
 .badge {
-	//background-color: $badge-background;
+	font-family: "open-sans";
+	background-color: $badge-background;
 	border-radius: $border-radius;
 	display: inline-block;
 	font-size: $small-font-size;
 	line-height: 1;
 	padding: 0.4em 1.2em;
-	//color: $badge-text-color;
+	color: $badge-text-color;
 	margin : $element-padding;
 	font-style:italic;
 	border: $border-style;
 
 	&.selected {
-		background-color: #FBADAD !important; 
+		background-color: #FF7043 !important; 
 	}
 }
 

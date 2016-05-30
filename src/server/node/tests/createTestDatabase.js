@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-10 11:51:25
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-18 17:05:05
+* @Last Modified time: 2016-05-30 15:34:22
 */
 
 
@@ -83,6 +83,24 @@ describe('Create Test Database', function(){
 
     };
 
+    it('should add a random number of submissions', function(done) {
+
+		var names = ['Tim','Peter','Hilde','Gabi'];
+		var text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis pharetra odio. Donec semper orci et metus rhoncus tristique. Fusce eleifend purus purus, sed auctor est tincidunt tincidunt. Mauris tellus lectus, dictum sed diam eu, gravida suscipit ex. Fusce suscipit lorem non eleifend iaculis. Nullam purus tellus, maximus sit amet tempus facilisis, bibendum quis nisl. Fusce eget euismod turpis. Nullam in tortor purus. Integer quis tincidunt est. Cras mi lorem, egestas sit amet felis sit amet, porttitor ornare orci.";
+
+		// Add some Models
+		var size = Math.floor(10 + Math.random() * 10)
+		var array = _.map(_.range(size), function(i) {
+			return {
+				text: text,
+				author: names[Math.floor(Math.random() * names.length)]
+			}
+		});
+		Submission.create(array, function(err,models) {
+			done();
+		});
+	});
+
 	it('should add several submissions', function(done){
 
 		var submission = new Submission({
@@ -149,8 +167,9 @@ describe('Create Test Database', function(){
 				postFile(submissionId,TEST_FILES[1], function(submission) {
 					done();
 				});
-				done();
 			});
 		})
 	});
+
+	
 })

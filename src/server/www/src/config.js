@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-19 10:13:30
+* @Last Modified time: 2016-05-30 15:29:41
 */
 
 export default {
@@ -14,7 +14,7 @@ export default {
 	stringTruncateShort: 50,
 	stringTruncateLong: 220,
 
-	recordsPerPage: 4,
+	recordsPerPage: 12,
 
 	tags: ['tag1','tag2','tag3','tag4']
 }

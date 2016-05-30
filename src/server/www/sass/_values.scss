@@ -4,7 +4,7 @@ $card-margin: 1em;
 $text-padding: .5em;
 $element-padding: 0.25em;
 $paragraph-padding: 1em;
-$button-padding: 0.25em;
+$button-padding: 2em;
 $element-margin: 0.5em;
 
 /* Border */
@@ -12,16 +12,20 @@ $border-radius:3px;
 $border-style: 1px solid #aaa;
 $card-border-style: 2px solid #aaa;
 $input-border: 1px solid #aaa;
+//$input-border: 0;
 
 /* Colors */
 $card-background: #EFEFEF;
 $tag-background: #DDDDDD;
 $tag-text-color: #000000;
-$badge-background: #111111;
-$badge-text-color: #EEEEEE;
-$button-background: #CCCCCC;
-$button-background-hover: #AAAAAA;
-$button-background-clicked: #FFFFFF;
+$badge-background: #FFFFFF;
+$badge-text-color: #000000;
+$button-background: #01579B;
+$button-text-color: #FFFFFF;
+$button-background-hover: #0288D1;
+$button-background-clicked: #80D8FF;
+$input-background-color: transparent;
+$input-text-color: #000;
 
 /* Font sizes */
 $small-font-size: 80%;

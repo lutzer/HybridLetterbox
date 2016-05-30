@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-26 16:16:13
+* @Last Modified time: 2016-05-30 14:46:17
 */
 
 import 'jquery';
@@ -31,7 +31,10 @@ class SubmissionInputView extends Marionette.ItemView {
             'keypress #new-submission-text' : 'focus',
             'mouseleave .input-box' : 'unfocus',
             'click #submit-button' : 'onSubmitButtonClick',
-            'change #new-submission-file' : 'onFileInputChanged'
+            'change #new-submission-file' : 'onFileInputChanged',
+            'click #tag-dropdown' : 'onTagDropdownClick',
+            'click .tag-dropdown-list' : 'preventPropagation',
+            'mouseleave .tag-dropdown-list' : 'onLeaveDropdown'
     	}
     }
 
@@ -61,6 +64,18 @@ class SubmissionInputView extends Marionette.ItemView {
         this.$('#new-submission-file').val('');
         $('#attach-text').addClass('hidden');
         $('input[name="new-submission-tags"]:checked').attr('checked', false);
+    }
+
+    onTagDropdownClick() {
+        this.$('.tag-dropdown-list').toggleClass('expand');
+    }
+
+    onLeaveDropdown() {
+        this.$('.tag-dropdown-list').removeClass('expand');
+    }
+
+    preventPropagation(event) {
+        event.stopPropagation();
     }
 
     onSubmitButtonClick() {

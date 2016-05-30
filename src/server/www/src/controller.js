@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-26 11:05:34
+* @Last Modified time: 2016-05-30 16:46:44
 */
 
 import Backbone from 'backbone';
@@ -57,6 +57,12 @@ class Controller extends Marionette.Controller {
 		/* ROUTES */
 
 		showSubmissionList(tag=null) {
+
+			this.mainView.headerRegion.show(new Marionette.ItemView({
+				tagName: 'h1',
+				template: _.template('Logo')
+			}));
+
 			//update list view
 			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
 
@@ -72,6 +78,9 @@ class Controller extends Marionette.Controller {
 		}
 
 		showSubmission(id) {
+			this.mainView.headerRegion.show(new Marionette.ItemView({
+				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Back</span></a></div>')
+			}));
 			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
 			this.mainView.sideRegion.reset();
 			this.mainView.topRegion.reset();

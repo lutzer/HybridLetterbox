@@ -1,20 +1,30 @@
-<h2>Add New Submission</h2>
 <div class="input-box">
-	<span class="input-field"><textarea id="new-submission-text" maxlength="1024" placeholder="What do you have to say?"></textarea></span>
+	<span class="input-row"><textarea id="new-submission-text" maxlength="1024" placeholder="What do you have to say?"></textarea></span>
 	<div class="input-extra">
-		<span class="input-field"><input id="new-submission-author" maxlength="32" type="text" placeholder="Your Name"></span>
-		<span class="input-field tag-field">
-			<% _.each(tags, function(tag) { %>
-			<span class="tag-checkbox"><label><input type="checkbox" name="new-submission-tags" value="<%= tag %>"><%= tag %></label></span>
-			<% }) %>
+		<span class="input-row">
+			<span id="tag-dropdown">Topics
+				<ul class="tag-dropdown-list">
+					<% _.each(tags, function(tag) { %>
+					<li>
+						<label>
+							<input type="checkbox" name="new-submission-tags" value="<%= tag %>"><%= tag %>
+						</label>
+					</li>
+					<% }) %>
+				</ul>
+			</span>
+			<span class="input-author"><input id="new-submission-author" maxlength="32" type="text" placeholder="Your Name"></span>
 		</span>
 		<span id="attach-text" class="badge hidden"></span>
-		<div class="button-right">
-			<label for="new-submission-file"><span class="button">Attach Image</span></label>
-			<input type="file" name="file" class="pure-input-rounded input-element" id="new-submission-file" accept="image/x-png, image/gif, image/jpeg" style="display:none">
-		</div>
-		<div class="button-left">
-			<span class="input-field"><span class="button" id="submit-button">Submit</span></span>
-		</div>
+		<span class="spacer"></span>
+		<span class="input-row">
+			<div class="button-right">
+				<label for="new-submission-file"><span class="button">Attach Image</span></label>
+				<input type="file" name="file" class="pure-input-rounded input-element" id="new-submission-file" accept="image/x-png, image/gif, image/jpeg" style="display:none">
+			</div>
+			<div class="button-left">
+				<span class="button" id="submit-button">Submit</span>
+			</div>
+		</span>
 	</div>
 </div>

@@ -1,11 +1,13 @@
 .button {
+	font-family: "open-sans";
 	display:inline-block;
 	border-radius: $border-radius;
 	background: $button-background;
+	color: $button-text-color;
 	cursor: pointer;
-	padding: $button-padding;
+	padding:  $text-padding $button-padding $text-padding $button-padding;
 	margin: $element-margin 0 $element-margin 0;
-	border: 1px solid #aaa;
+	font-size: 80%;
 	@include shadow(1);
 
 	&:hover {
@@ -14,9 +16,19 @@
 
 	&:active {
 		background: $button-background-clicked;
+		@include shadow(0);
 	}
 }
 
+.close-button {
+	font-family: "open-sans";
+
+	background: image-url('arrow-left.png') no-repeat;
+	background-size: 30px;
+	background-position: left center;
+	padding-left: 28px;
+	margin: $button-padding 0 $button-padding 0;
+}
 
 
 

@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-26 13:32:46
+* @Last Modified time: 2016-05-30 15:21:31
 */
 
 import Marionette from 'marionette';
@@ -58,7 +58,7 @@ class SubmissionListView extends Marionette.CompositeView {
         this.listenTo(Backbone,'submission:new', this.onSubmissionAdded);
         this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
 
-        this.loadMore = false;
+        this.loadMore = true;
 
         this.collection.getFirstPage(this.fetchParams);
 	}
@@ -97,16 +97,10 @@ class SubmissionListView extends Marionette.CompositeView {
         this.collection.remove(data);
     }
 
-    onChildShowDetails() {
-    	console.log(this);
-    }
-
     onLoadMoreButtonClick(event) {
         event.preventDefault();
         this.collection.getNextPage(this.fetchParams);
         this.loadMore = true;
-
-        this.$('#load-more-button').addClass('hidden');
     }
 
     onWindowScroll() {
@@ -123,13 +117,15 @@ class SubmissionListView extends Marionette.CompositeView {
     }
 
     showSpinner() {
-        console.log('show');
-        this.$('#spinner').removeClass('gone');
+        this.$('.spinner').removeClass('hidden');
+        this.$('#load-more-button').addClass('hidden');
     }
     
     hideSpinner() {
-        console.log('hide');
-        this.$('#spinner').addClass('gone');
+        this.$('.spinner').addClass('hidden');
+        if (!(this.loadMore)) {
+            this.$('#load-more-button').removeClass('hidden');
+        }
     }
 
 

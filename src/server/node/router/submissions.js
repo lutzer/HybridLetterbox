@@ -18,8 +18,6 @@ var router = express.Router();
  */ 
 router.get('/',(req,res) => {
 
-    console.log(req.query);
-
     //get qury options
     var options = {}
     if (_.has(req.query,'tag'))

@@ -85,10 +85,11 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            var submissionId = res.body[0]._id;
+            var submissionId = res.body.docs[0]._id;
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:removed', function (data) {
+
                assert.equal(data.id, submissionId)
                socket.disconnect();
             });
@@ -110,8 +111,8 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            var submissionId = res.body[0]._id;
-            var nComments = res.body[0].comments.length
+            var submissionId = res.body.docs[0]._id;
+            var nComments = res.body.docs[0].comments.length
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {
@@ -135,7 +136,7 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            var submissionId = res.body[0]._id;
+            var submissionId = res.body.docs[0]._id;
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {
@@ -160,8 +161,8 @@ describe('Socket Tests', function(){
         request(BASE_URL).get('api/submissions/').end(function(err, res) {
             if (err) throw err;
 
-            var submissionId = res.body[0]._id;
-            var nComments = res.body[0].comments.length
+            var submissionId = res.body.docs[0]._id;
+            var nComments = res.body.docs[0].comments.length
 
             var socket = socketIoClient.connect(SOCKET_SERVER_URL)
             socket.on('submission:changed', function (data) {

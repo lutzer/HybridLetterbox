@@ -1,9 +1,4 @@
-<div class="link-back"><a href="#"><span class="button">Back</span></a></div>
-<div class="singleview-header">
-	<div class="author"><h3><%= author %></h3></div>
-	<div class="date"><%= formatDate(createdAt) %></div>
-</div>
-
+<!--<div class="link-back"><a href="#"><span class="button">Back</span></a></div>-->
 <% _.each(files, function(file) { %>
 <div class="singleview-image">
 	<img src="<%= filesUrl+file.name %>">
@@ -12,6 +7,10 @@
 
 <div class="singleview-text">
 	<%= text %>
+</div>
+<div class="singleview-header">
+	<div class="author"><h3><%= author %></h3></div>
+	<div class="date">Posted on <%= formatDate(createdAt) %></div>
 </div>
 <div class="singleview-bottom">
 	<div class="singleview-tags"> 
@@ -28,9 +27,6 @@
 	<div class="comments">
 		<% _.each(comments, function(comment) { %>
 			<div class="comment">
-				<div class="comment-image">
-				    <img src="https://raw.githubusercontent.com/thoughtbot/empties/master/source/images/placeholder.png">
-				 </div>
 				<div class="comment-content">
 					<h4><%= comment.author %></h4>
 					<div class="date"><%= fromNow(comment.createdAt) %></div>
