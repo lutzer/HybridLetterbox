@@ -32,9 +32,6 @@
 					<div class="date"><%= fromNow(comment.createdAt) %></div>
 					<p><%= comment.text %></p>
 				</div>
-				<% if (isAdmin) { %>
-				<button id="delete-comment-button" data-id="<%= comment._id %>">Delete</button>
-				<% } %>
 			</div>
 		<% }) %>
 		<div id="comment-input">

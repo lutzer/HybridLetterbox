@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-30 16:46:44
+* @Last Modified time: 2016-05-31 12:24:50
 */
 
 import Backbone from 'backbone';
@@ -17,6 +17,7 @@ import SubmissionListView from 'views/submission_list_view';
 import TagListView from 'views/tag_list_view';
 import SubmissionInputView from 'views/submission_input_view';
 import SubmissionView from 'views/submission_view';
+import AdminView from 'views/admin_view';
 
 class Controller extends Marionette.Controller {
 		
@@ -82,6 +83,15 @@ class Controller extends Marionette.Controller {
 				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Back</span></a></div>')
 			}));
 			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
+			this.mainView.sideRegion.reset();
+			this.mainView.topRegion.reset();
+		}
+
+		showAdminPage() {
+			this.mainView.headerRegion.show(new Marionette.ItemView({
+				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Back</span></a></div>')
+			}));
+			this.mainView.contentRegion.show(new AdminView());
 			this.mainView.sideRegion.reset();
 			this.mainView.topRegion.reset();
 		}

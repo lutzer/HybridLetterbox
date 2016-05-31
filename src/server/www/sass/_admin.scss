@@ -1,0 +1,56 @@
+.adminview {
+	margin: 80px $card-margin $card-margin $card-margin;
+
+	.admin-item-view {
+		margin-top:20px;
+		border-bottom: $border-style;
+	}
+
+	.admin-element {
+		.label {
+			position: absolute;
+			font-weight: bold;
+		}
+
+		p {
+			margin-left:70px;
+		}
+	}
+
+	.admin-image {
+
+		margin-left:70px;
+
+		img {
+			max-height:200px;
+		}
+	}
+
+	.admin-tags{
+		list-style-type: none;
+		margin-left:70px;
+		padding:0;
+
+		li {
+			display: inline;
+		}
+	}
+
+	.admin-comments {
+		margin-left:70px;
+
+		ul {
+			margin: $paragraph-padding 0 $paragraph-padding 0;
+			padding:0;
+			list-style-type: none;
+		}
+
+		.date {
+			font-size: 70%;
+		}
+	}
+
+	.admin-buttons {
+		margin-left:70px;
+	}
+}

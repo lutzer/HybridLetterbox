@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 15:17:01
+* @Last Modified time: 2016-05-31 14:15:19
 */
 
 import Backbone from 'backbone';
@@ -34,7 +34,6 @@ class SubmissionView extends Marionette.LayoutView {
     get templateHelpers() {
 		return {
 			filesUrl : Config.files_url + this.model.get('_id') + '/',
-            isAdmin : false,
            	formatDate: function(date) {
            		return moment(date).format('LLL');
            	},
@@ -63,20 +62,6 @@ class SubmissionView extends Marionette.LayoutView {
     	//if (_.isUndefined(this.commentInputRegion.currentView))
 		//	this.showChildView('commentInputRegion', new CommentInputView({ submissionId : this.model.get('_id') }));
 	}
-
-    events() {
-    	return {
-    		'click #delete-comment-button' : 'onDeleteCommentButtonClick'
-    	}
-    }
-
-    onDeleteCommentButtonClick(event) {
-    	var commentId = $(event.target).attr('data-id')
-    	var comment = new CommentModel({
-    		_id : commentId
-    	});
-    	comment.destroy();
-    }
 
     onSubmissionChanged(data) {
     	if (data.model._id == this.model.get('_id'))

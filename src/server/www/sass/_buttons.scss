@@ -20,6 +20,11 @@
 	}
 }
 
+.button.small {
+	font-size: 70%;
+	padding:  $text-padding;
+}
+
 .close-button {
 	font-family: "open-sans";
 
@@ -28,6 +33,19 @@
 	background-position: left center;
 	padding-left: 28px;
 	margin: $button-padding 0 $button-padding 0;
+	cursor: pointer;
+}
+
+.expand-button {
+	font-family: "open-sans";
+	font-style: italic;
+	background: image-url('arrow-down.png') no-repeat;
+	background-size: 24px;
+	background-position: right center;
+	padding-right:28px;
+	margin: $button-padding 0 $button-padding 0;
+	cursor: pointer;
+	font-size: 80%;
 }
 
 

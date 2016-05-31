@@ -4,13 +4,13 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-10 16:46:16
+* @Last Modified time: 2016-05-31 15:06:34
 */
 
-import $ from 'jquery';
 import Backbone from 'backbone';
 import SubmissionModel from 'models/submission_model';
 import Config from 'config';
+import Utils from 'utils';
 
 class SubmissionCollection extends Backbone.Collection {
 
@@ -45,7 +45,9 @@ class SubmissionCollection extends Backbone.Collection {
 			limit: this.paginate.recordsPerPage
 		}
 
-		this.fetch({ data : $.param(_.extend(options,paginateOptions)) });
+		console.log(Utils.encodeQueryParameters(_.extend(options,paginateOptions)));
+
+		this.fetch({ data : Utils.encodeQueryParameters(_.extend(options,paginateOptions)) });
 	}
 
 	getNextPage(options) {
