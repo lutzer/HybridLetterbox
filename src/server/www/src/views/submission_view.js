@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-31 14:15:19
+* @Last Modified time: 2016-05-31 15:20:27
 */
 
 import Backbone from 'backbone';
@@ -56,12 +56,6 @@ class SubmissionView extends Marionette.LayoutView {
         //listen to socket events
         this.listenTo(Backbone,'submission:changed', this.onSubmissionChanged);
     }
-
-    onDomRefresh() {
-    	//console.log(this.commentInputRegion.currentView);
-    	//if (_.isUndefined(this.commentInputRegion.currentView))
-		//	this.showChildView('commentInputRegion', new CommentInputView({ submissionId : this.model.get('_id') }));
-	}
 
     onSubmissionChanged(data) {
     	if (data.model._id == this.model.get('_id'))
