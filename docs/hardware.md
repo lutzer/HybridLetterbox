@@ -6,8 +6,6 @@
 
  ![Atmega168PinMap2](images/Atmega168PinMap2.png)
 
- ![driver-ic-of-motor](images/driver-ic-of-motor.png)
-
  ![Raspberry-Pi-GPIO-Layout-Model-B-Plus](images/Raspberry-Pi-GPIO-Layout-Model-B-Plus.png)
 
 ## Camera Board
@@ -37,3 +35,10 @@
 
 * PIN4 with 10 kOhm Current limiting resistor
 
+
+## Stepper
+
+* Driver: SN754410 Half Bridge
+* Connected Pins: 
+
+![bipolar-stepper-drive](images/bipolar-stepper-drive.jpg)
