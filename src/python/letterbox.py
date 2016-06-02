@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-28 10:34:47
+# @Last Modified time: 2016-06-01 12:35:48
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -17,23 +17,36 @@ logging.basicConfig(level=logging.INFO)
 
 lbControl = False
 
+def boxsize_commmand():
+	"""Opens a camera window to setup the size of the textbox on the postcards"""
+	return
+
+def roi_command(turned=False):
+	"""
+		Opens a camera window to setup the region of interest for finding markers on the postcard
+		
+		--turned : setup the marker region, when the postcard is upside down.
+	"""
+	return
+
 def camera_command(calibrate=False,n=5):
 	"""Opens a camera window to focus the lens, to calibrate lens distortion"""
+
 	from camera.cameraControl import CameraControl
 	camera = CameraControl()
 
 	if calibrate:
 		from hardware.letterboxControl import LetterboxControl
 		global lbControl
-		#lbControl = LetterboxControl()
+		lbControl = LetterboxControl()
 
 		# capture images
 		images = []
 		for i in range(0,n):
-			#lbControl.setStepperPosition(0) 
+			lbControl.setStepperPosition(0) 
 			img = camera.captureImage()
 			images.append(img)
-			#lbControl.setStepperPosition(1) 
+			lbControl.setStepperPosition(1) 
 
 		# start calibration
 		from camera.cameraCalibrator import CameraCalibrator
@@ -101,7 +114,7 @@ def photocell_command(repeat=1):
 			print "Timed out"
 
 def reset_command():
-	'''Resets the headboard'''
+	"""Resets and restarts the headboard"""
 
 	global lbControl
 	from hardware.letterboxControl import LetterboxControl

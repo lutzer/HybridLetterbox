@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name pi_bmp_footprint)(type KiCad)(uri /Users/lutz/Projects/Letterbox/HybridLetterbox/resources/hardware/pi_bmp_footprint)(options "")(descr ""))
+)

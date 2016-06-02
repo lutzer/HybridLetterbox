@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-28 10:33:00
+# @Last Modified time: 2016-06-01 12:20:57
 
 import cv2
 import numpy as np
@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
-CONTOUR_MIN_SIZE = 900*500 #size of the sourunding box in pixels
+CONTOUR_MIN_SIZE = 900*500 #size of the sourounding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
 

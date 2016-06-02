@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-27 11:26:53
+# @Last Modified time: 2016-06-01 12:19:33
 
 import logging
 
@@ -81,7 +81,6 @@ def loop ():
 
 		# turn back to normal
 		lbControl.setStepperPosition(StepperPosition.START)
-
 
 		# TODO: compare both sides
 		# extract image
