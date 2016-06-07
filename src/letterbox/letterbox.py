@@ -3,13 +3,14 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-01 12:35:48
+# @Last Modified time: 2016-06-07 11:27:13
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
 import logging
 
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
+CONFIG_FILE = "letterbox.ini"
 SCAN_RESULT_FILE = "scan.jpg"
 
 # debug options

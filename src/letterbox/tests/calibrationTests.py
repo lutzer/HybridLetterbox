@@ -2,13 +2,13 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 15:55:35
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-13 12:27:24
+# @Last Modified time: 2016-06-06 15:05:41
 
 import unittest
 
-IMAGE_FOLDER = "scripts/tests/images/"
+IMAGE_FOLDER = "letterbox/tests/images/"
 IMAGE_NAMES = ["image1.jpg","image2.jpg","image3.jpg","image4.jpg","image5.jpg"]
-TEST_IMAGE = "scripts/tests/images/image1.jpg"
+TEST_IMAGE = "letterbox/tests/images/image1.jpg"
 CAMERA_MATRIX_FILE = "matrix.json"
 
 class CalibrationTests(unittest.TestCase):

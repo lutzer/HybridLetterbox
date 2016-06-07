@@ -6,13 +6,13 @@
 
 ### Setup Letterbox for the first time
 
-* Call Setup script with `sudo src/python/setup.py`
+* Call Setup script with `sudo src/letterbox/setup.py`
 
 ## Development
 
 ### Python Test Scripts
 
-* Call testscripts by sudo `python2 -m src.python.tests`
+* go to src folder and call testscripts by sudo `python2 -m letterbox.tests`
 
 ### Node Testscripts
 

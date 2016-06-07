@@ -2,12 +2,12 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 15:55:35
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-14 18:07:41
+# @Last Modified time: 2016-06-06 15:05:49
 
 import unittest
 
-TEST_FILE = "scripts/tests/images/scan3.jpg"
-TEST_PATTERN_FILE = "scripts/tests/images/pattern-scan.jpg"
+TEST_FILE = "letterbox/tests/images/scan3.jpg"
+TEST_PATTERN_FILE = "letterbox/tests/images/pattern-scan.jpg"
 OUTPUT_FILE = "test.jpg"
 
 class ScannerTests(unittest.TestCase):

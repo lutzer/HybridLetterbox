@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-01 12:19:33
+# @Last Modified time: 2016-06-07 11:32:45
 
 import logging
 
@@ -16,8 +16,10 @@ logger = logging.getLogger(__name__)
 
 # CHANGEABLE PARAMETERS
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
-SUBMISSION_IMAGES_FOLDER = "images/"
-API_HTTP_ADDRESS = "http://127.0.0.1/api"
+IMAGE_SAVE_FOLDER = "images/"
+DEVICE_NAME = "letterbox"
+CONFIG_FILE = "letterbox.ini"
+
 
 # DO NOT CHANGE THESE PARAMETERS
 DELAY_BETWEEN_READINGS = 0.3
@@ -27,13 +29,17 @@ loopRunning = True
 lbControl = None
 camera = None
 calibrator = None
+config = None
 
 ##################
 # MAIN FUNCTIONS #
 ##################
 
 def init ():
-	global lbControl, CameraControl, calibrator
+	global lbControl, CameraControl, calibrator, config
+
+	# read config
+	config = ConfigReader(CONFIG_FILE)
 
 	try:
 		#init vars
@@ -59,12 +65,12 @@ def init ():
 	return
 
 def loop ():
-	global lbControl, camera, calibrator
+	global lbControl, camera, calibrator, config
 
 	if (lbControl.checkPhotocell()):
 		lbControl.flashFeedbackLed(1)
 
-		imageFolder = config.get("Main","Image_Save_Folder")
+		imageFolder = IMAGE_SAVE_FOLDER
 
 		#take first picture
 		img1 = camera.captureImage()
@@ -92,11 +98,20 @@ def loop ():
 
 		#save image
 		# TODO: generate filename
-		filename = "test.jpg"
-		scanner.saveImage(img1,SUBMISSION_IMAGES_FOLDER + filename)
-		logger.info("# saved image to: "+filename)
+		filename = datetime.now()+config.get("Main","id")+'.jpg'
+
+		filepath = scanner.saveImage(img1,SUBMISSION_IMAGES_FOLDER + filename)
+		logger.info("# saved image to: "+filepath)
 
 		#TODO: send picture
+		requestClient = new HttpRequestClient(config.get("Main","api")+'/submissions/');
+		submission = {
+			'device' : DEVICE_NAME,
+			'author' : config.get("Main","author")
+			'tag' : 'lbtesttag',
+			'text' : 'lbtesttext'
+		}
+		requestClient.postSubmission(submission,filepath);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return

@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-01 12:20:57
+# @Last Modified time: 2016-06-06 15:06:50
 
 import cv2
 import numpy as np
@@ -27,7 +27,23 @@ class MarkerPattern:
 		cv2.rectangle(self.pattern,(1,1),(size+2,size+2),0)
 		self.pattern[2 : 2+pattern.shape[0], 2: 2+pattern.shape[1]] = pattern
 
-MARKER = MarkerPattern([[1, 1,],[1, 0,]],2)
+MARKERS = [
+	MarkerPattern([[1, 0, 0],
+				   [0, 0, 0],
+				   [0, 0, 0]],3),
+	MarkerPattern([[1, 1, 0],
+				   [0, 0, 0],
+				   [0, 0, 0]],3),
+	MarkerPattern([[1, 1, 1],
+				   [0, 0, 0],
+				   [0, 0, 0]],3),
+	MarkerPattern([[1, 1, 1],
+				   [1, 0, 0],
+				   [0, 0, 0]],3),
+	MarkerPattern([[1, 1, 1],
+				   [1, 1, 0],
+				   [0, 0, 0]],3),
+]
 
 
 class CardScanner:
@@ -85,8 +101,8 @@ class CardScanner:
 		small_image = cv2.resize(self.image, (0,0), fx=RESIZE_FACTOR, fy=RESIZE_FACTOR)
 
 		results = []
-		results.append(checkPattern(small_image, MARKER.pattern, MARKER_THRESHOLD))
-		flipped = cv2.flip(MARKER.pattern,-1)
+		results.append(checkPattern(small_image, MARKERS[0].pattern, MARKER_THRESHOLD))
+		flipped = cv2.flip(MARKERS[0].pattern,-1)
 		results.append(checkPattern(small_image, flipped, MARKER_THRESHOLD))
 
 		return results

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 15:55:35
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-04-04 10:43:46
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-07 10:52:12
 
 import unittest
 
-TEST_FILE = "test.jpg"
+TEST_FILE = "letterbox/tests/test.jpg"
 
 class CameraTests(unittest.TestCase):
 
