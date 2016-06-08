@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-07 11:27:13
+# @Last Modified time: 2016-06-07 13:44:15
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -17,6 +17,7 @@ SCAN_RESULT_FILE = "scan.jpg"
 logging.basicConfig(level=logging.INFO)
 
 lbControl = False
+config = None
 
 def boxsize_commmand():
 	"""Opens a camera window to setup the size of the textbox on the postcards"""

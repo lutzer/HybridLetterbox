@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-07 11:32:45
+# @Last Modified time: 2016-06-07 14:39:00
 
 import logging
 
@@ -97,9 +97,7 @@ def loop ():
 		scanner.maskRectangle()
 
 		#save image
-		# TODO: generate filename
 		filename = datetime.now()+config.get("Main","id")+'.jpg'
-
 		filepath = scanner.saveImage(img1,SUBMISSION_IMAGES_FOLDER + filename)
 		logger.info("# saved image to: "+filepath)
 
