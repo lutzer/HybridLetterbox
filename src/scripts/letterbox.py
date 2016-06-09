@@ -11,6 +11,12 @@ from cameraControl import CameraControl
 from configReader import ConfigReader
 from multiprocessing import Process
 
+# Twitter Tokens
+CONSUMER_KEY = 'gQPXLseJE26rXsMVIF5sMOp7s'
+CONSUMER_SECRET = 'L2UC0UoFg5QinGhINce5OlSk5BEizC2qn6CyBSHKRGrzvMqjC3'
+ACCESS_TOKEN = '2872442655-X1IxyHSjRof2u1VTGf6ywpz3yRJxWs7q5LMHNsa'
+ACCESS_TOKEN_SECRET = 'HpYvILfPegoFSzBOplRegS27KiMgSgSjbWPjPjdgBU9mQ' 
+
 # Debug options
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -87,6 +93,9 @@ def init ():
 		lbControl.flashLed(10)
 		stop()
 		sys_exit(0)
+
+	# init twitter
+	twitter = TwitterPoster(CONSUMER_KEY,CONSUMER_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
 	
 	lbControl.flashLed(2);
 	logger.info("# finished initializing. starting loop...")
@@ -168,6 +177,8 @@ def sendNotification(boxUrl,webUrl,data,category):
 		# send web notification
 		logger.debug("sending file to web url: "+webUrl)
 		r2 = requests.post(webUrl, files={ 'file' : open(data['path']+"/"+data['file'], 'rb')}, data=data)
+
+	twitter.tweet(data['path']+"/"+data['file'],message)
 
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")

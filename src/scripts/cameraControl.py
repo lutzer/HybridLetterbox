@@ -69,12 +69,12 @@ class CameraControl:
 		self.bgImage = self.captureImage()
 
 		if (self.param["Pattern"] != False):
-			self.patternImage = cv2.imread(self.param["Pattern"]["File"],cv2.CV_LOAD_IMAGE_GRAYSCALE);
+			self.patternImage = cv2.imread(self.param["Pattern"]["File"],cv2.IMREAD_GRAYSCALE);
 			self.patternImage = cv2.resize(self.patternImage, (0,0), fx=RESIZE_FACTOR, fy=RESIZE_FACTOR) #resize image by half
 
 		self.catMarkers = []
 		for file in CAT_MARKERS:
-			self.catMarkers.append(cv2.imread(file,cv2.CV_LOAD_IMAGE_GRAYSCALE))
+			self.catMarkers.append(cv2.imread(file,cv2.IMREAD_GRAYSCALE))
 
 		return
 
@@ -90,7 +90,7 @@ class CameraControl:
 		image = self.thresholdImage(image)
 
 		logger.debug("undistort image")
-		image = calibrator.undistortImage(image)
+		image = self.calibrator.undistortImage(image)
 
 		logger.debug("extrct roi")
 		image,found, minVal,cat = self.extractRoiAndMaskPattern(image)

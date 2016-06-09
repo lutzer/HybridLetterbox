@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 RC_TIMEOUT = 6000 # max cycles for photoresistor read
-SERVO_DIRECTION = True # true = clockwise, false = counterclockwise
+SERVO_DIRECTION = False # true = clockwise, false = counterclockwise
 
 # Class Controls the Hardware of the Letterbox
 class LbControl:
