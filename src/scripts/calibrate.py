@@ -63,12 +63,15 @@ image = camera.captureImage()
 # write image
 cv2.imwrite("images/calibrateInput.jpg",image)
 
+calibrator = CameraCalibrator()
+undisorted = calibrator.undistortImage(image)
+cv2.imwrite("images/calibrateUndistorted.jpg",undisorted)
+
 # thresholdImage
 print("threshold image")
 threshImage = camera.thresholdImage(image)
 
 #undisort image
-calibrator = CameraCalibrator()
 threshImage = calibrator.undistortImage(threshImage)
 
 # write image

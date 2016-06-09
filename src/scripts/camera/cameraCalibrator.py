@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-04-27 18:32:54
+# @Last Modified time: 2016-06-09 20:15:38
 
 import numpy as np
 import cv2
@@ -56,8 +56,7 @@ class CameraCalibrator:
 		        imgpoints.append(corners)
 
 		        # Draw and display the corners
-		        #cv2.drawChessboardCorners(img, (CHESSBOARD_ROWS,CHESSBOARD_COLUMNS), corners,ret)
-		        #showImage(img,500)
+		        cv2.drawChessboardCorners(img, (CHESSBOARD_ROWS,CHESSBOARD_COLUMNS), corners,ret)
 		    else:
 		    	logger.debug("didnt find chessboard")
 		
@@ -87,7 +86,7 @@ class CameraCalibrator:
 	def undistortImage(self,img):
 		if (self.calibrationData == False):
 			return img
-
 		h,  w = img.shape[:2]
+		#newcameramtx, roi=cv2.getOptimalNewCameraMatrix( self.calibrationData['camera_matrix'], np.asarray(self.calibrationData['dist_coeff']), (w,h), 1,(w,h) )
 		img = cv2.undistort(img, np.asarray(self.calibrationData['camera_matrix']), np.asarray(self.calibrationData['dist_coeff']), None)
 		return img

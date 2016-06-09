@@ -10,6 +10,7 @@ from lbControl import LbControl
 from cameraControl import CameraControl
 from configReader import ConfigReader
 from multiprocessing import Process
+from twitterPoster import TwitterPoster
 
 # Twitter Tokens
 CONSUMER_KEY = 'gQPXLseJE26rXsMVIF5sMOp7s'
@@ -156,13 +157,13 @@ def sendNotification(boxUrl,webUrl,data,category):
 
 	message = ""
 	if category == 0:
-		message = "WAS MACHT IHRER MEINUNG NACH LEBENSQUALITAET IN DEUTSCHLAND AUS?"
+		message = "Lieber Markplatz, du bist ..."
 	elif category == 1:
-		message = ""
+		message = "Lieber Marktplatz, du warst fuer mich ..."
 	elif category == 2:
-		message = "WAS IST IHNEN PERSOENLICH WICHTIG IM LEBEN?"
+		message = "Lieber Marktplatz, ich wuensche mir fuer dich ..."
 	elif category == 3:
-		message = ""
+		message = "Lieber Marktplatz, du warst fuer mich ..."
 
 	data['message'] = message
 	data['device'] = 'letterbox'
@@ -178,7 +179,7 @@ def sendNotification(boxUrl,webUrl,data,category):
 		logger.debug("sending file to web url: "+webUrl)
 		r2 = requests.post(webUrl, files={ 'file' : open(data['path']+"/"+data['file'], 'rb')}, data=data)
 
-	twitter.tweet(data['path']+"/"+data['file'],message)
+	#twitter.tweet(data['path']+"/"+data['file'],message)
 
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")

@@ -8,6 +8,9 @@ from camera.cameraCalibrator import CameraCalibrator
 
 logger = logging.getLogger(__name__)
 
+ERODE_KERNEL_SIZE = 3
+ERODE_ITERATIONS = 6
+
 # PARAMETERS
 RESIZE_FACTOR = 0.5
 #CAT_MARKERS = []
@@ -128,17 +131,25 @@ class CameraControl:
 		
 		# background substraction to equalite light
 		image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-		substractImage = cv2.scaleAdd(image,-1.0,bgImage)
 
-		# apply threshold
-		retval,threshImage = cv2.threshold(substractImage,self.param["Image_Threshold_Low"],0,cv2.THRESH_TOZERO)
-		retval,threshImage = cv2.threshold(threshImage,self.param["Image_Threshold_High"],0,cv2.THRESH_TRUNC)
-		kernel = numpy.ones((3,3),numpy.uint8)
-		#threshImage = cv2.erode(threshImage,kernel,self.param['Dilate_Iterations'])
-		#threshImage = cv2.dilate(threshImage,kernel,self.param['Dilate_Iterations'])
+		threshImage = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,45,+4)
+		# apply truncate threshold, not binary image
+		image[threshImage == 255] = 255
+		threshImage = image
 
-		# invert image
-		threshImage = 255 - (threshImage * (255 / self.param["Image_Threshold_High"]))
+		kernel = numpy.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),numpy.uint8)
+		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
+		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
+
+		# # apply threshold
+		# retval,threshImage = cv2.threshold(substractImage,self.param["Image_Threshold_Low"],0,cv2.THRESH_TOZERO)
+		# retval,threshImage = cv2.threshold(threshImage,self.param["Image_Threshold_High"],0,cv2.THRESH_TRUNC)
+		# kernel = numpy.ones((3,3),numpy.uint8)
+		# #threshImage = cv2.erode(threshImage,kernel,self.param['Dilate_Iterations'])
+		# #threshImage = cv2.dilate(threshImage,kernel,self.param['Dilate_Iterations'])
+
+		# # invert image
+		# threshImage = 255 - (threshImage * (255 / self.param["Image_Threshold_High"]))
 
 		return threshImage
 
@@ -176,14 +187,17 @@ class CameraControl:
 		# check for category Marker
 		category = -1
 		if (len(self.catMarkers) > 0):
+			#c1 = [minLoc[0] - width_marker*0.2, minLoc[1] + height_marker*0.9]
+			#c2 = [minLoc[0] + width_marker*1.2, minLoc[1] + height_marker*2]
 			c1 = [minLoc[0] - width_marker*0.2, minLoc[1] + height_marker*0.9]
-			c2 = [minLoc[0] + width_marker*1.2, minLoc[1] + height_marker*2]
+			c2 = [minLoc[0] + width_marker*1.2, minLoc[1] + height_marker*2.5]
 			markerRegion = image[c1[1] : c2[1], c1[0] : c2[0]]
 			category = findCategoryMarker(markerRegion,self.catMarkers)
 
 		# mask pattern
 		if (drawRectangles):
 			cv2.rectangle(image, minLoc, (minLoc[0] + width_marker , minLoc[1] + height_marker), 0, 1)
+			cv2.rectangle(image, (int(c1[0]),int(c1[1])), (int(c2[0]),int(c2[1])), 0, 1)
 			cv2.rectangle(image, p1, p2, 0, 1)
 		else:
 			cv2.rectangle(image, minLoc, (minLoc[0] + width_marker , minLoc[1] + height_marker), 255, -1)
@@ -207,5 +221,8 @@ def getRoi (image,roi):
 def createColorMask (rgbImage,lowerBound,upperBound):
 	hsvImage =  cv2.cvtColor(rgbImage, cv2.COLOR_BGR2HSV)
 	return cv2.inRange(hsvImage,lowerBound,upperBound)
+
+def invertImage(img):
+	return 255 - img
 
 
