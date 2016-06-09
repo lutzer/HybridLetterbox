@@ -8,7 +8,7 @@ import RPi.GPIO as GPIO
 import time    
  
 DEBUG = 1
-RC_TIMEOUT = 3000	# stop reading after x cycles
+RC_TIMEOUT = 6000	# stop reading after x cycles
 
 GPIO.setmode(GPIO.BCM)
 
