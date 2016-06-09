@@ -146,7 +146,6 @@ def notification_exception_handler(request, exception):
 def sendNotification(boxUrl,webUrl,data,category):
 
 	message = ""
-	submissionCategory = "none"
 	if category == 0:
 		message = "WAS MACHT IHRER MEINUNG NACH LEBENSQUALITAET IN DEUTSCHLAND AUS?"
 	elif category == 1:
@@ -157,7 +156,7 @@ def sendNotification(boxUrl,webUrl,data,category):
 		message = ""
 
 	data['message'] = message
-	data['category'] = submissionCategory
+	data['device'] = 'letterbox'
 
 	if (bool(boxUrl) != False):
 		# first send box notification
