@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-07 11:45:47
+# @Last Modified time: 2016-06-15 14:11:45
 
 import cv2
 import numpy as np
@@ -48,7 +48,7 @@ MARKERS = [
 
 class CardScanner:
 
-	def __init__(self,image,roi=False):
+	def __init__(self,image,image_turned=None,roi=False):
 
 		if (roi):
 			image = image[roi[0] : roi[1], roi[2] : roi[3]]

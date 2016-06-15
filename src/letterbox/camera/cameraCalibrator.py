@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-27 11:08:52
+# @Last Modified time: 2016-06-15 13:52:31
 
 import numpy as np
 import cv2
@@ -79,9 +79,14 @@ class CameraCalibrator:
 			json.dump(self.calibrationData, file)
 
 	def loadCalibrationMatrix(self,path):
-		with open(path) as file:    
-			self.calibrationData = json.load(file)
-		return self.calibrationData;
+		try:
+			with open(path) as file:    
+				self.calibrationData = json.load(file)
+			return self.calibrationData;
+		except Exception as err:
+			logger.info(err)
+			return False
+
 	
 	def undistortImage(self,img):
 		if (self.calibrationData == False):

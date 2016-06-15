@@ -2,13 +2,18 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-07 14:39:00
+# @Last Modified time: 2016-06-15 14:08:33
 
 import logging
+import time
 
-from camera.* import CameraControl, CardScanner, CameraCalibrator
-from hardware.* import LetterboxControl
-from comm.* import HttpRequestClient
+from camera.cameraControlTest import CameraControlTest
+from camera.cardScanner import CardScanner
+from camera.cameraCalibrator import CameraCalibrator
+from hardware.letterboxControlTest import LetterboxControlTest
+from hardware.letterboxControl import MotorPosition
+from comm.httpRequestClient import HttpRequestClient
+from utils.configReader import ConfigReader
 
 # Debug options
 logging.basicConfig(level=logging.INFO)
@@ -36,19 +41,18 @@ config = None
 ##################
 
 def init ():
-	global lbControl, CameraControl, calibrator, config
+	global lbControl, camera, calibrator, config
 
 	# read config
 	config = ConfigReader(CONFIG_FILE)
 
 	try:
 		#init vars
-		lbControl = LetterboxControl()
-		
-		# TODO: create pattern object
+		lbControl = LetterboxControlTest()
+		print lbControl;
 
 		# start camera
-		camera = CameraControl()
+		camera = CameraControlTest()
 		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 		# init hardware
@@ -58,11 +62,11 @@ def init ():
 		logger.error(err)
 		lbControl.flashFeedbackLed(20)
 		stop()
-		sys_exit(0)
+		return False
 	
 	lbControl.flashFeedbackLed(2);
 	logger.info("# finished initializing. starting loop...")
-	return
+	return True
 
 def loop ():
 	global lbControl, camera, calibrator, config
@@ -76,23 +80,23 @@ def loop ():
 		img1 = camera.captureImage()
 
 		#turn postcard
-		lbControl.setStepperPosition(StepperPosition.TURN)
+		lbControl.setMotorPosition(MotorPosition.TURN)
 
 		#take second picture
 		img2 = camera.captureImage()
 
 		# TODO: make this none blocking
 		#eject postcard
-		lbControl.setStepperPosition(StepperPosition.EJECT)
+		lbControl.setMotorPosition(MotorPosition.EJECT)
 
 		# turn back to normal
-		lbControl.setStepperPosition(StepperPosition.START)
+		lbControl.setMotorPosition(MotorPosition.START)
 
 		# TODO: compare both sides
 		# extract image
 		img1 = calibrator.undistortImage(img1)
 		
-		scanner = cardScanner(img1)
+		scanner = CardScanner(img1)
 		scanner.threshold()
 		scanner.maskRectangle()
 
@@ -102,14 +106,14 @@ def loop ():
 		logger.info("# saved image to: "+filepath)
 
 		#TODO: send picture
-		requestClient = new HttpRequestClient(config.get("Main","api")+'/submissions/');
-		submission = {
-			'device' : DEVICE_NAME,
-			'author' : config.get("Main","author")
-			'tag' : 'lbtesttag',
-			'text' : 'lbtesttext'
-		}
-		requestClient.postSubmission(submission,filepath);
+		# requestClient = new HttpRequestClient(config.get("Main","api")+'/submissions/')
+		# submission = {
+		# 	'device' : DEVICE_NAME,
+		# 	'author' : config.get("Main","author")
+		# 	'tag' : 'lbtesttag',
+		# 	'text' : 'lbtesttext'
+		# }
+		# requestClient.postSubmission(submission,filepath);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return
@@ -125,17 +129,17 @@ def stop ():
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")
 	stop()
-	sys_exit(0)
+	#sys_exit(0)
 
 #################
 # START PROGRAM #
 #################
 
-init()
-try:
-	while loopRunning:
-		loop()
-except KeyboardInterrupt:
-	print("# program loop interrupted")
-finally:
-	stop()
+if init():
+	try:
+		while loopRunning:
+			loop()
+	except KeyboardInterrupt:
+		print("# program loop interrupted")
+	finally:
+		stop()
