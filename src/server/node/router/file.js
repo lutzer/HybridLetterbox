@@ -48,8 +48,7 @@ router.post('/attach/:submissionId', fileUploader, function(req,res){
 
         //check extension
         if (!(_.contains(Config.allowedFileTypes,file.type))) {
-            console.log(file)
-            Utils.handleError({ message: 'Only jpg,gif and png images are allowed for upload.' },res);
+            Utils.handleError({ message: 'Only jpg,gif and png images are allowed for upload. File is '+file.type },res);
             fse.remove(file.path);
             return;
         }
