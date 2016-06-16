@@ -1,6 +1,6 @@
 # SERVER API
 
-The web api allows to post submissions from several sources, may it be the Hybrid Letterbox, The Web App, or other interfaces. In the following it is described what format the api expects and how it responds to http requests.
+The web api allows to post and retrieve submissions from several sources, may it be the Hybrid Letterbox, The Web App, or other interfaces. It also allows commenting on submissions. In the following it is described what format the api expects and how it responds to http requests.
 
 ## ROUTES
 
