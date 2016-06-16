@@ -8,7 +8,7 @@
 	padding:  $text-padding $button-padding $text-padding $button-padding;
 	margin: $element-margin 0 $element-margin 0;
 	font-size: 80%;
-	@include shadow(1);
+	//@include shadow(1);
 
 	&:hover {
 		background: $button-background-hover;
