@@ -7,7 +7,7 @@ var async = require('async');
 var Submission = r_require('models/submission');
 var Comment = r_require('models/comment');
 
-var SOCKET_SERVER_URL = "http://localhost:"+Config.port
+var SOCKET_SERVER_URL = "http://127.0.0.1:"+Config.port
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
 var MODEL_NUMBER = 10
 var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.png']
