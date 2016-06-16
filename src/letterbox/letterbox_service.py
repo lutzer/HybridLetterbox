@@ -2,10 +2,11 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 14:08:33
+# @Last Modified time: 2016-06-16 19:40:31
 
 import logging
 import time
+from datetime import datetime
 
 from camera.cameraControlTest import CameraControlTest
 from camera.cardScanner import CardScanner
@@ -21,8 +22,9 @@ logger = logging.getLogger(__name__)
 
 # CHANGEABLE PARAMETERS
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
-IMAGE_SAVE_FOLDER = "images/"
+IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
+LETTERBOX_VERSION = 2 # 0 = DEBUG, < 3 (OLD VERSION), >= 3
 CONFIG_FILE = "letterbox.ini"
 
 
@@ -101,19 +103,19 @@ def loop ():
 		scanner.maskRectangle()
 
 		#save image
-		filename = datetime.now()+config.get("Main","id")+'.jpg'
-		filepath = scanner.saveImage(img1,SUBMISSION_IMAGES_FOLDER + filename)
+		filename = str(datetime.now())+config.get("Main","id")+'.jpg'
+		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename)
 		logger.info("# saved image to: "+filepath)
 
 		#TODO: send picture
-		# requestClient = new HttpRequestClient(config.get("Main","api")+'/submissions/')
-		# submission = {
-		# 	'device' : DEVICE_NAME,
-		# 	'author' : config.get("Main","author")
-		# 	'tag' : 'lbtesttag',
-		# 	'text' : 'lbtesttext'
-		# }
-		# requestClient.postSubmission(submission,filepath);
+		requestClient = HttpRequestClient(config.get("Main","api")+'/submissions/')
+		submission = {
+			'device' : DEVICE_NAME,
+			'author' : config.get("Main","author"),
+			'tag' : 'lbtesttag',
+			'text' : 'lbtesttext'
+		}
+		requestClient.postSubmission(submission,filepath);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return

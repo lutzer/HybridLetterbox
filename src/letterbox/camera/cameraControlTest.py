@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 14:12:01
+# @Last Modified time: 2016-06-16 19:18:28
 
 #import picamera
 import cv2
@@ -35,8 +35,7 @@ class CameraControlTest:
 
 	def captureImage(self):
 		logger.info('taking image')
-		image = cv2.imread("/tests/images/input.jpg")
-		print image
+		image = cv2.imread("tests/images/input.jpg")
 		return image
 
 	def startPreview(self,duration=30):

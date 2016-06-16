@@ -1,4 +1,5 @@
 *.pyc
 src/server/files
 !src/server/files.keep
+npm-debug.log
 

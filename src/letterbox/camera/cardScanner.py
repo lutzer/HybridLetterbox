@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 14:11:45
+# @Last Modified time: 2016-06-16 19:24:05
 
 import cv2
 import numpy as np
@@ -60,6 +60,7 @@ class CardScanner:
 	def saveImage(self,path):
 		logger.info("save Image")
 		cv2.imwrite(path,self.image)
+		return path
 
 	def extract():
 
