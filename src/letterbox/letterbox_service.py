@@ -2,11 +2,10 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-16 19:40:31
+# @Last Modified time: 2016-06-17 00:57:14
 
 import logging
 import time
-from datetime import datetime
 
 from camera.cameraControlTest import CameraControlTest
 from camera.cardScanner import CardScanner
@@ -15,6 +14,7 @@ from hardware.letterboxControlTest import LetterboxControlTest
 from hardware.letterboxControl import MotorPosition
 from comm.httpRequestClient import HttpRequestClient
 from utils.configReader import ConfigReader
+from utils.utils import generateImageName
 
 # Debug options
 logging.basicConfig(level=logging.INFO)
@@ -103,12 +103,12 @@ def loop ():
 		scanner.maskRectangle()
 
 		#save image
-		filename = str(datetime.now())+config.get("Main","id")+'.jpg'
+		filename = generateImageName(config.get("Main","id")) + '.jpg'
 		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename)
 		logger.info("# saved image to: "+filepath)
 
 		#TODO: send picture
-		requestClient = HttpRequestClient(config.get("Main","api")+'/submissions/')
+		requestClient = HttpRequestClient(config.get("Main","api")+'/submissions/',config.get("Main","api")+'/file/attach/')
 		submission = {
 			'device' : DEVICE_NAME,
 			'author' : config.get("Main","author"),

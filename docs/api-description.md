@@ -6,7 +6,7 @@ The web api allows to post and retrieve submissions from several sources, may it
 
 ### /api/submissions/
 
-* GET /api/submissions
+* GET **/api/submissions**
 
   ```
   # get all submissions, responds with
@@ -15,7 +15,7 @@ The web api allows to post and retrieve submissions from several sources, may it
   ```
 
 
-* GET /api/submissions/<id>
+* GET **/api/submissions/:id**
 
   ```
   # get single submission, responds with
@@ -46,29 +46,29 @@ The web api allows to post and retrieve submissions from several sources, may it
   ```
 
 
-* POST /api/submissions/
+* POST **/api/submissions/**
 
   ```
   # add submission, expects
 
   {
-      text : { type: String, required: true, maxlength: '1500' },
-      author: { type: String, required: true, maxlength: '60' },
-      device: { type: String, default: false },
-      tags : [ { type: String, match: /^\w+$/ } ],
-      dataset : { type: String, ref: 'Dataset', default: ''},
-      location : { type: [ Number ], default: [ 0 ] }, // [ longitude, latitude ]
+    text : { type: String, required: true, maxlength: '1500' },
+    author: { type: String, required: true, maxlength: '60' },
+    device: { type: String, default: false },
+    tags : [ { type: String, match: /^\w+$/ } ],
+    dataset : { type: String, ref: 'Dataset', default: ''},
+    location : { type: [ Number ], default: [ 0 ] }, // [ longitude, latitude ]
   }
   ```
 
 
-* PUT /api/submissions/<id>
+* PUT **/api/submissions/:id**
 
   ```
   # see POST, requires AUTH
   ```
 
-* DELETE /api/submissions/<id>
+* DELETE **/api/submissions/:id**
 
   ```
   # requires AUTH
@@ -78,7 +78,7 @@ The web api allows to post and retrieve submissions from several sources, may it
 
 ### /api/comments/
 
-* GET /api/comments
+* GET **/api/comments**
 
   ```
   # get all comments, responds with
@@ -87,7 +87,7 @@ The web api allows to post and retrieve submissions from several sources, may it
   ```
 
 
-* GET /api/comments/<id>
+* GET **/api/comments/:id**
 
   ```
   # get single comment, responds with
@@ -104,19 +104,19 @@ The web api allows to post and retrieve submissions from several sources, may it
   ```
 
 
-* POST /api/comments
+* POST **/api/comments**
 
   ```
   # expects
   {
-  	submission: { type: String, ref: 'Submission' }, //submission id
-      text : { type: String, required: true, maxlength: '800' },
-      author: { type: String, default: 'anonymous', maxlength: '60' }
+    submission: { type: String, ref: 'Submission' }, 
+    text : { type: String, required: true, maxlength: '800' },
+    author: { type: String, default: 'anonymous', maxlength: '60' }
   }
   ```
 
 
-* DELETE /api/comments/<id>
+* DELETE **/api/comments/:id**
 
   ```
   # requires auth
@@ -126,15 +126,15 @@ The web api allows to post and retrieve submissions from several sources, may it
 
 ### /api/file/
 
-* POST /api/file//attach/<submission_id>
+* POST **/api/file/attach/:submission_id**
 
   ```
-  # adds file to submission, expects single file
+  # adds file to submission, expects single FILE
   ```
 
 ### /api/tags/
 
-* GET /api/tags
+* GET **/api/tags**
 
   ```
   #returns all tags, responds with

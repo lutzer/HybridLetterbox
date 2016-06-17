@@ -38,7 +38,7 @@ router.post('/attach/:submissionId', fileUploader, function(req,res){
         }
 
         var file = req.files.file;
-
+        
         //check file size
         if (file.size > Config.maxFileSize) {
             Utils.handleError({ message: 'File is too big, only '+Config.maxFileSize/1024+'KB allowed.' },res);
