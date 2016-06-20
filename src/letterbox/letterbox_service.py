@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 15:40:40
+# @Last Modified time: 2016-06-20 17:02:30
 
 import logging
 import time
@@ -10,7 +10,6 @@ import time
 from camera.cameraControlTest import CameraControlTest
 from camera.cardScanner import CardScanner
 from camera.cameraCalibrator import CameraCalibrator
-from hardware.letterboxControlTest import LetterboxControlTest
 from hardware.letterboxControl import MotorPosition
 from comm.httpRequestClient import HttpRequestClient
 from utils.configReader import ConfigReader
@@ -26,7 +25,7 @@ IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
 LETTERBOX_VERSION = 2 # 0 = DEBUG, < 3 (OLD VERSION), >= 3
 CONFIG_FILE = "letterbox.ini"
-
+LETTERBOX_VERSION = 0
 
 # DO NOT CHANGE THESE PARAMETERS
 DELAY_BETWEEN_READINGS = 0.3
@@ -50,8 +49,15 @@ def init ():
 
 	try:
 		#init vars
-		lbControl = LetterboxControlTest()
-		print lbControl;
+		if LETTERBOX_VERSION == 0:
+			from hardware.letterboxControlTest import LetterboxControlTest
+			lbControl = LetterboxControlTest()
+		elif LETTERBOX_VERSION == 1:
+			from hardware.letterboxControlV1 import LetterboxControlV1
+			lbControl = LetterboxControlV1()
+		else:
+			from hardware.letterboxControlV2 import LetterboxControlV2
+			lbControl = LetterboxControlV2()
 
 		# start camera
 		camera = CameraControlTest()
