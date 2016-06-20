@@ -2,12 +2,11 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 17:02:30
+# @Last Modified time: 2016-06-20 17:37:34
 
 import logging
 import time
 
-from camera.cameraControlTest import CameraControlTest
 from camera.cardScanner import CardScanner
 from camera.cameraCalibrator import CameraCalibrator
 from hardware.letterboxControl import MotorPosition
@@ -60,7 +59,13 @@ def init ():
 			lbControl = LetterboxControlV2()
 
 		# start camera
-		camera = CameraControlTest()
+		if LETTERBOX_VERSION == 0:
+			from camera.cameraControlTest import CameraControlTest
+			camera = CameraControlTest()
+		else:
+			from camera.cameraControl import CameraControl
+			camera = CameraControl()
+
 		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 		# init hardware
