@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-17 00:57:14
+# @Last Modified time: 2016-06-17 10:44:47
 
 import logging
 import time
@@ -108,14 +108,14 @@ def loop ():
 		logger.info("# saved image to: "+filepath)
 
 		#TODO: send picture
-		requestClient = HttpRequestClient(config.get("Main","api")+'/submissions/',config.get("Main","api")+'/file/attach/')
+		requestClient = HttpRequestClient(config.get("Main","api"))
 		submission = {
 			'device' : DEVICE_NAME,
 			'author' : config.get("Main","author"),
 			'tag' : 'lbtesttag',
 			'text' : 'lbtesttext'
 		}
-		requestClient.postSubmission(submission,filepath);
+		requestClient.postSubmission(submission,filepath,filename);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return
