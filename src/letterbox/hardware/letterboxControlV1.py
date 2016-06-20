@@ -2,7 +2,8 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 17:16:26
+# @Last Modified time: 2016-06-20 17:19:04
+# 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
 import time
