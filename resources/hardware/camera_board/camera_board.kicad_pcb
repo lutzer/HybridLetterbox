@@ -85,7 +85,7 @@
       (subtractmaskfromsilk false)
       (outputformat 4)
       (mirror false)
-      (drillshape 1)
+      (drillshape 2)
       (scaleselection 1)
       (outputdirectory plots/))
   )

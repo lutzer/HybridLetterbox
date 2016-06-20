@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-17 10:44:47
+# @Last Modified time: 2016-06-20 15:40:40
 
 import logging
 import time
@@ -100,21 +100,38 @@ def loop ():
 		
 		scanner = CardScanner(img1)
 		scanner.threshold()
+
+		# find marker
+		marker, flipped, val = scanner.findMarker()
+		logger.info("Found marker: "+str(marker)+" with value: "+str(val)+". Flipped: "+str(flipped))
+
+		# extract text box
 		scanner.maskRectangle()
 
-		#save image
-		filename = generateImageName(config.get("Main","id")) + '.jpg'
+		# save image
+		filename = generateImageName(config.get("MAIN","id")) + '.jpg'
 		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename)
 		logger.info("# saved image to: "+filepath)
 
-		#TODO: send picture
-		requestClient = HttpRequestClient(config.get("Main","api"))
+		# create submission
+		category = -1;
+		tag = ""
+		text = ""
+		if val < config.get("MARKER","marker_threshold"):
+			category = marker
+			tag = config.get("CATEGORIES","tags"+str(category))
+			text = config.get("CATEGORIES","text"+str(category))
+
 		submission = {
 			'device' : DEVICE_NAME,
-			'author' : config.get("Main","author"),
-			'tag' : 'lbtesttag',
-			'text' : 'lbtesttext'
+			'author' : config.get("MAIN","author"),
+			'category' : marker,
+			'tags' : tag,
+			'text' : text
 		}
+
+		# send data and picture
+		requestClient = HttpRequestClient(config.get("MAIN","api"))
 		requestClient.postSubmission(submission,filepath,filename);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
