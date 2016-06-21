@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 15:00:11
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-21 16:54:30
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -15,8 +15,10 @@ logger = logging.getLogger(__name__)
 PIN_LED = 22
 PIN_SERVO = 18
 PIN_PHOTORESISTOR = 17
-PHOTORESISTOR_THRESHOLD = 0.5
+PHOTORESISTOR_THRESHOLD = 0.2
 SERVO_INVERSE = False
+RC_TIMEOUT = 3000
+
 
 
 # Class Controls the Hardware of the Letterbox
@@ -28,15 +30,15 @@ class LetterboxControlV1(LetterboxControl):
 	"""
 
 	def init(self):
-		self.pinLed = pinLed
-		self.pinServo = pinServo
-		self.pinPhotoresistor = pinPhotoresistor
+		self.pinLed = PIN_LED
+		self.pinServo = PIN_SERVO
+		self.pinPhotoresistor = PIN_PHOTORESISTOR
 		self.PRThreshold = PHOTORESISTOR_THRESHOLD
 
 		GPIO.setmode(GPIO.BCM)
-		GPIO.setup(pinLed, GPIO.OUT)
-		GPIO.setup(pinServo, GPIO.OUT)
-		GPIO.setup(pinPhotoresistor, GPIO.OUT)
+		GPIO.setup(self.pinLed, GPIO.OUT)
+		GPIO.setup(self.pinServo, GPIO.OUT)
+		GPIO.setup(self.pinPhotoresistor, GPIO.OUT)
 
 		self.ledState = False
 
@@ -55,7 +57,7 @@ class LetterboxControlV1(LetterboxControl):
 		if (preLedState): # reset led state
 			self.toggleCameraLed(True);
 
-	def toggleFeedbackLed (self,on):
+	def toggleFeedbackLed(self,on):
 		self.toggleCameraLed(on)
 
 	def toggleCameraLed(self,on):
@@ -72,7 +74,7 @@ class LetterboxControlV1(LetterboxControl):
 	def checkPhotocell(self):
 		# turn on led
 		if not(self.ledState):
-			self.toggleLed(True);
+			self.toggleFeedbackLed(True);
 			time.sleep(0.1)
 
 		val = readRCPin(self.pinPhotoresistor,RC_TIMEOUT)
@@ -94,7 +96,6 @@ class LetterboxControlV1(LetterboxControl):
 			setServo(self.pinServo,1)
 
 	def calibrateMotor(self):
-		def calibrate(self):
 		logger.info("calibrating lbcontrol")
 		self.toggleLed(True)
 		self.setMotorPosition(MotorPosition.EJECT)

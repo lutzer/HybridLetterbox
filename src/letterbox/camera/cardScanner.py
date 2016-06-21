@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 11:15:50
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-21 17:24:13
 
 import cv2
 import numpy as np
@@ -13,15 +13,15 @@ logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
-CONTOUR_MIN_SIZE = 900*500 #size of the surounding box in pixels
+CONTOUR_MIN_SIZE = 1100*700 # minimal size of the surounding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
 
-MARKER_THRESHOLD = 0.1
+MARKER_THRESHOLD = 0.75 # minmal threshold for detecting a marker
 NUMBER_OF_MARKERS = 4
 
-PATTERN_MIN_SIZE = 10*10;
-PATTERN_MAX_SIZE = 100*100;
+PATTERN_MIN_SIZE = 30*30;
+PATTERN_MAX_SIZE = 80*80;
 
 
 class CardScanner:
@@ -55,19 +55,19 @@ class CardScanner:
 		# find threshold value
 		#otsuVal,_ = cv2.threshold(greyImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
-		threshImage = cv2.adaptiveThreshold(greyImage,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-			cv2.THRESH_BINARY,45,+4)
+		threshImage = cv2.adaptiveThreshold(greyImage, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+			cv2.THRESH_BINARY, 45, +4)
+
+		# erode small pixels
+		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
+		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
+		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
 
 		self.binaryImage = threshImage
 
 		# apply truncate threshold, not binary image
 		greyImage[threshImage == 255] = 255
 		threshImage = greyImage
-
-		# erode small pixels
-		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
-		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
-		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
 
 		self.image = threshImage 
 
@@ -82,7 +82,7 @@ class CardScanner:
 		invertedImage = invertImage(self.binaryImage);
 		height, width = invertedImage.shape
 
-		contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
+		_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
 
 		# find possible candidate Regions
 		markerCandidates = []
@@ -124,7 +124,7 @@ class CardScanner:
 		invertedImage = invertImage(self.binaryImage)
 		
 		# find contours
-		contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE);
+		_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE);
 
 		# create contour mask
 		height, width = invertedImage.shape
@@ -150,7 +150,7 @@ class CardScanner:
 		self.image[contourMask == 0] = 255
 
 		# create bounding box and crop image
-		contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		_, contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 		if len(contours) > 0:
 			x,y,w,h = cv2.boundingRect(contours[0])
 			self.image = self.image[y:y+h,x:x+w]

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 15:56:55
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-21 17:24:41
 
 import logging
 import time
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
 IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
-LETTERBOX_VERSION = 0 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
+LETTERBOX_VERSION = 1 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
 CONFIG_FILE = "letterbox.ini"
 
 # DO NOT CHANGE THESE PARAMETERS
@@ -92,16 +92,15 @@ def loop ():
 		img1 = camera.captureImage()
 
 		#turn postcard
-		lbControl.setMotorPosition(MotorPosition.TURN)
+		#lbControl.setMotorPosition(MotorPosition.TURN)
 
 		#take second picture
-		img2 = camera.captureImage()
+		#img2 = camera.captureImage()
 
 		# TODO: make this none blocking
 		#eject postcard
 		lbControl.setMotorPosition(MotorPosition.EJECT)
-
-		# turn back to normal
+		time.sleep(1)
 		lbControl.setMotorPosition(MotorPosition.START)
 
 		# TODO: compare both sides
@@ -158,7 +157,7 @@ def stop ():
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")
 	stop()
-	#sys_exit(0)
+	sys_exit(0)
 
 #################
 # START PROGRAM #
