@@ -2,8 +2,8 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 17:19:04
-# 
+# @Last Modified time: 2016-06-21 15:00:11
+
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
 import time
@@ -21,6 +21,11 @@ SERVO_INVERSE = False
 
 # Class Controls the Hardware of the Letterbox
 class LetterboxControlV1(LetterboxControl):
+
+	"""
+	Class controls the hardware of the second prototype of the letterbox 
+	(with servo mechanism).
+	"""
 
 	def init(self):
 		self.pinLed = pinLed

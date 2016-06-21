@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-16 19:18:28
+# @Last Modified time: 2016-06-21 11:07:48
 
 #import picamera
 import cv2
@@ -14,8 +14,12 @@ import time
 logger = logging.getLogger(__name__)
 
 
-# Class Controls the Camera
 class CameraControlTest:
+
+	"""
+	Test Class for running the letterbox service on a system without picamera
+	"""
+
 	def __init__(self,automode=False):
 		logger.info('init PiCamera')
 		self.camera = None

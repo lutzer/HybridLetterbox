@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 17:37:34
+# @Last Modified time: 2016-06-21 15:56:55
 
 import logging
 import time
@@ -22,9 +22,8 @@ logger = logging.getLogger(__name__)
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
 IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
-LETTERBOX_VERSION = 2 # 0 = DEBUG, < 3 (OLD VERSION), >= 3
+LETTERBOX_VERSION = 0 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
 CONFIG_FILE = "letterbox.ini"
-LETTERBOX_VERSION = 0
 
 # DO NOT CHANGE THESE PARAMETERS
 DELAY_BETWEEN_READINGS = 0.3
@@ -114,7 +113,7 @@ def loop ():
 
 		# find marker
 		marker, flipped, val = scanner.findMarker()
-		logger.info("Found marker: "+str(marker)+" with value: "+str(val)+". Flipped: "+str(flipped))
+		logger.info("Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
 
 		# extract text box
 		scanner.maskRectangle()
@@ -126,18 +125,18 @@ def loop ():
 
 		# create submission
 		category = -1;
-		tag = ""
-		text = ""
-		if val < config.get("MARKER","marker_threshold"):
+		tags = None
+		text = " "
+		if val < float(config.get("MARKER","marker_threshold")):
 			category = marker
-			tag = config.get("CATEGORIES","tags"+str(category))
+			tags = config.get("CATEGORIES","tags"+str(category))
 			text = config.get("CATEGORIES","text"+str(category))
 
 		submission = {
 			'device' : DEVICE_NAME,
 			'author' : config.get("MAIN","author"),
 			'category' : marker,
-			'tags' : tag,
+			'tags' : tags,
 			'text' : text
 		}
 

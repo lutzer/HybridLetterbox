@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 13:52:31
+# @Last Modified time: 2016-06-21 11:09:24
 
 import numpy as np
 import cv2
@@ -15,6 +15,11 @@ CHESSBOARD_COLUMNS = 11
 logger = logging.getLogger(__name__)
 
 class CameraCalibrator:
+
+	"""
+	Calibrates camera optic and creates a matrix file, loads saved matrix file to
+	undistort images captured by the camera.
+	"""
 
 	def __init__(self,matrixFile=False):
 		self.calibrationData = False

@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-04-27 11:10:15
+# @Last Modified time: 2016-06-21 11:07:00
 
 from serialThread import *
 import RPi.GPIO as GPIO
@@ -24,8 +24,13 @@ class StepperPosition(Enum):
 	TURN = 1
 	EJECT = 2
 
-# Class Controls the Hardware of the Letterbox
 class LetterboxControl:
+
+	"""
+	Class controls the hardware of the third prototype of the letterbox 
+	with atmega headboard and stepper motor.
+	"""
+
 	def __init__(self,cleanup=False):
 
 		if (cleanup == False):

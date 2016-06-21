@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 15:18:16
+# @Last Modified time: 2016-06-21 11:15:50
 
 import cv2
 import numpy as np
@@ -13,17 +13,22 @@ logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
-CONTOUR_MIN_SIZE = 900*500 #size of the sourounding box in pixels
+CONTOUR_MIN_SIZE = 900*500 #size of the surounding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
 
 MARKER_THRESHOLD = 0.1
+NUMBER_OF_MARKERS = 4
 
 PATTERN_MIN_SIZE = 10*10;
 PATTERN_MAX_SIZE = 100*100;
 
 
 class CardScanner:
+
+	"""
+	thresholds postcard, extracts Text Box, checks for markers
+	"""
 
 	def __init__(self,image,image_turned=None,roi=False):
 
@@ -35,20 +40,14 @@ class CardScanner:
 		self.binaryImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 		# init markers
-		self.markers = [PostcardMarker(0),PostcardMarker(1),PostcardMarker(2),PostcardMarker(3)]
+		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
+
 
 	def saveImage(self,path):
 		logger.info("save Image")
 		cv2.imwrite(path,self.image)
 		return path
 
-	def extract():
-
-		self.threshold()
-		cat = self.findMarker()
-		self.maskRectangle()
-
-		return cat;
 
 	def threshold(self):
 		greyImage = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -58,7 +57,6 @@ class CardScanner:
 
 		threshImage = cv2.adaptiveThreshold(greyImage,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
 			cv2.THRESH_BINARY,45,+4)
-
 
 		self.binaryImage = threshImage
 
@@ -73,9 +71,12 @@ class CardScanner:
 
 		self.image = threshImage 
 
-	# returns category of the postcard, if false no marker was found
-	# apply function on binaryImage image
+
 	def findMarker(self):
+		"""	
+		returns category of the postcard, if false no marker was found
+		apply function on binaryImage image
+		"""
 
 		#find squares as possible marker regions
 		invertedImage = invertImage(self.binaryImage);
@@ -117,11 +118,9 @@ class CardScanner:
 		return (minResult['marker'], minResult['flipped'], minResult['value'])
 
 
-
-	# masks everything on the picture except for 
-	# apply function on thresholded image
 	def maskRectangle(self):
-		
+		""" extracts TextBox from postcard (apply function on thresholded image) """
+
 		invertedImage = invertImage(self.binaryImage)
 		
 		# find contours
@@ -182,6 +181,7 @@ def showImage(img,wait = 0,resize=True):
 		img = cv2.resize(img,(1024,768))
 	cv2.imshow('img',img)
 	cv2.waitKey(wait)
+
 
 def invertImage(img):
 	return 255 - img

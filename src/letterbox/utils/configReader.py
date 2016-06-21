@@ -10,7 +10,7 @@ class ConfigReader:
 				"author" : "Letterbox",
 				"api" : "http://127.0.0.1/api",
 
-				"marker_threshold" : 0.4,
+				"marker_threshold" : 0.3,
 
 				"text0" : "cat0",
 				"tag0" : "tag0",

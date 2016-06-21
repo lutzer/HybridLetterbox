@@ -2,14 +2,20 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 13:55:15
+# @Last Modified time: 2016-06-21 11:06:17
+
+
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Class Controls the Hardware of the Letterbox
 class LetterboxControlTest(LetterboxControl):
+
+	""" 
+	Test class for running the letterbox service on a test machine without 
+	GPIO support 
+	"""
 
 	def init(self):
 		self.reads = 0;
