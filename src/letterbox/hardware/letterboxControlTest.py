@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 11:06:17
+# @Last Modified time: 2016-06-22 14:01:29
 
 
 from letterboxControl import LetterboxControl, MotorPosition
@@ -41,7 +41,7 @@ class LetterboxControlTest(LetterboxControl):
 	def setMotorPosition(self,pos):
 		logger.info("set motor pos to"+str(pos))
 
-	def calibrateMotor(self):
+	def calibrate(self):
 		logger.info("calibrate motor")
 
 	def reset(self):

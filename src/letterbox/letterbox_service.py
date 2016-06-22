@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 11:37:19
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-22 14:06:02
 
 import logging
 import time
@@ -68,6 +68,7 @@ def init ():
 		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 		# init hardware
+		lbControl.calibrate()
 		logger.info(" # initializing...")
 
 	except Exception as err:

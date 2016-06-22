@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 12:08:14
+# @Last Modified time: 2016-06-22 13:59:16
 
 import cv2
 import numpy as np
@@ -41,6 +41,11 @@ class CardScanner:
 
 		# init markers
 		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
+
+		showImage(PostcardMarker(0).pattern)
+		showImage(PostcardMarker(1).pattern)
+		showImage(PostcardMarker(2).pattern)
+		showImage(PostcardMarker(3).pattern)
 
 	def saveImage(self,path,rotate=False):
 
@@ -172,7 +177,7 @@ class CardScanner:
 def showImage(img,wait = 0,resize=True):
 	import cv2
 	if resize:
-		img = cv2.resize(img,(1024,768))
+		img = cv2.resize(img,(1024,768),interpolation= cv2.INTER_NEAREST)
 	cv2.imshow('img',img)
 	cv2.waitKey(wait)
 

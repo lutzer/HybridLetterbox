@@ -8,7 +8,7 @@ After=network.target
 
 Type=simple
 
-ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
+ExecStart=/bin/python2 /home/letterbox/HybridLetterbox/scr/letterbox/letterbox_service.py
 
 RemainAfterExit=true
 

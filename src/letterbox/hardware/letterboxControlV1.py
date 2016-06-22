@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-21 16:54:30
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-22 14:01:24
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -43,7 +43,7 @@ class LetterboxControlV1(LetterboxControl):
 		self.ledState = False
 
 	def stop(self):
-		self.toggleLed(False)
+		self.toggleFeedbackLed(False)
 		GPIO.cleanup()
 		logger.info("cleaned up LbControl")
 
@@ -95,7 +95,7 @@ class LetterboxControlV1(LetterboxControl):
 		elif pos == MotorPosition.START:
 			setServo(self.pinServo,1)
 
-	def calibrateMotor(self):
+	def calibrate(self):
 		logger.info("calibrating lbcontrol")
 		self.toggleLed(True)
 		self.setMotorPosition(MotorPosition.EJECT)

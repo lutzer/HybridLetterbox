@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 11:07:00
+# @Last Modified time: 2016-06-22 14:01:35
 
 from serialThread import *
 import RPi.GPIO as GPIO
@@ -101,7 +101,7 @@ class LetterboxControl:
 		self.serial.sendMessage("stp:"+str(pos))
 		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
 
-	def calibrateStepper(self):
+	def calibrate(self):
 		self.serial.sendMessage("stp:c")
 		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
 
