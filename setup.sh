@@ -1,10 +1,13 @@
+#!/bin/bash
+set -x #echo on
+
 REPO_DIR=~/HybridLetterbox
 
 # copy ini file
 cp $REPO_DIR/src/letterbox/letterbox.default.ini $REPO_DIR/src/letterbox/letterbox.ini
 
 # copy service file
-cp $REPO_DIR/install/letterbox.service /etc/systemd/system/letterbox.service;
+sudo cp $REPO_DIR/install/letterbox.service /etc/systemd/system/letterbox.service;
 
 # enable letterbox service
 sudo systemctl enable letterbox.service;

@@ -2,12 +2,13 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 14:09:36
+# @Last Modified time: 2016-06-22 15:46:57
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
 import time
 import RPi.GPIO as GPIO
+from threading import Thread
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +84,11 @@ class LetterboxControlV1(LetterboxControl):
 			return True
 		return False
 
+	def ejectCard(self):
+		''' Asynchronous function for ejecting a postcard '''
+		thread = Thread(target=self._ejectAsync)
+		thread.start()
+
 	def setMotorPosition(self,pos):
 		if (SERVO_INVERSE):
 			if (pos == MotorPosition.START):
@@ -106,6 +112,13 @@ class LetterboxControlV1(LetterboxControl):
 
 	def reset(self):
 		logger.info("reset lb control")
+
+	### PRIVATE METHODS ###
+	#
+	def _ejectAsync(self):
+		self.setMotorPosition(MotorPosition.EJECT)
+		time.sleep(1)
+		self.setMotorPosition(MotorPosition.START)
 
 ################################
 # LOW LEVEL HARDWARE FUNCTIONS #

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 13:44:33
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 15:40:58
 
 from enum import Enum
 
@@ -14,7 +14,7 @@ class MotorPosition(Enum):
 # Class Controls the Hardware of the Letterbox
 class LetterboxControl:
 
-	def __init__(self,cleanup=False):
+	def __init__(self,cleanup=True):
 
 		self.cleanup = cleanup
 		self.init();
@@ -44,6 +44,9 @@ class LetterboxControl:
 		raise NotImplementedError('method not implemented')
 
 	def checkPhotocell(self):
+		raise NotImplementedError('method not implemented')
+
+	def ejectCard(self):
 		raise NotImplementedError('method not implemented')
 
 	def setMotorPosition(self,pos):

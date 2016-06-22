@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 14:10:00
+# @Last Modified time: 2016-06-22 15:46:33
 
 import logging
 import time
@@ -98,11 +98,8 @@ def loop ():
 		#take second picture
 		#img2 = camera.captureImage()
 
-		# TODO: make this none blocking
 		#eject postcard
-		lbControl.setMotorPosition(MotorPosition.EJECT)
-		time.sleep(1)
-		lbControl.setMotorPosition(MotorPosition.START)
+		lbControl.ejectCard();
 
 		# TODO: compare both sides
 		# extract image
