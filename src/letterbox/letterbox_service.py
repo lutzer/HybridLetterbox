@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 10:30:17
+# @Last Modified time: 2016-06-22 11:19:27
 
 import logging
 import time
@@ -22,7 +22,6 @@ logger = logging.getLogger(__name__)
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
 IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
-LETTERBOX_VERSION = 0 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
 CONFIG_FILE = "letterbox.ini"
 
 # DO NOT CHANGE THESE PARAMETERS
@@ -44,13 +43,14 @@ def init ():
 
 	# read config
 	config = ConfigReader(CONFIG_FILE)
+	lbVersion = int(config.get("MAIN","version"))
 
 	try:
 		#init vars
-		if LETTERBOX_VERSION == 0:
+		if lbVersion == 0:
 			from hardware.letterboxControlTest import LetterboxControlTest
 			lbControl = LetterboxControlTest()
-		elif LETTERBOX_VERSION == 1:
+		elif lbVersion == 1:
 			from hardware.letterboxControlV1 import LetterboxControlV1
 			lbControl = LetterboxControlV1()
 		else:
@@ -58,7 +58,7 @@ def init ():
 			lbControl = LetterboxControlV2()
 
 		# start camera
-		if LETTERBOX_VERSION == 0:
+		if lbVersion == 0:
 			from camera.cameraControlTest import CameraControlTest
 			camera = CameraControlTest()
 		else:
