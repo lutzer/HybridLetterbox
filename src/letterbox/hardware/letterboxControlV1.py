@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 14:01:24
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 14:09:36
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -97,7 +97,7 @@ class LetterboxControlV1(LetterboxControl):
 
 	def calibrate(self):
 		logger.info("calibrating lbcontrol")
-		self.toggleLed(True)
+		self.toggleFeedbackLed(True)
 		self.setMotorPosition(MotorPosition.EJECT)
 		time.sleep(1)
 		self.setMotorPosition(MotorPosition.START)
