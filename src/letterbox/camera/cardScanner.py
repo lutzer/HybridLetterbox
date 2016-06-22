@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 11:28:02
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 11:32:09
 
 import cv2
 import numpy as np
@@ -43,9 +43,9 @@ class CardScanner:
 		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
 
 
-	def saveImage(self,path,rotated=False):
+	def saveImage(self,path,rotate=False):
 
-		if (rotated)
+		if rotate:
 			self.image = cv2.flip(self.image, -1)
 
 		logger.info("save Image")
