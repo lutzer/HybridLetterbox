@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-21 17:24:41
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-22 10:30:17
 
 import logging
 import time
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
 IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
-LETTERBOX_VERSION = 1 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
+LETTERBOX_VERSION = 0 # 0 = DEBUG, 1 = PROTOTYPE 2, 2 = CURRENT VERSION
 CONFIG_FILE = "letterbox.ini"
 
 # DO NOT CHANGE THESE PARAMETERS

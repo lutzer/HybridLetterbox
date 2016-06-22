@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-21 17:24:13
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-22 11:07:33
 
 import cv2
 import numpy as np
@@ -41,6 +41,8 @@ class CardScanner:
 
 		# init markers
 		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
+
+		showImage(self.markers[0].pattern)
 
 
 	def saveImage(self,path):
@@ -82,17 +84,20 @@ class CardScanner:
 		invertedImage = invertImage(self.binaryImage);
 		height, width = invertedImage.shape
 
-		_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
+		else:
+			contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
 
 		# find possible candidate Regions
 		markerCandidates = []
-		contourImg = np.zeros((height,width), np.uint8)
+		#contourImg = np.zeros((height,width), np.uint8)
 		for contour in contours:
 			epsilon = 0.1*cv2.arcLength(contour,True)
 			approx = cv2.approxPolyDP(contour,epsilon,True)
 			area = cv2.contourArea(approx)
 			if len(approx) == 4 and area > PATTERN_MIN_SIZE and area < PATTERN_MAX_SIZE:
-				cv2.drawContours(contourImg , [approx], 0, 255, thickness=-1)
+				#cv2.drawContours(contourImg , [approx], 0, 255, thickness=-1)
 				markerCandidates.append(approx);
 
 		# match marker patterns on each candidate region
@@ -124,7 +129,10 @@ class CardScanner:
 		invertedImage = invertImage(self.binaryImage)
 		
 		# find contours
-		_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE);
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE)
+		else:
+			contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE)
 
 		# create contour mask
 		height, width = invertedImage.shape
@@ -150,29 +158,14 @@ class CardScanner:
 		self.image[contourMask == 0] = 255
 
 		# create bounding box and crop image
-		_, contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		else:
+			contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
 		if len(contours) > 0:
 			x,y,w,h = cv2.boundingRect(contours[0])
 			self.image = self.image[y:y+h,x:x+w]
-
-
-# matches a pattern to different scales
-def checkPattern(img,pattern,threshold):
-	#create pattern
-	pattern = pattern.copy()
-	pattern[pattern > 0] = 255
-
-	#resize pattern for matching
-	for scale in np.linspace(1.0, 20.0, 20):
-		resizedPattern = cv2.resize(pattern, (0,0), fx=scale, fy=scale, interpolation= cv2.INTER_NEAREST)
-		patternHeight,patternWidth = resizedPattern.shape
-
-		# match pattern
-		mat = cv2.matchTemplate(img,resizedPattern,cv2.TM_SQDIFF_NORMED)
-		minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(mat)
-
-		if minVal < threshold:
-			return minVal, minLoc, maxLoc
 
 
 def showImage(img,wait = 0,resize=True):

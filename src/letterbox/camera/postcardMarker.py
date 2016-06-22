@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-20 14:53:51
+# @Last Modified time: 2016-06-22 11:07:13
 
 import cv2
 import numpy as np
@@ -22,11 +22,12 @@ INNER_PATTERNS = [
 ]
 
 OUTER_PATTERN = [
-	[0 , 0 , 0 , 0 , 0],
-	[0 , 1 , 1 , 1 , 0],
-	[0 , 1 , 1 , 0 , 0],
-	[0 , 1 , 0 , 1 , 0],
-	[0 , 0 , 0 , 0 , 0]
+	[0 , 0 , 0 , 0 , 0, 0],
+	[0 , 1 , 1 , 1 , 1, 0],
+	[0 , 1 , 1 , 1 , 1, 0],
+	[0 , 1 , 1 , 1 , 0, 0],
+	[0 , 1 , 1 , 0 , 1, 0],
+	[0 , 0 , 0 , 0 , 0, 0]
 ]
 
 class PostcardMarker:
@@ -38,6 +39,8 @@ class PostcardMarker:
 
 		# put in inner pattern
 		self.pattern[1:3, 1:3] = self.innerPattern
+		self.pattern[3:5, 1:3] = self.innerPattern
+		self.pattern[1:3, 3:5] = self.innerPattern
 
 		self.pattern[self.pattern > 0] = 255
 
