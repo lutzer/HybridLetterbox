@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 11:56:55
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-22 11:59:38
 
 import cv2
 import numpy as np
@@ -41,11 +41,11 @@ class PostcardMarker:
 
 		# put in parity bit
 		if id == 1:
-			self.pattern[1,3] = 1
+			self.pattern[1,3] = 0
 		elif id == 2:
-			self.pattern[3,1] = 1
+			self.pattern[3,1] = 0
 		elif id == 3:
-			self.pattern[1,3] = 1
-			self.pattern[3,1] = 1
+			self.pattern[1,3] = 0
+			self.pattern[3,1] = 0
 
 		self.pattern[self.pattern > 0] = 255
