@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 11:07:33
+# @Last Modified time: 2016-06-22 11:12:44
 
 import cv2
 import numpy as np
@@ -41,8 +41,6 @@ class CardScanner:
 
 		# init markers
 		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
-
-		showImage(self.markers[0].pattern)
 
 
 	def saveImage(self,path):
