@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 14:06:02
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 14:10:00
 
 import logging
 import time
@@ -73,7 +73,7 @@ def init ():
 
 	except Exception as err:
 		logger.error(err)
-		lbControl.flashFeedbackLed(20)
+		lbControl.flashFeedbackLed(10)
 		stop()
 		return False
 	
