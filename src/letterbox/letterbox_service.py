@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 11:19:27
+# @Last Modified time: 2016-06-22 11:27:02
 
 import logging
 import time
@@ -119,7 +119,7 @@ def loop ():
 
 		# save image
 		filename = generateImageName(config.get("MAIN","id")) + '.jpg'
-		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename)
+		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename, rotate=flipped)
 		logger.info("# saved image to: "+filepath)
 
 		# create submission
