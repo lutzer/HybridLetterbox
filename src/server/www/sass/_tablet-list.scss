@@ -1,9 +1,6 @@
 .tablet-list-view {
-	@include display(flex);
-	@include flex-wrap(wrap);
-	@include justify-content(space-between);
-	//@include column-count(3);
-	margin: $card-margin;
+	width: 80%;	
+	margin: $card-margin auto $card-margin auto;
 	
 
 	.item-view {
