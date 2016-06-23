@@ -4,12 +4,14 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 12:03:15
+* @Last Modified time: 2016-06-23 12:23:39
 */
 
 import Marionette from 'marionette';
+import Backbone from 'backbone';
 import _ from 'underscore';
 import SubmissionCollection from 'models/submission_collection';
+import SubmissionModel from 'models/submission_model';
 import TabletItemView from 'views/tablet_item_view';
 
 import template from 'text!templates/tablet_tmpl.html';
