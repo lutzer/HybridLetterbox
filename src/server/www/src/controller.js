@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 14:42:01
+* @Last Modified time: 2016-06-23 16:05:38
 */
 
 import Backbone from 'backbone';
@@ -50,6 +50,9 @@ class Controller extends Marionette.Controller {
             });
             socket.on('submission:removed', function(data) {
             	Backbone.trigger('submission:new',data);
+            });
+            socket.on('feedback:scanning', function(data) {
+            	Backbone.trigger('feedback:scanning',data);
             });
 
             //load mainview

@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-01-26 17:02:11
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-17 11:42:05
+# @Last Modified time: 2016-06-23 15:57:14
 
 import requests
 import logging
@@ -14,6 +14,7 @@ from json import dumps as json_dumps
 logger = logging.getLogger(__name__)
 
 POST_SUBMISSIONS_ROUTE = "/submissions/"
+GET_SCANNING_ROUTE = "/feedback/scanning/"
 POST_FILE_ROUTE = "/file/attach/"
 
 class HttpRequestClient():
@@ -21,10 +22,17 @@ class HttpRequestClient():
 	def __init__(self,address):
 		self.address = address
 
-	# submits new submission to server
 	def postSubmission(self, submission, filepath, filename):
+		'''	posts submission to server '''
+
 		thread = Thread(target=sendSubmission, args=(self.address, submission, filepath, filename))
 		thread.start()
+
+	def sendScanning(self, progress):
+
+		thread = Thread(target=sendScanningRequest, args=(self.address, progress))
+		thread.start()
+
 		
 def sendSubmission(address, submission, filepath, filename):
 
@@ -58,6 +66,16 @@ def sendSubmission(address, submission, filepath, filename):
 	# delete file
 	if os.path.isfile(filepath):
 		os.remove(filepath)
+
+def sendScanningRequest(address, progress):
+
+	try:
+		res = requests.get(address + GET_SCANNING_ROUTE + str(progress))
+	except Exception as err:
+		logger.error(err)
+		return
+	
+
 
 
 			

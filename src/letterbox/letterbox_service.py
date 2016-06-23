@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-06-23 15:12:06
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-06-23 15:58:06
 
 import logging
 import time
@@ -87,6 +87,11 @@ def loop ():
 	if (lbControl.checkPhotocell()):
 		lbControl.flashFeedbackLed(1)
 
+		httpClient = HttpRequestClient(config.get("MAIN","api"))
+
+		# tell node server that a new submission is beeing scanned
+		httpClient.sendScanning(0)
+
 		imageFolder = IMAGE_SAVE_FOLDER
 
 		#take first picture
@@ -139,8 +144,7 @@ def loop ():
 		}
 
 		# send data and picture
-		requestClient = HttpRequestClient(config.get("MAIN","api"))
-		requestClient.postSubmission(submission,filepath,filename);
+		httpClient.postSubmission(submission,filepath,filename);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return

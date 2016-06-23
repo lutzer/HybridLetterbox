@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 14:01:29
+# @Last Modified time: 2016-06-23 15:58:51
 
 
 from letterboxControl import LetterboxControl, MotorPosition
@@ -46,3 +46,6 @@ class LetterboxControlTest(LetterboxControl):
 
 	def reset(self):
 		logger.info("reset lb control")
+
+	def ejectCard(self):
+		logger.info("ejecting card")

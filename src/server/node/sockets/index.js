@@ -40,7 +40,6 @@ module.exports = function (http) {
 		function feedbackScanningHandler(progress) {
 			sio.emit('feedback:scanning',{progress: progress}, socket.id);
 		}
-		socket.on('feedback:scanning',feedbackScanningHandler)
 		appEvents.on('feedback:scanning', feedbackScanningHandler);
 
 	    // Clean up after disconnect

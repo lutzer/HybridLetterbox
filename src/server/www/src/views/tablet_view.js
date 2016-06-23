@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 12:23:39
+* @Last Modified time: 2016-06-23 16:29:03
 */
 
 import Marionette from 'marionette';
@@ -44,8 +44,7 @@ class TabletView extends Marionette.CompositeView {
         this.listenTo(Backbone,'submission:changed', this.onSubmissionChanged);
         this.listenTo(Backbone,'submission:new', this.onSubmissionAdded);
         this.listenTo(Backbone,'submission:removed', this.onSubmissionRemoved);
-
-        this.loadMore = true;
+        this.listenTo(Backbone,'feedback:scanning', this.onSubmissionScanning);
 
         this.collection.getFirstPage(this.fetchParams);
 	}
@@ -77,6 +76,7 @@ class TabletView extends Marionette.CompositeView {
     	submission.fetch();
     	 // add to front of collection
 		this.collection.add(submission, { at: 0});
+		this.hideScanSpinner();
     }
 
     onSubmissionRemoved(data) {
@@ -84,10 +84,8 @@ class TabletView extends Marionette.CompositeView {
         this.collection.remove(data);
     }
 
-    onLoadMoreButtonClick(event) {
-        event.preventDefault();
-        this.collection.getNextPage(this.fetchParams);
-        this.loadMore = true;
+    onSubmissionScanning(data) {
+    	this.showScanSpinner();
     }
 
     onWindowScroll() {
@@ -104,15 +102,22 @@ class TabletView extends Marionette.CompositeView {
     }
 
     showSpinner() {
-        this.$('.spinner').removeClass('hidden');
-        this.$('#load-more-button').addClass('hidden');
+        this.$('#fetch-spinner').removeClass('hidden');    
     }
     
     hideSpinner() {
-        this.$('.spinner').addClass('hidden');
-        if (!(this.loadMore)) {
-            this.$('#load-more-button').removeClass('hidden');
-        }
+        this.$('#fetch-spinner').addClass('hidden');
+    }
+
+    showScanSpinner() {
+    	this.$('#scan-spinner').removeClass('hidden');
+    	setTimeout(() => {
+    		this.hideScanSpinner();
+    	},5000)
+    }
+
+    hideScanSpinner() {
+    	this.$('#scan-spinner').addClass('hidden');
     }
   
 }
