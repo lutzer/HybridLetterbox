@@ -50,12 +50,12 @@
 
   padding: $card-margin;
   margin: $card-margin;
-  border: $border-style;
-  border-radius: $border-radius;
-  background-color: #eeeeee;
+  //border: $border-style;
+  //border-radius: $border-radius;
+  //background-color: #eeeeee;
 
   h2 {
-    text-align: center;
+    font-weight: normal;
   }
 
   .spinner {
