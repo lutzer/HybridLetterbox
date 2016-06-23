@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 15:46:33
+# @Last Modified time: 2016-06-23 15:12:06
 
 import logging
 import time
@@ -134,7 +134,8 @@ def loop ():
 			'author' : config.get("MAIN","author"),
 			'category' : marker,
 			'tags' : tags,
-			'text' : text
+			'text' : text,
+			'dataset' : config.get("MAIN","dataset")
 		}
 
 		# send data and picture

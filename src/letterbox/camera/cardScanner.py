@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 14:06:55
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 16:40:02
 
 import cv2
 import numpy as np
@@ -76,6 +76,10 @@ class CardScanner:
 		# apply truncate threshold, not binary image
 		greyImage[threshImage == 255] = 255
 		threshImage = greyImage
+
+		#increase contrast
+		minVal = threshImage.min()
+		threshImage[threshImage < 255] = threshImage[threshImage < 255] - minVal
 
 		self.image = threshImage 
 
