@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 14:09:48
+* @Last Modified time: 2016-06-23 14:42:01
 */
 
 import Backbone from 'backbone';
@@ -19,6 +19,8 @@ import SubmissionInputView from 'views/submission_input_view';
 import SubmissionView from 'views/submission_view';
 import AdminView from 'views/admin_view';
 import TabletView from 'views/tablet_view';
+
+import headerTemplate from 'text!templates/header_tmpl.html';
 
 class Controller extends Marionette.Controller {
 		
@@ -61,8 +63,7 @@ class Controller extends Marionette.Controller {
 		showSubmissionList(tag=null) {
 
 			this.mainView.headerRegion.show(new Marionette.ItemView({
-				tagName: 'h1',
-				template: _.template('Logo')
+				template: _.template(headerTemplate)
 			}));
 
 			//update list view
