@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-21 15:54:40
+* @Last Modified time: 2016-06-23 11:51:43
 */
 
 import Backbone from 'backbone';
@@ -18,6 +18,7 @@ import TagListView from 'views/tag_list_view';
 import SubmissionInputView from 'views/submission_input_view';
 import SubmissionView from 'views/submission_view';
 import AdminView from 'views/admin_view';
+import TabletView from 'views/tablet_view';
 
 class Controller extends Marionette.Controller {
 		
@@ -92,6 +93,16 @@ class Controller extends Marionette.Controller {
 				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Close</span></a></div>')
 			}));
 			this.mainView.contentRegion.show(new AdminView());
+			this.mainView.sideRegion.reset();
+			this.mainView.topRegion.reset();
+		}
+
+		showTabletView() {
+			this.mainView.headerRegion.show(new Marionette.ItemView({
+				tagName: 'h1',
+				template: _.template('Logo')
+			}));
+			this.mainView.contentRegion.show(new TabletView() );
 			this.mainView.sideRegion.reset();
 			this.mainView.topRegion.reset();
 		}
