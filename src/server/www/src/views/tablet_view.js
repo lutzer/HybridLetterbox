@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 16:29:03
+* @Last Modified time: 2016-06-23 18:08:55
 */
 
 import Marionette from 'marionette';
@@ -113,7 +113,7 @@ class TabletView extends Marionette.CompositeView {
     	this.$('#scan-spinner').removeClass('hidden');
     	setTimeout(() => {
     		this.hideScanSpinner();
-    	},5000)
+    	},10000)
     }
 
     hideScanSpinner() {
