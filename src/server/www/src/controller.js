@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 11:51:43
+* @Last Modified time: 2016-06-23 14:09:48
 */
 
 import Backbone from 'backbone';
@@ -99,8 +99,7 @@ class Controller extends Marionette.Controller {
 
 		showTabletView() {
 			this.mainView.headerRegion.show(new Marionette.ItemView({
-				tagName: 'h1',
-				template: _.template('Logo')
+				template: _.template('<h1>Logo</h1><span class="line-horizontal"></span>')
 			}));
 			this.mainView.contentRegion.show(new TabletView() );
 			this.mainView.sideRegion.reset();
