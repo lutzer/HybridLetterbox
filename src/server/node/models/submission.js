@@ -50,6 +50,10 @@ submissionSchema.pre('save', function(next) {
     Utils.escapePath(this,'author');
     Utils.escapePath(this,'device');
 
+    //dont allow false or null tags
+    if (this.get('tags') == null || this.get('tags') == false)
+        this.set('tags',[]);
+
     return next();
 
 });

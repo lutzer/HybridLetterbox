@@ -4,12 +4,12 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-15 18:18:25
+* @Last Modified time: 2016-06-21 15:55:08
 */
 
 export default {
 	web_service_url : '/api/',
-	web_socket_url : '/'+window.location.port,
+	web_socket_url : ':'+window.location.port,
 	files_url : '/files/',
 	stringTruncateShort: 50,
 	stringTruncateLong: 220,

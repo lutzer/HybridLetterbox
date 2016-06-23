@@ -99,6 +99,11 @@ sudo resize2fs /dev/mmcblk0p2
     iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
    ```
 
+### Install MongoDb
+
+1. `sudo pacman -S mongodb`
+2. enable startup script: `sudo systemctl enable mongodb.service`
+
 ### Enable Serial Connection
 
 see  http://rpi900.com/tutorials/using-the-serial-port.html
@@ -222,37 +227,10 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
    ( to stop: systemctl stop letterbox.service or systemctl disable letterbox.service
 
-#### Powerswitch
-
-1. create another service: powerswitch.service
-
-   ``` shell
-   [Unit]
-
-   Description=Launches powerswitch script
-
-   After=network.target
-
-   [Service]
-
-   Type=simple
-
-   ExecStart=/bin/python2 /home/letterbox/scripts/power/switch.py
-
-   RemainAfterExit=true
-
-   [Install]
-
-   WantedBy=multi-user.target
-   ```
-
-
-1. sudo systemctl daemon-reload
-2. sudo systemctl enable powerswitch.service
-
 ### Autostart pm2 manager
 
-TODO
+1. install pm2: `sudo pip2 install pm2`
+2. enable startup: `pm2 `
 
 ## Configure Tp-Link Router
 

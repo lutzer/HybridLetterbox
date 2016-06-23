@@ -1,2 +1,5 @@
 */camera_matrix.json
 */scan.jpg
+_tmp/*
+!_tmp/.keep
+letterbox.ini

@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 14:08:33
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-06-22 15:46:33
 
 import logging
 import time
 
-from camera.cameraControlTest import CameraControlTest
 from camera.cardScanner import CardScanner
 from camera.cameraCalibrator import CameraCalibrator
-from hardware.letterboxControlTest import LetterboxControlTest
 from hardware.letterboxControl import MotorPosition
 from comm.httpRequestClient import HttpRequestClient
 from utils.configReader import ConfigReader
+from utils.utils import generateImageName
 
 # Debug options
 logging.basicConfig(level=logging.INFO)
@@ -21,10 +20,9 @@ logger = logging.getLogger(__name__)
 
 # CHANGEABLE PARAMETERS
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
-IMAGE_SAVE_FOLDER = "images/"
+IMAGE_SAVE_FOLDER = "_tmp/"
 DEVICE_NAME = "letterbox"
 CONFIG_FILE = "letterbox.ini"
-
 
 # DO NOT CHANGE THESE PARAMETERS
 DELAY_BETWEEN_READINGS = 0.3
@@ -45,22 +43,37 @@ def init ():
 
 	# read config
 	config = ConfigReader(CONFIG_FILE)
+	lbVersion = int(config.get("MAIN","version"))
 
 	try:
 		#init vars
-		lbControl = LetterboxControlTest()
-		print lbControl;
+		if lbVersion == 0:
+			from hardware.letterboxControlTest import LetterboxControlTest
+			lbControl = LetterboxControlTest()
+		elif lbVersion == 1:
+			from hardware.letterboxControlV1 import LetterboxControlV1
+			lbControl = LetterboxControlV1()
+		else:
+			from hardware.letterboxControlV2 import LetterboxControlV2
+			lbControl = LetterboxControlV2()
 
 		# start camera
-		camera = CameraControlTest()
+		if lbVersion == 0:
+			from camera.cameraControlTest import CameraControlTest
+			camera = CameraControlTest()
+		else:
+			from camera.cameraControl import CameraControl
+			camera = CameraControl()
+
 		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 		# init hardware
+		lbControl.calibrate()
 		logger.info(" # initializing...")
 
 	except Exception as err:
 		logger.error(err)
-		lbControl.flashFeedbackLed(20)
+		lbControl.flashFeedbackLed(10)
 		stop()
 		return False
 	
@@ -80,17 +93,13 @@ def loop ():
 		img1 = camera.captureImage()
 
 		#turn postcard
-		lbControl.setMotorPosition(MotorPosition.TURN)
+		#lbControl.setMotorPosition(MotorPosition.TURN)
 
 		#take second picture
-		img2 = camera.captureImage()
+		#img2 = camera.captureImage()
 
-		# TODO: make this none blocking
 		#eject postcard
-		lbControl.setMotorPosition(MotorPosition.EJECT)
-
-		# turn back to normal
-		lbControl.setMotorPosition(MotorPosition.START)
+		lbControl.ejectCard();
 
 		# TODO: compare both sides
 		# extract image
@@ -98,22 +107,39 @@ def loop ():
 		
 		scanner = CardScanner(img1)
 		scanner.threshold()
+
+		# find marker
+		marker, flipped, val = scanner.findMarker()
+		logger.info("Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
+
+		# extract text box
 		scanner.maskRectangle()
 
-		#save image
-		filename = datetime.now()+config.get("Main","id")+'.jpg'
-		filepath = scanner.saveImage(img1,SUBMISSION_IMAGES_FOLDER + filename)
+		# save image
+		filename = generateImageName(config.get("MAIN","id")) + '.jpg'
+		filepath = scanner.saveImage(IMAGE_SAVE_FOLDER + filename, rotate=flipped)
 		logger.info("# saved image to: "+filepath)
 
-		#TODO: send picture
-		# requestClient = new HttpRequestClient(config.get("Main","api")+'/submissions/')
-		# submission = {
-		# 	'device' : DEVICE_NAME,
-		# 	'author' : config.get("Main","author")
-		# 	'tag' : 'lbtesttag',
-		# 	'text' : 'lbtesttext'
-		# }
-		# requestClient.postSubmission(submission,filepath);
+		# create submission
+		category = -1;
+		tags = None
+		text = " "
+		if val < float(config.get("MARKER","marker_threshold")):
+			category = marker
+			tags = config.get("CATEGORIES","tags"+str(category))
+			text = config.get("CATEGORIES","text"+str(category))
+
+		submission = {
+			'device' : DEVICE_NAME,
+			'author' : config.get("MAIN","author"),
+			'category' : marker,
+			'tags' : tags,
+			'text' : text
+		}
+
+		# send data and picture
+		requestClient = HttpRequestClient(config.get("MAIN","api"))
+		requestClient.postSubmission(submission,filepath,filename);
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return
@@ -129,7 +155,7 @@ def stop ():
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")
 	stop()
-	#sys_exit(0)
+	sys_exit(0)
 
 #################
 # START PROGRAM #

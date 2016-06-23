@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 12:53:02
+# @Last Modified time: 2016-06-21 11:08:31
 
 import picamera
 import cv2
@@ -20,8 +20,12 @@ CAMERA_SHUTTER_SPEED = 100 # in miliseconds
 CAMERA_ISO = 800
 CAMERA_RESOLUTION = (1600, 1200)
 
-# Class Controls the Camera
 class CameraControl:
+
+	"""
+	Controls the raspberry pi camera.
+	"""
+
 	def __init__(self,automode=False):
 		logger.info('init PiCamera')
 		self.camera = None
@@ -37,11 +41,6 @@ class CameraControl:
 		self.camera = picamera.PiCamera()
 		if not automode:
 			self.camera.framerate = 2
-			#self.camera.exposure_mode = 'off'
-			#self.camera.shutter_speed = CAMERA_SHUTTER_SPEED * 1000
-			#self.camera.awb_mode = 'off'
-			#self.camera.awb_gains = CAMERA_WHITE_BALANCE
-			#self.camera.ISO = CAMERA_ISO
 			self.camera.resolution = CAMERA_RESOLUTION
 		time.sleep(1) # warmup time
 

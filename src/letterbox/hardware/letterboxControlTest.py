@@ -2,14 +2,20 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 13:55:15
+# @Last Modified time: 2016-06-22 14:01:29
+
+
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Class Controls the Hardware of the Letterbox
 class LetterboxControlTest(LetterboxControl):
+
+	""" 
+	Test class for running the letterbox service on a test machine without 
+	GPIO support 
+	"""
 
 	def init(self):
 		self.reads = 0;
@@ -35,7 +41,7 @@ class LetterboxControlTest(LetterboxControl):
 	def setMotorPosition(self,pos):
 		logger.info("set motor pos to"+str(pos))
 
-	def calibrateMotor(self):
+	def calibrate(self):
 		logger.info("calibrate motor")
 
 	def reset(self):

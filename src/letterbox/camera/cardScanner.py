@@ -2,51 +2,33 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 14:11:45
+# @Last Modified time: 2016-06-22 14:06:55
 
 import cv2
 import numpy as np
 import logging
+from postcardMarker import PostcardMarker
 
 logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
-CONTOUR_MIN_SIZE = 900*500 #size of the sourounding box in pixels
+CONTOUR_MIN_SIZE = 1100*700 # minimal size of the surounding box in pixels
 ERODE_KERNEL_SIZE = 3
 ERODE_ITERATIONS = 3
 
-MARKER_THRESHOLD = 0.1
+MARKER_THRESHOLD = 0.75 # minmal threshold for detecting a marker
+NUMBER_OF_MARKERS = 4
 
-class MarkerPattern:
-
-	def __init__(self,pattern,size):
-		pattern = np.array(pattern)
-		self.innerPattern = pattern
-		self.pattern = np.ones((size+4,size+4),np.uint8)
-		cv2.rectangle(self.pattern,(1,1),(size+2,size+2),0)
-		self.pattern[2 : 2+pattern.shape[0], 2: 2+pattern.shape[1]] = pattern
-
-MARKERS = [
-	MarkerPattern([[1, 0, 0],
-				   [0, 0, 0],
-				   [0, 0, 0]],3),
-	MarkerPattern([[1, 1, 0],
-				   [0, 0, 0],
-				   [0, 0, 0]],3),
-	MarkerPattern([[1, 1, 1],
-				   [0, 0, 0],
-				   [0, 0, 0]],3),
-	MarkerPattern([[1, 1, 1],
-				   [1, 0, 0],
-				   [0, 0, 0]],3),
-	MarkerPattern([[1, 1, 1],
-				   [1, 1, 0],
-				   [0, 0, 0]],3),
-]
+PATTERN_MIN_SIZE = 30*30;
+PATTERN_MAX_SIZE = 80*80;
 
 
 class CardScanner:
+
+	"""
+	thresholds postcard, extracts Text Box, checks for markers
+	"""
 
 	def __init__(self,image,image_turned=None,roi=False):
 
@@ -57,17 +39,23 @@ class CardScanner:
 		self.image = image.copy();
 		self.binaryImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-	def saveImage(self,path):
+		# init markers
+		self.markers = [PostcardMarker(i) for i in range(NUMBER_OF_MARKERS)]
+
+		#showImage(PostcardMarker(0).pattern)
+		#showImage(PostcardMarker(1).pattern)
+		#showImage(PostcardMarker(2).pattern)
+		#showImage(PostcardMarker(3).pattern)
+
+	def saveImage(self,path,rotate=False):
+
+		if rotate:
+			self.image = cv2.flip(self.image, -1)
+
 		logger.info("save Image")
 		cv2.imwrite(path,self.image)
+		return path
 
-	def extract():
-
-		self.threshold()
-		cat = self.findMarker()
-		self.maskRectangle()
-
-		return cat;
 
 	def threshold(self):
 		greyImage = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -75,9 +63,13 @@ class CardScanner:
 		# find threshold value
 		#otsuVal,_ = cv2.threshold(greyImage,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
-		threshImage = cv2.adaptiveThreshold(greyImage,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
-			cv2.THRESH_BINARY,45,+4)
+		threshImage = cv2.adaptiveThreshold(greyImage, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+			cv2.THRESH_BINARY, 45, +4)
 
+		# erode small pixels
+		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
+		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
+		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
 
 		self.binaryImage = threshImage
 
@@ -85,47 +77,71 @@ class CardScanner:
 		greyImage[threshImage == 255] = 255
 		threshImage = greyImage
 
-		# erode small pixels
-		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
-		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
-		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
-
 		self.image = threshImage 
 
-	# returns category of the postcard, if false no marker was found
-	# apply function on thresholded image
+
 	def findMarker(self):
-		category = False
+		"""	
+		returns category of the postcard, if false no marker was found
+		apply function on binaryImage image
+		"""
 
-		#size down image for faster image processing
-		small_image = cv2.resize(self.image, (0,0), fx=RESIZE_FACTOR, fy=RESIZE_FACTOR)
+		#find squares as possible marker regions
+		invertedImage = invertImage(self.binaryImage);
+		height, width = invertedImage.shape
 
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
+		else:
+			contours, _ = cv2.findContours(invertedImage, cv2.RETR_EXTERNAL , cv2.CHAIN_APPROX_SIMPLE);
+
+		# find possible candidate Regions
+		markerCandidates = []
+		#contourImg = np.zeros((height,width), np.uint8)
+		for contour in contours:
+			epsilon = 0.1*cv2.arcLength(contour,True)
+			approx = cv2.approxPolyDP(contour,epsilon,True)
+			area = cv2.contourArea(approx)
+			if len(approx) == 4 and area > PATTERN_MIN_SIZE and area < PATTERN_MAX_SIZE:
+				#cv2.drawContours(contourImg , [approx], 0, 255, thickness=-1)
+				markerCandidates.append(approx);
+
+		# match marker patterns on each candidate region
 		results = []
-		for marker in MARKERS:
-			pattern = marker.pattern;
-			result1 = (checkPattern(small_image, pattern, MARKER_THRESHOLD))
-			flipped = cv2.flip(pattern,-1)
-			results2 = (checkPattern(small_image, flipped, MARKER_THRESHOLD))
-			results.append({
-				"side1": result1,
-				"side2": result2
-			});
+		for candidate in markerCandidates:
+			x,y,w,h = cv2.boundingRect(candidate)
+			roi = self.binaryImage[y:y+h, x:x+w]
+			vals = []
+			for i,marker in enumerate(self.markers):
+				resizedPattern = cv2.resize(marker.pattern, (w,h), interpolation= cv2.INTER_NEAREST)
+				flippedPattern = cv2.flip(resizedPattern, -1)
+				mat = cv2.matchTemplate(roi,resizedPattern,cv2.TM_SQDIFF_NORMED)
+				vals.append({ 'marker': i, 'flipped' : False, 'value' : mat[0,0] })
+				mat = cv2.matchTemplate(roi,flippedPattern,cv2.TM_SQDIFF_NORMED)
+				vals.append({ 'marker': i, 'flipped' : True, 'value' : mat[0,0] })
 
-		return results
+			# find minimum
+			minVal = min(vals, key=lambda x: x['value'])
+			results.append(minVal)
+
+		#return minimum
+		minResult = min(results, key=lambda x: x['value'])
+		return (minResult['marker'], minResult['flipped'], minResult['value'])
 
 
-	# masks everything on the picture except for 
-	# apply function on thresholded image
 	def maskRectangle(self):
-		image = self.image;
-		
-		invertedImage = invertImage(image.copy())
+		""" extracts TextBox from postcard (apply function on thresholded image) """
+
+		invertedImage = invertImage(self.binaryImage)
 		
 		# find contours
-		contours, hierarchy = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE);
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE)
+		else:
+			contours, _ = cv2.findContours(invertedImage, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE)
 
 		# create contour mask
-		height, width = image.shape
+		height, width = invertedImage.shape
 		contourMask = np.zeros((height,width), np.uint8)
 
 		# add only big contours to it
@@ -141,44 +157,30 @@ class CardScanner:
 		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
 		contourMask = cv2.erode(contourMask,kernel,ERODE_ITERATIONS)
 
+		# delete all pixels, that didnt had overlappying contours
+		contourMask[contourMask < n] = 0
+
 		# find overlapping contours and apply mask to image
-		self.image[contourMask < n] = 255
+		self.image[contourMask == 0] = 255
 
-	def crop(self):
-		self.image = cropImage(self.image)
+		# create bounding box and crop image
+		if cv2.__version__[0] == '3':
+			_, contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+		else:
+			contours, _ = cv2.findContours(contourMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-
-# matches a pattern to different scales
-def checkPattern(img,pattern,threshold):
-	#create pattern
-	pattern = pattern.copy()
-	pattern[pattern > 0] = 255
-
-	#resize pattern for matching
-	for scale in np.linspace(1.0, 20.0, 20):
-		resizedPattern = cv2.resize(pattern, (0,0), fx=scale, fy=scale, interpolation= cv2.INTER_NEAREST)
-		patternHeight,patternWidth = resizedPattern.shape
-
-		# match pattern
-		mat = cv2.matchTemplate(img,resizedPattern,cv2.TM_SQDIFF_NORMED)
-		minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(mat)
-
-		if minVal < threshold:
-			return minVal, minLoc, maxLoc
+		if len(contours) > 0:
+			x,y,w,h = cv2.boundingRect(contours[0])
+			self.image = self.image[y:y+h,x:x+w]
 
 
 def showImage(img,wait = 0,resize=True):
 	import cv2
 	if resize:
-		img = cv2.resize(img,(1024,768))
+		img = cv2.resize(img,(1024,768),interpolation= cv2.INTER_NEAREST)
 	cv2.imshow('img',img)
 	cv2.waitKey(wait)
 
+
 def invertImage(img):
 	return 255 - img
-
-def cropImage(img):
-	inverted = invertImage(img)
-	points = cv2.findNonZero(inverted)
-	x,y,w,h = cv2.boundingRect(points)
-	return img[y:y+h,x:x+w]
