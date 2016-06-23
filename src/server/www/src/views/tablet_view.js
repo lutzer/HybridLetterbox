@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 18:08:55
+* @Last Modified time: 2016-06-23 18:12:57
 */
 
 import Marionette from 'marionette';
@@ -80,8 +80,8 @@ class TabletView extends Marionette.CompositeView {
     }
 
     onSubmissionRemoved(data) {
-        //console.log(data);
-        this.collection.remove(data);
+        console.log(data);
+        this.collection.remove(data._id);
     }
 
     onSubmissionScanning(data) {
