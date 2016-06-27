@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 18:12:57
+* @Last Modified time: 2016-06-27 12:20:57
 */
 
 import Marionette from 'marionette';
@@ -89,9 +89,6 @@ class TabletView extends Marionette.CompositeView {
     }
 
     onWindowScroll() {
-
-        if (!(this.loadMore))
-            return;
 
         var scrollPos = $(window).scrollTop();
         var triggerPos =  $(document).height() - $(window).height() * 1.2;

@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 16:18:21
+* @Last Modified time: 2016-06-27 12:20:43
 */
 
 import Marionette from 'marionette';
@@ -101,9 +101,6 @@ class SubmissionListView extends Marionette.CompositeView {
     }
 
     onWindowScroll() {
-
-        if (!(this.loadMore))
-            return;
 
         var scrollPos = $(window).scrollTop();
         var triggerPos =  $(document).height() - $(window).height() * 1.2;

@@ -102,7 +102,24 @@ sudo resize2fs /dev/mmcblk0p2
 ### Install MongoDb
 
 1. `sudo pacman -S mongodb`
+
 2. enable startup script: `sudo systemctl enable mongodb.service`
+
+3. change systemd script `nano /lib/systemd/system/mongodb.service` ro run mongodb in journal mode
+
+   ```
+   [Unit]
+   Description=High-performance, schema-free document-oriented database
+   After=network.target
+
+   [Service]
+   User=mongodb
+   ExecStart=/usr/bin/mongod --quiet --journal --config /etc/mongodb.conf
+
+   [Install]
+   WantedBy=multi-user.target
+
+   ```
 
 ### Enable Serial Connection
 
@@ -191,6 +208,8 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
   ```
 
 ### Autostart Python Scripts
+
+
 
 #### Letterbox
 
