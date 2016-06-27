@@ -6,7 +6,11 @@
 
 ### Setup Letterbox for the first time
 
-* Call Setup script with `sudo src/letterbox/setup.py`
+* go to HybridLetterbox dir and update to the newest version: `git pull`
+* modify two config files
+  * go to src/server/node directory and copy config file: `cp config.defaultjs config.js` and modify file to your needs
+  * go to src/letterbox/ and copy ini file: `cp letterbox.default.ini letterbox.ini `  and modify it to your needs
+
 
 ## Development
 
