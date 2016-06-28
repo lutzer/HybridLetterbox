@@ -42,3 +42,19 @@
 * Connected Pins: 
 
 ![bipolar-stepper-drive](images/bipolar-stepper-drive.jpg)
+
+
+
+## Problems
+
+- Headboard
+  * [ ] Make Serial port a 5 pin port (rx, tx, vcc, gnd, dts) to be able to program atmega with turned of rasp pi. or: jumper to block serial connection to rasp pi
+  * [ ] Connect all gnds,5v and 3v together to be able to power it from another power src than rasp pi
+  * [ ] mixed up RX and TX Connection to rasp pi
+  * [ ] ~~Feedback LED on wrong pin for wpm: do we need that?~~
+  * [ ] mark + on led pin headers, mark stepper header
+  * [ ] transistor holes too far apart
+- Camera Board
+  * [ ] Move power connector to bottom side
+- Stepper Board
+  * [ ] Hard to solder via on upper fill. Need to put wire between the two ground holes or find another solution
