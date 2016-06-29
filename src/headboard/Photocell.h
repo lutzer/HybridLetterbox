@@ -5,7 +5,7 @@
 
 //reading debounce interval
 #define CALIBRATION_READINGS 25
-#define DEBOUNCE_INTERVALL 10
+#define DEBOUNCE_INTERVALL 50
 
 class Photocell {
 
@@ -13,9 +13,9 @@ class Photocell {
     byte _resistorPin;
     byte _ledPin;
 
-    bool _enabled = false;
+    bool _enabled = false; //led enabled?
     
-    bool _reading = false;
+    bool _reading = true; //previous reading, true = not blocked, false = blocked
     bool _blocked = false;
 
     long _lastChanged = 0;
@@ -73,15 +73,17 @@ class Photocell {
 
       int val = analogRead(_resistorPin);
 
+      // currently not blocked
       if (val > _threshold) {
+        // if previous reading was false
         if (_reading == false)
+          _blocked = true;
           _lastChanged = time;
         _reading = true;
+      // currently blocked
       } else {
-        // if previous reading was false
-        if (_reading == true) {
-          _blocked = true;
-           _lastChanged = time;
+        if (_reading == false) {
+          _lastChanged = time;
         }
         _reading = false;
       }

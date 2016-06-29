@@ -5,10 +5,11 @@
 #include <Bounce2.h>
 #include "AccelStepper.h"
 
-#define MOTOR_MAX_SPEED 1000.0
-#define MOTOR_ACCELLERATION 500.0
-#define MOTOR_CALIBRATION_SPEED 300.0
-#define MOTOR_FULL_TURN 64*64
+#define MOTOR_MAX_SPEED 500.0
+#define MOTOR_ACCELLERATION 200.0
+#define MOTOR_CALIBRATION_SPEED 50.0
+#define MOTOR_START_POS_OFFSET 1
+#define MOTOR_FULL_TURN 201
 #define MOTOR_GEAR_OFFSET 0 //If the steppers gearbox axis is loose, correct calibration position by this offset
 #define NUM_MOTOR_PINS 4
 #define HALFSTEP 8
@@ -39,7 +40,7 @@ class StepperMotorControl {
     
     StepperMotorControl(byte motorPin1, byte motorPin2, byte motorPin3, byte motorPin4, byte reedPin) {
       // setup motor
-      stepper = AccelStepper(HALFSTEP, motorPin1, motorPin2, motorPin3, motorPin4);
+      stepper = AccelStepper(AccelStepper::FULL4WIRE, motorPin1, motorPin2, motorPin3, motorPin4);
       stepper.setMaxSpeed(MOTOR_MAX_SPEED);
       stepper.setAcceleration(MOTOR_ACCELLERATION);
       stepper.setSpeed(0);
@@ -66,6 +67,7 @@ class StepperMotorControl {
       while (this->readReedSwitch() == LOW) {
         stepper.move(-MOTOR_FULL_TURN/8);
         stepper.runToPosition();
+        this->readReedSwitch();
       }
       
 
@@ -84,10 +86,10 @@ class StepperMotorControl {
       stepper.setSpeed(0);
 
       // calculate middle position
-      long stepperStartPos = (start2 - start1) / 2 + start1;
+      long stepperStartPos = start1 + MOTOR_START_POS_OFFSET;
 
       //move to start position
-      stepper.move( (start1 - start2) / 2 );
+      stepper.moveTo(stepperStartPos);
       stepper.runToPosition();
 
       //reset current position to zero

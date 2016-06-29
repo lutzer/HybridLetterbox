@@ -21,17 +21,17 @@
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
 #define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
 #define PHOTORESISTOR_LED_PIN 3 //CONNECT PHOTORESISTOR LED TO THIS
-#define MOTOR_PIN1  8 // IN1 on the ULN2003 driver 1
-#define MOTOR_PIN2  7 // IN2 on the ULN2003 driver 1
-#define MOTOR_PIN3  6 // IN3 on the ULN2003 driver 1
+#define MOTOR_PIN1  2 // IN1 on the ULN2003 driver 1
+#define MOTOR_PIN2  3 // IN2 on the ULN2003 driver 1
+#define MOTOR_PIN3  4 // IN3 on the ULN2003 driver 1
 #define MOTOR_PIN4  5 // IN4 on the ULN2003 driver 1
-#define REED_PIN 4 // CONNECT TO REED SWITCH
+#define REED_PIN 8 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
 #define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
 #define SERIAL softwareSerial // change to Serial for using normal Serial
-#define RX_PIN 1 //only used  for software serial, rx = 0
-#define TX_PIN 0 //only used for software serial, tx = 1
+#define RX_PIN 0 //only used  for software serial, rx = 0
+#define TX_PIN 1 //only used for software serial, tx = 1
 #define SERIAL_BUFFER_SIZE 16
 #define SERIAL_END_CHARACTER '\n'
 #define BAUD_RATE 9600
@@ -48,7 +48,7 @@ char serialBuffer[SERIAL_BUFFER_SIZE]; //allow only messages of the size of eigh
 byte serialBufferPosition = 0;
 
 // MOTOR VARS
-StepperMotorControl stepperMotor(MOTOR_PIN1, MOTOR_PIN3, MOTOR_PIN2, MOTOR_PIN4, REED_PIN);
+StepperMotorControl stepperMotor(MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4, REED_PIN);
 Photocell photocell(PHOTORESISTOR_PIN,PHOTORESISTOR_LED_PIN);
 
 // function makes the arduino reset
@@ -83,7 +83,7 @@ void setup() {
   SERIAL.write("calibrate photocell\n");
   int i = 0;
   while(!photocell.calibrate()) {
-    blinkStatusLed(200);
+    blinkStatusLed(1000);
     if (i >= CALIBRATION_TRIES -1) {
       resetArduino();
     }
@@ -92,12 +92,12 @@ void setup() {
 
   SERIAL.write("calibrate motor\n");
   //calibrate stepper
-  stepperMotor.calibrate();
+  //stepperMotor.calibrate();
 
   //enable photocell
   photocell.enable(true);
 
-  digitalWrite(LED_STATUS_PIN,HIGH); // turn status led on
+  digitalWrite(LED_STATUS_PIN,HIGH); // turn status led on to signal everything is ok
   
   clearSerialBuffer();
   SERIAL.write("started\n");

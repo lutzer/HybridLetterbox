@@ -44,7 +44,7 @@ see http://www.gammon.com.au/forum/?id=11637 or https://www.arduino.cc/en/Tutori
 
   * If using arduino, remove Atmega from Arduino
 * Upload Sketches using Lilypad Arduino with atmega328 chip
-* Programmer: AVR mkII
+* Programmer: *AVR mkII* or *ArduinoISP*
 
 ## Serial Connection with rasp pi
 

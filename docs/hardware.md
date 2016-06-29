@@ -54,6 +54,8 @@
   * [ ] ~~Feedback LED on wrong pin for wpm: do we need that?~~
   * [ ] mark + on led pin headers, mark stepper header
   * [ ] transistor holes too far apart
+  * [ ] mixed up RX / TX on serial connector to atmega. cross RX <-> TX
+  * [ ] spannungsabfall an den beiden dioden zu hoch, entfernen?
 - Camera Board
   * [ ] Move power connector to bottom side
 - Stepper Board
