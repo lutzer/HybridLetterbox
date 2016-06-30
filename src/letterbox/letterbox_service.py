@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-23 15:58:06
+# @Last Modified time: 2016-06-30 14:52:43
 
 import logging
 import time
@@ -33,13 +33,14 @@ lbControl = None
 camera = None
 calibrator = None
 config = None
+lbVersion = 0
 
 ##################
 # MAIN FUNCTIONS #
 ##################
 
 def init ():
-	global lbControl, camera, calibrator, config
+	global lbControl, camera, calibrator, config, lbVersion
 
 	# read config
 	config = ConfigReader(CONFIG_FILE)
@@ -82,7 +83,7 @@ def init ():
 	return True
 
 def loop ():
-	global lbControl, camera, calibrator, config
+	global lbControl, camera, calibrator, config, lbVersion
 
 	if (lbControl.checkPhotocell()):
 		lbControl.flashFeedbackLed(1)
@@ -97,26 +98,32 @@ def loop ():
 		#take first picture
 		img1 = camera.captureImage()
 
+		if lbVersion > 1:
 		#turn postcard
-		#lbControl.setMotorPosition(MotorPosition.TURN)
-
-		#take second picture
-		#img2 = camera.captureImage()
+			lbControl.setMotorPosition(MotorPosition.TURN)
+			img2 = camera.captureImage()
 
 		#eject postcard
 		lbControl.ejectCard();
 
-		# TODO: compare both sides
-		# extract image
+		# extract image front side
 		img1 = calibrator.undistortImage(img1)
-		
 		scanner = CardScanner(img1)
 		scanner.threshold()
 
 		# find marker
 		marker, flipped, val = scanner.findMarker()
-		logger.info("Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
-
+		
+		# check other side
+		if val < float(config.get("MARKER","marker_threshold") and 'img2' in locals():
+			img2 = calibrator.undistortImage(img2)
+			scanner = CardScanner(img2)
+			scanner.threshold()
+			marker, flipped, val = scanner.findMarker()
+			logger.info("Side:2 Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
+		else:
+			logger.info("Side:1 Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
+		
 		# extract text box
 		scanner.maskRectangle()
 

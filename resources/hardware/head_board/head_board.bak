@@ -251,17 +251,6 @@ MOT2
 Text Label 4800 4750 0    60   ~ 0
 MOT3
 $Comp
-L R R5
-U 1 1 56E7D702
-P 8450 2950
-F 0 "R5" V 8530 2950 50  0000 C CNN
-F 1 "100 Ohm" V 8450 2950 50  0000 C CNN
-F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 8380 2950 50  0001 C CNN
-F 3 "" H 8450 2950 50  0000 C CNN
-	1    8450 2950
-	1    0    0    -1  
-$EndComp
-$Comp
 L +5V #PWR014
 U 1 1 56E7D87A
 P 8450 2800
@@ -808,7 +797,9 @@ Wire Wire Line
 Wire Wire Line
 	6550 2450 6550 4250
 Wire Wire Line
-	4750 1350 5050 1350
+	4750 1350 4950 1350
+Wire Wire Line
+	4950 1350 5050 1350
 Wire Wire Line
 	5250 1350 5250 1050
 Wire Wire Line
@@ -954,4 +945,15 @@ Wire Wire Line
 	6450 2250 9750 2250
 Wire Wire Line
 	9750 2250 9750 4550
+$Comp
+L R R5
+U 1 1 56E7D702
+P 8450 2950
+F 0 "R5" V 8530 2950 50  0000 C CNN
+F 1 "100 Ohm" V 8450 2950 50  0000 C CNN
+F 2 "Resistors_ThroughHole:Resistor_Horizontal_RM7mm" V 8380 2950 50  0001 C CNN
+F 3 "" H 8450 2950 50  0000 C CNN
+	1    8450 2950
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

@@ -2,12 +2,13 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-22 14:01:35
+# @Last Modified time: 2016-06-30 14:56:38
 
 from serialThread import *
 import RPi.GPIO as GPIO
 import logging
 from enum import Enum
+from letterboxControl import LetterboxControl, MotorPosition
 
 # CONSTANTS
 FEEDBACK_LED_PIN = 24
@@ -19,26 +20,18 @@ STEPPER_TIMEOUT = 8 #8 seconds for making a full turn
 
 logger = logging.getLogger(__name__)
 
-class StepperPosition(Enum):
-	START = 0
-	TURN = 1
-	EJECT = 2
-
-class LetterboxControl:
+class LetterboxControlV2(LetterboxControl):
 
 	"""
 	Class controls the hardware of the third prototype of the letterbox 
 	with atmega headboard and stepper motor.
 	"""
+	
+	# start atmega on headboard
+	def init(self):
+		logger.info("init headboard")
 
-	def __init__(self,cleanup=False):
-
-		if (cleanup == False):
-			GPIO.setwarnings(False)
-
-		self.cleanup = cleanup
-
-        # init pins
+		 # init pins
 		GPIO.setmode(GPIO.BCM)
 		GPIO.setup(FEEDBACK_LED_PIN, GPIO.OUT)
 		GPIO.setup(CAMERA_LED_PIN, GPIO.OUT)
@@ -46,24 +39,8 @@ class LetterboxControl:
 		# open serial connection to headboard
 		self.serial = SerialThread(SERIAL_ADDRESS, SERIAL_BAUDRATE)
 		self.serial.start();
-
-		self.init();
-
-	def __del__(self):
-		if (self.cleanup):
-			GPIO.cleanup()
-		self.serial.stop();
-		logger.info("cleaned up LetterboxControl")
-
-
-    #################### 
-	# CONTROL HARDWARE FUNCTIONS #
-	####################
-	
-	# start atmega on headboard
-	def init(self):
-		logger.info("init headboard")
 		
+		# send headboard start command
 		self.serial.clear()
 		self.serial.sendMessage("start")
 		response = self.serial.waitForResponse(text="started",timeout=STEPPER_TIMEOUT*2)
@@ -76,9 +53,9 @@ class LetterboxControl:
 
 	def flashFeedbackLed(self,times=20,delay=0.25):
 		for i in range(0,times):
-			self.toggleCameraLed(True)
+			self.toggleFeedbackLed(True)
 			time.sleep(delay)
-			self.toggleCameraLed(False)
+			self.toggleFeedbackLed(False)
 			time.sleep(delay)
 
 	def toggleFeedbackLed (self,on):
@@ -97,7 +74,7 @@ class LetterboxControl:
 		self.serial.sendMessage("pr:?")
 		return self.serial.waitForResponse()
 
-	def setStepperPosition(self,pos):
+	def setMotorPosition(self,pos):
 		self.serial.sendMessage("stp:"+str(pos))
 		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
 
