@@ -75,7 +75,7 @@ class Photocell {
 
       // currently not blocked
       if (val > _threshold) {
-        // if previous reading was false
+        // if previous reading was false (lightbarrier is not blocked anymore), send blocked signal
         if (_reading == false)
           _blocked = true;
           _lastChanged = time;
@@ -90,7 +90,7 @@ class Photocell {
 
     };
 
-    boolean isBlocked() {
+    boolean wasBlocked() {
 
       if (_enabled && _blocked) {
         _blocked = false;

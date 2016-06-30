@@ -21,11 +21,11 @@
 #define LED_STATUS_PIN 13 //IN5 on ULN2003 CONNECTED TO LED
 #define PHOTORESISTOR_PIN A0 //ANALOG PIN FOR PHOTORESISTOR
 #define PHOTORESISTOR_LED_PIN 3 //CONNECT PHOTORESISTOR LED TO THIS
-#define MOTOR_PIN1  2 // IN1 on the ULN2003 driver 1
-#define MOTOR_PIN2  3 // IN2 on the ULN2003 driver 1
-#define MOTOR_PIN3  4 // IN3 on the ULN2003 driver 1
-#define MOTOR_PIN4  5 // IN4 on the ULN2003 driver 1
-#define REED_PIN 8 // CONNECT TO REED SWITCH
+#define MOTOR_PIN1  5 // IN1 on the ULN2003 driver 1
+#define MOTOR_PIN2  6 // IN2 on the ULN2003 driver 1
+#define MOTOR_PIN3  7 // IN3 on the ULN2003 driver 1
+#define MOTOR_PIN4  8 // IN4 on the ULN2003 driver 1
+#define REED_PIN 4 // CONNECT TO REED SWITCH
 
 // SERIAL PARAMETERS
 #define SOFTWARE_SERIAL 1 // uncomment this line for using normal serial
@@ -81,18 +81,18 @@ void setup() {
   
   //calibrate photocell
   SERIAL.write("calibrate photocell\n");
-  int i = 0;
+  /*int i = 0;
   while(!photocell.calibrate()) {
     blinkStatusLed(1000);
     if (i >= CALIBRATION_TRIES -1) {
       resetArduino();
     }
     i++;
-  }
+  }*/
 
   SERIAL.write("calibrate motor\n");
   //calibrate stepper
-  //stepperMotor.calibrate();
+  stepperMotor.calibrate();
 
   //enable photocell
   photocell.enable(true);
@@ -110,7 +110,7 @@ void loop() {
     
    	if (compareSubString(serialBuffer,"pr:?")) {
       char response[] = "pr:?\n";
-      response[3] = photocell.isBlocked() ? '1' : '0';
+      response[3] = photocell.wasBlocked() ? '1' : '0';
       SERIAL.write(response);
    	} else if (compareSubString(serialBuffer,"stp:0") && !stepperMotor.moving) {
       stepperMotor.setPosition(STEPPER_START);
