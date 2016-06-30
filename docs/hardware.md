@@ -48,13 +48,13 @@
 ## Problems
 
 - Headboard
-  * [ ] Make Serial port a 5 pin port (rx, tx, vcc, gnd, dts) to be able to program atmega with turned of rasp pi. or: jumper to block serial connection to rasp pi
-  * [ ] Connect all gnds,5v and 3v together to be able to power it from another power src than rasp pi
-  * [ ] mixed up RX and TX Connection to rasp pi
+  * [x] Make Serial port a 5 pin port (rx, tx, vcc, gnd, dts) to be able to program atmega with turned of rasp pi. or: jumper to block serial connection to rasp pi
+  * [x] Connect all gnds,5v and 3v together to be able to power it from another power src than rasp pi
+  * [x] mixed up RX and TX Connection to rasp pi
   * [ ] ~~Feedback LED on wrong pin for wpm: do we need that?~~
   * [ ] mark + on led pin headers, mark stepper header
   * [ ] transistor holes too far apart
-  * [ ] mixed up RX / TX on serial connector to atmega. cross RX <-> TX
+  * [ ] mixed up RX / TX on serial connector to atmega. cross RX <-> TX, **take care to not change this on rasp pi**
   * [ ] spannungsabfall an den beiden dioden zu hoch, entfernen?
 - Camera Board
   * [ ] Move power connector to bottom side

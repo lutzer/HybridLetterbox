@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-23 16:05:38
+* @Last Modified time: 2016-06-29 17:30:03
 */
 
 import Backbone from 'backbone';
@@ -81,6 +81,26 @@ class Controller extends Marionette.Controller {
 				this.mainView.sideRegion.currentView.setTag(tag);
 			else
 				this.mainView.sideRegion.show(new TagListView({ tag: tag }));
+		}
+
+		showSubmissionSet(set=null,tag=null) {
+			this.mainView.headerRegion.show(new Marionette.ItemView({
+				template: _.template(headerTemplate)
+			}));
+
+			//update list view
+			this.mainView.contentRegion.show(new SubmissionListView({ dataset: set, tag : tag }));
+
+			//set input view
+			if (!(this.mainView.topRegion.currentView instanceof SubmissionInputView))
+				this.mainView.topRegion.show(new SubmissionInputView());
+
+			//set tagview
+			if (this.mainView.sideRegion.currentView instanceof TagListView)
+				this.mainView.sideRegion.currentView.setTag(tag);
+			else
+				this.mainView.sideRegion.show(new TagListView({ tag: tag }));
+		
 		}
 
 		showSubmission(id) {

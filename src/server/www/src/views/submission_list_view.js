@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-27 12:20:43
+* @Last Modified time: 2016-06-29 17:30:40
 */
 
 import Marionette from 'marionette';
@@ -48,6 +48,9 @@ class SubmissionListView extends Marionette.CompositeView {
 
 		if (options.tag != null)
 			this.fetchParams.tag = options.tag
+
+        if (options.dataset != null)
+            this.fetchParams.dataset = options.dataset
 		
 		this.collection = new SubmissionCollection();
 

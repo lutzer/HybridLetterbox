@@ -22,6 +22,8 @@ router.get('/',(req,res) => {
     var options = {}
     if (_.has(req.query,'tag'))
         options.tags = req.query.tag;
+    if (_.has(req.query,'dataset'))
+        options.dataset = req.query.dataset;
 
     // paginate options
     var paginateOptions = {}
