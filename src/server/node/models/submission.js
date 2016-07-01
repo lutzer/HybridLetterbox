@@ -14,7 +14,7 @@ var submissionSchema = mongoose.Schema({
 
 	_id: { type: String, default: uuid.v4 }, //use uuid
 
-    title: { type: String, maxlength: 120, default: false },
+    title: { type: String, maxlength: 120 },
     text : { type: String, required: true, maxlength: '1500' },
     author: { type: String, required: true, maxlength: '60' },
     device: { type: String, default: false },
