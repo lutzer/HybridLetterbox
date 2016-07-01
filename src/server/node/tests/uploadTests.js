@@ -6,7 +6,7 @@ var _ = require('underscore');
 var Submission = r_require('models/submission');
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
-var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.png']
+var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.jpg']
 var DST_PATH = 'tests/files/test.jpg'
 
 describe('File upload', function() {

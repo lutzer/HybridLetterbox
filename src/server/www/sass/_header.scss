@@ -1,6 +1,20 @@
 #header {
 	//border-bottom: $border-style;
-	margin: $card-margin;
+	//margin: $card-margin;
+
+	.header-bar {
+		width:100%;
+		background-color: #fff;
+		height: 80px;
+	}
+
+	.header-image {
+		width:100%;
+
+		img {
+			width: 100%;
+		}
+	}
 
 	
 	.link-back {

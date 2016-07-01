@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-30 14:46:17
+* @Last Modified time: 2016-07-01 19:56:41
 */
 
 import 'jquery';
@@ -26,10 +26,8 @@ class SubmissionInputView extends Marionette.ItemView {
 
     events() {
     	return {
-            'focus #new-submission-text' : 'focus',
-            'click #new-submission-text' : 'focus',
-            'keypress #new-submission-text' : 'focus',
-            'mouseleave .input-box' : 'unfocus',
+            'click .submission-headline' : 'focus',
+            'mouseleave' : 'unfocus',
             'click #submit-button' : 'onSubmitButtonClick',
             'change #new-submission-file' : 'onFileInputChanged',
             'click #tag-dropdown' : 'onTagDropdownClick',

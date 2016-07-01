@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-29 17:30:03
+* @Last Modified time: 2016-07-01 20:12:22
 */
 
 import Backbone from 'backbone';
@@ -70,45 +70,23 @@ class Controller extends Marionette.Controller {
 			}));
 
 			//update list view
-			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag }));
+			this.mainView.contentRegion.show(new SubmissionListView({ tag: tag, dataset: Config.dataset }));
 
 			//set input view
 			if (!(this.mainView.topRegion.currentView instanceof SubmissionInputView))
 				this.mainView.topRegion.show(new SubmissionInputView());
 
 			//set tagview
-			if (this.mainView.sideRegion.currentView instanceof TagListView)
-				this.mainView.sideRegion.currentView.setTag(tag);
+			if (this.mainView.tagsRegion.currentView instanceof TagListView)
+				this.mainView.tagsRegion.currentView.setTag(tag);
 			else
-				this.mainView.sideRegion.show(new TagListView({ tag: tag }));
-		}
-
-		showSubmissionSet(set=null,tag=null) {
-			this.mainView.headerRegion.show(new Marionette.ItemView({
-				template: _.template(headerTemplate)
-			}));
-
-			//update list view
-			this.mainView.contentRegion.show(new SubmissionListView({ dataset: set, tag : tag }));
-
-			//set input view
-			if (!(this.mainView.topRegion.currentView instanceof SubmissionInputView))
-				this.mainView.topRegion.show(new SubmissionInputView());
-
-			//set tagview
-			if (this.mainView.sideRegion.currentView instanceof TagListView)
-				this.mainView.sideRegion.currentView.setTag(tag);
-			else
-				this.mainView.sideRegion.show(new TagListView({ tag: tag }));
-		
+				this.mainView.tagsRegion.show(new TagListView({ tag: tag, dataset: Config.dataset }));
 		}
 
 		showSubmission(id) {
-			this.mainView.headerRegion.show(new Marionette.ItemView({
-				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Close</span></a></div>')
-			}));
+			this.mainView.headerRegion.reset();
 			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
-			this.mainView.sideRegion.reset();
+			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
 		}
 
@@ -116,8 +94,8 @@ class Controller extends Marionette.Controller {
 			this.mainView.headerRegion.show(new Marionette.ItemView({
 				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Close</span></a></div>')
 			}));
-			this.mainView.contentRegion.show(new AdminView());
-			this.mainView.sideRegion.reset();
+			this.mainView.contentRegion.show(new AdminView({ dataset: Config.dataset }));
+			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
 		}
 
@@ -125,8 +103,8 @@ class Controller extends Marionette.Controller {
 			this.mainView.headerRegion.show(new Marionette.ItemView({
 				template: _.template('<h1>Logo</h1><span class="line-horizontal"></span>')
 			}));
-			this.mainView.contentRegion.show(new TabletView() );
-			this.mainView.sideRegion.reset();
+			this.mainView.contentRegion.show(new TabletView({ dataset: Config.dataset }) );
+			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
 		}
 

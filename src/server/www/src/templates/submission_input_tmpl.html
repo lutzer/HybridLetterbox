@@ -1,30 +1,29 @@
 <div class="input-box">
-	<span class="input-row"><textarea id="new-submission-text" maxlength="1024" placeholder="What do you have to say?"></textarea></span>
+	<div class="submission-headline"><h1>Liebe Sonnenallee ... <span class="blinking-cursor">|</span></h1></div>
 	<div class="input-extra">
 		<span class="input-row">
-			<span id="tag-dropdown">Topics
-				<ul class="tag-dropdown-list">
-					<% _.each(tags, function(tag) { %>
-					<li>
-						<label>
-							<input type="checkbox" name="new-submission-tags" value="<%= tag %>"><%= tag %>
-						</label>
-					</li>
-					<% }) %>
-				</ul>
-			</span>
-			<span class="input-author"><input id="new-submission-author" maxlength="32" type="text" placeholder="Your Name"></span>
+			<textarea id="new-submission-text" maxlength="1000" placeholder="What do you have to say?"></textarea>
 		</span>
-		<span id="attach-text" class="badge hidden"></span>
-		<span class="spacer"></span>
 		<span class="input-row">
-			<div class="button-right">
-				<label for="new-submission-file"><span class="button">Attach Image</span></label>
-				<input type="file" name="file" class="pure-input-rounded input-element" id="new-submission-file" accept="image/x-png, image/gif, image/jpeg" style="display:none">
-			</div>
-			<div class="button-left">
-				<span class="button" id="submit-button">Submit</span>
-			</div>
+			<span class="input-author"><input id="new-submission-author" maxlength="32" type="text" placeholder="Your Name"></span>
+
+			<ul class="tag-list">
+				<% _.each(tags, function(tag) { %>
+				<li class="badge">
+					<label>
+						<input type="checkbox" name="new-submission-tags" value="<%= tag %>"><%= tag %>
+					</label>
+				</li>
+				<% }) %>
+			</ul>
 		</span>
+		<span id="attach-text" class="hidden"></span>
 	</div>
 </div>
+<div class="button-row">
+	<span class="file-button">
+		<label for="new-submission-file"><span class="button">Attach Image</span></label>
+		<input type="file" name="file" class="pure-input-rounded input-element" id="new-submission-file" accept="image/x-png, image/gif, image/jpeg" style="display:none">
+	</span>
+	<span class="button" id="submit-button">Post</span>
+</span>

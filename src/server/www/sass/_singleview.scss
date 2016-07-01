@@ -1,5 +1,8 @@
 .singleview {
-	margin: 80px $card-margin $card-margin $card-margin;
+	margin: $card-margin*2;
+	background-color: $card-color;
+	padding: $text-padding*2;
+
 
 	h2 {
 		margin: 0 0 $paragraph-padding 0;
@@ -27,22 +30,7 @@
 	}
 
 	.singleview-header {
-
-		padding: $text-padding 0 $text-padding 0;
-		margin-bottom: $paragraph-padding;
-
-		.author {
-			float:right;
-
-			h3 {
-				margin:0 0 $text-padding 0;
-			}
-		}
-
-		.date {
-			float:left;
-			font-size: 80%;
-		}
+		text-align: center;
 	}
 
 	.singleview-text {

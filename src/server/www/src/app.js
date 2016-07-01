@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-29 17:28:52
+* @Last Modified time: 2016-07-01 13:38:12
 */
 
 import $ from 'jquery';
@@ -40,8 +40,6 @@ class App extends Backbone.Marionette.Application {
 				'submission/:id' : 'showSubmission',
 				'admin' : 'showAdminPage',
 				'tablet' : 'showTabletView',
-				'set/:set' : 'showSubmissionSet',
-				'set/:set/tag/:tag' : 'showSubmissionSet',
 				'*actions': 'showSubmissionList'
 			}
 		});

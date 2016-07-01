@@ -1,27 +1,28 @@
-<div class="card-header">
-	<div class="date"><%= fromNow(createdAt) %></div>
-</div>
-<% if (files.length > 0) { %>
-<div class="card-image">
-	<div class="image" style="background-image: url('<%= filesUrl+files[0].name %>')"></div>
-</div>
-<% } %>
-<div class="card-text">
+<div class="inner-card">
+	<div class="card-header">
+		<% if (title != 'false') { %>
+		<h3><%= title %></h3>
+		<% } %>
+	</div>
 	<% if (files.length > 0) { %>
-	<%= text_truncated_short %>
+	<div class="card-image">
+		<img src="<%= filesUrl+files[0].name %>">
+	</div>
 	<% } else { %>
-	<%= text_truncated_long %>
+	<div class="card-text">
+		<p><%= text_truncated %></p>
+	</div>
 	<% } %>
-</div>
-<div class="card-tags"> 
-	<ul class="tag-list">
-	<% _.each(tags, function(tag) { %>
-		<li><span class="badge"><%= tag %></span></li>
-	<% }) %>
-	</ul>
-</div>
-<div class="card-bottom">
-
-	<div class="author"><%= author %></div>
-	<div class="comment-number"><%= comments.length %> Comments</div>
+	<div class="card-bottom">
+		<p class="author">by <%= author %></p>
+		<p class="date"><%= fromNow(createdAt) %></p>
+		<!--<span class="comment-number"><%= comments.length %> Comments</div>-->
+		<% if (tags.length > 0) { %>
+		<ul class="tag-list">
+			<% _.each(tags, function(tag) { %>
+			<li><span class="badge with-hash"><%= tag %></span></li>
+			<% }) %>
+		</ul>
+		<% } %>
+	</div>
 </div>

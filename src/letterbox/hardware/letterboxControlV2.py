@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-30 14:56:38
+# @Last Modified time: 2016-06-30 18:19:42
 
 from serialThread import *
 import RPi.GPIO as GPIO
@@ -82,9 +82,21 @@ class LetterboxControlV2(LetterboxControl):
 		self.serial.sendMessage("stp:c")
 		return self.serial.waitForResponse(text="stp:e",timeout=STEPPER_TIMEOUT)
 
-		# resets and recalibrates the headboard
+	# resets and recalibrates the headboard
 	def reset(self):
 		logger.info("resetting headboard")
 		self.serial.sendMessage('reset')
 		time.sleep(2) # give the headboard 2 seconds to reset
 		return self.init()
+
+	def ejectCard(self):
+		''' Asynchronous function for ejecting a postcard '''
+		thread = Thread(target=self._ejectAsync)
+		thread.start()
+
+	### PRIVATE METHODS ###
+	#
+	def _ejectAsync(self):
+		self.setMotorPosition(MotorPosition.EJECT)
+		time.sleep(1)
+		self.setMotorPosition(MotorPosition.START)

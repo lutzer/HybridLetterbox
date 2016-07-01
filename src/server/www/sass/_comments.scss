@@ -26,6 +26,7 @@
 		width:100%;
 		font-size: 110%;
 
+
 		h4 {
 			margin: 0 0 $text-padding 0;
 			float: left;
@@ -44,6 +45,14 @@
 	textarea#new-comment-text {
 		height:5em;
 	}
+}
+
+.new-comment {
+	background-color: $body-background;
+}	
+
+.button-row {
+	text-align: right;
 }
 
 

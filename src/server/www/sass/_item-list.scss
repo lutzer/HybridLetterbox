@@ -1,19 +1,19 @@
 .list-view {
-	@include display(flex);
-	@include flex-wrap(wrap);
-	@include justify-content(space-between);
+	//@include display(flex);
+	//@include flex-wrap(wrap);
+	//@include justify-content(space-between);
 	//@include column-count(3);
+	width: 100%;
 	margin: $card-margin;
 	
 
 	.item-view {
-		position: relative;
-		display:inline-box;
-		float:left;
+		//position: relative;
+		//display:inline-box;
+		//float:left;
 		width:33.3%;
-		padding-bottom: 2.5em;
-		margin-bottom: $card-margin;
-		overflow: hidden;
+		margin:0;
+		padding: $card-margin;
 		cursor: pointer;
 
 		@include media($tablet) {
@@ -23,47 +23,38 @@
 		@include media($mobile) {
 			width: 100%;
 		}
+
+		.inner-card {
+			background-color: $card-color;
+		}
 	}
 
 	.card-image {
 		overflow: hidden;
 		margin: $text-padding;
-		height: 12em;
 
-		.image {
+		img {
 			width: 100%;
-			height:100%;
-			background-position: center center;
-  			background-repeat: no-repeat;
-  			background-size: 100% auto;
-			border-radius: $border-radius;
 		}
 	}
 
 	.card-header {
-
-		padding: $text-padding;
-		margin-bottom: $paragraph-padding;
-
-		.tags {
-
-			
-		}
-
-		.date {
-			float:right;
-			font-size: 80%;
-		}
+		padding: 1px $text-padding 1px $text-padding;
 	}
 
 	.card-text {
 		padding: $text-padding;
-		font-size: 130%;
-  		overflow: hidden;
-	}
+		font-size: 150%;
+  		text-align:center;
+  		font-weight: bold;
 
-	.card-tags {
-		padding: $text-padding;
+  		p::before {
+			content: "»";
+		}
+
+		p::after {
+			content: "«";
+		}
 	}
 
 	.card-comments {
@@ -71,15 +62,10 @@
 	}
 
 	.card-bottom {
-		position: absolute;
-		bottom: 0;
 		padding: $text-padding;
 		width:100%;
-
-		.author {
-			float: right;
-			font-style: italic;
-		}
+		text-align: center;
+		font-size: $small-font-size;
 	}
 }
 

@@ -14,8 +14,12 @@ var router = express.Router();
  * GET /api/feedback/scanning
  */ 
 router.get('/',function(req,res){
+
+    var options = {}
+    if (_.has(req.query,'dataset'))
+        options.dataset = req.query.dataset;
     
-	Submission.find({}, (err, models) => {
+	Submission.find(options, (err, models) => {
 		if (Utils.handleError(err,res))
             return;
 

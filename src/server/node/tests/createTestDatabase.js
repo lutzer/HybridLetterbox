@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-10 11:51:25
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-30 15:34:22
+* @Last Modified time: 2016-07-01 17:24:47
 */
 
 
@@ -17,7 +17,7 @@ var Submission = r_require('models/submission')
 var Comment = r_require('models/comment')
 
 var BASE_URL = "http://localhost:"+Config.port+Config.baseUrl
-var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.png']
+var TEST_FILES = ['tests/files/img1.jpg','tests/files/img2.jpg','tests/files/img3.jpg']
 
 /* TEST DATABASE */
 
@@ -93,7 +93,8 @@ describe('Create Test Database', function(){
 		var array = _.map(_.range(size), function(i) {
 			return {
 				text: text,
-				author: names[Math.floor(Math.random() * names.length)]
+				author: names[Math.floor(Math.random() * names.length)],
+				title: "Liebe Sonnenallee ... "
 			}
 		});
 		Submission.create(array, function(err,models) {
@@ -167,6 +168,17 @@ describe('Create Test Database', function(){
 				postFile(submissionId,TEST_FILES[1], function(submission) {
 					done();
 				});
+			});
+		})
+	});
+
+	it('should add a file to submission 2', function(done) {
+
+		Submission.find({}, (err,models) => {
+
+			var submissionId = models[2]._id;
+			postFile(submissionId,TEST_FILES[2], function(submission) {
+				done();
 			});
 		})
 	});

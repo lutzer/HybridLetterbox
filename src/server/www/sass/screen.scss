@@ -20,8 +20,10 @@
 @import "side";
 @import "header";
 @import "footer";
+
 @import "buttons";
 @import "spinner";
+@import "blinking-cursor";
 
 @import "item-list";
 @import "comments";
@@ -32,24 +34,36 @@
 
 /* FONTS */
 
-@include font-face("crimson", "/fonts/CrimsonText-Roman", $file-formats: ttf);
-@include font-face("crimson", "/fonts/CrimsonText-Bold", bold, $file-formats: ttf);
-@include font-face("open-sans", "/fonts/OpenSans-Regular", normal, $file-formats: ttf);
-@include font-face("open-sans", "/fonts/OpenSans-Italic", normal, italic, $file-formats: ttf);
+@include font-face("tititllium", "/fonts/TitilliumWeb-Regular", $file-formats: ttf);
+@include font-face("tititllium", "/fonts/TitilliumWeb-SemiBold", 400, $file-formats: ttf);
+@include font-face("tititllium", "/fonts/TitilliumWeb-Bold", bold, $file-formats: ttf);
 
 /* ELEMENT STYLES */
 
 body {
-	font-family: "crimson";
+	font-family: "tititllium";
 	color: #444;
+	background-color: $body-background;
+	margin:0;
+	padding:0;
+	font-size: 12pt;
 }
 
 h4 {
 	margin: 0;
 }
 
+h3 {
+	text-align: center;
+	font-size: 100%;
+	padding: 0;
+	margin: $text-padding 0 0 0;
+	font-weight: normal;
+}
+
 h2 {
-	margin: 0.2em
+	margin: 0.2em;
+	font-size: 180%;
 }
 
 h1 {
@@ -67,7 +81,7 @@ a {
 }
 
 a.link {
-	font-family: 'open-sans';
+	font-family: 'tititllium';
 	font-size: 80%;
 
 	&:hover {
@@ -76,17 +90,17 @@ a.link {
 }
 
 #{$all-text-inputs} {
-	font-family: 'crimson';
-	font-size:100%;
+	font-family: 'tititllium';
+	font-size:130%;
 	width: 100%;
 	padding: $text-padding;
 	outline: none;
-	border: $input-border;
+	border: 0;
 	background-color: $input-background-color;
 	color: $input-text-color;
+	text-align:center;
 
 	@include placeholder {
-		font-style: italic;
 		color: #ccc;
 
 	}
@@ -95,27 +109,12 @@ a.link {
 textarea {
 	resize: none;
 	overflow: auto;
+	text-align:center;
+	font-size: 160%;
+	font-weight: bold;
 }
 
 /* MAIN STYLES */
-
-#container {
-	max-width: 1080px;
-	margin: auto;
-}
-
-#header {
-
-	.logo {
-
-		text-align:center;
-
-		img {
-
-			height: 100px;
-		}
-	}
-}
 
 .hidden {
 	display:none !important;
@@ -125,7 +124,7 @@ textarea {
 	list-style:none;
 	padding:0;
 	display: inline-block;
-	margin: 0;
+	margin: $paragraph-padding;
 
 	li {
 		float: left;
@@ -134,8 +133,7 @@ textarea {
 }
 
 .badge {
-	font-family: "open-sans";
-	background-color: $badge-background;
+	font-family: "tititllium";
 	border-radius: $border-radius;
 	display: inline-block;
 	font-size: $small-font-size;
@@ -143,12 +141,16 @@ textarea {
 	padding: 0.4em 1.2em;
 	color: $badge-text-color;
 	margin : $element-padding;
-	font-style:italic;
+	font-weight: 400;
 	border: $border-style;
 
 	&.selected {
 		background-color: #FF7043 !important; 
 	}
+}
+
+.badge.with-hash::before {
+	content: "#";
 }
 
 .spacer {
@@ -161,5 +163,19 @@ textarea {
 	width:100%;
 	border-bottom: $border-style;
 	display:block;
+}
+
+.column {
+	max-width: $max-width-outer;
+	width: 100%;
+	margin: auto;
+}
+
+.align-right {
+	float:right;
+}
+
+#content {
+	min-height: 500px;
 }
 

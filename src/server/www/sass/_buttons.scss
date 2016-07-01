@@ -1,5 +1,4 @@
 .button {
-	font-family: "open-sans";
 	display:inline-block;
 	border-radius: $border-radius;
 	background: $button-background;
@@ -8,7 +7,7 @@
 	padding:  $text-padding $button-padding $text-padding $button-padding;
 	margin: $element-margin 0 $element-margin 0;
 	font-size: 80%;
-	//@include shadow(1);
+	@include shadow(1);
 
 	&:hover {
 		background: $button-background-hover;
@@ -26,14 +25,11 @@
 }
 
 .close-button {
-	font-family: "open-sans";
+	width: 40px;
+	height: 40px;
 
-	background: image-url('arrow-left.png') no-repeat;
-	background-size: 30px;
-	background-position: left center;
-	padding-left: 28px;
-	margin: $button-padding 0 $button-padding 0;
-	cursor: pointer;
+	background: image-url('close-icon.png') no-repeat;
+	background-size: 40px;
 }
 
 .expand-button {

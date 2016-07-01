@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-29 17:30:40
+* @Last Modified time: 2016-07-01 19:49:17
 */
 
 import Marionette from 'marionette';
@@ -64,12 +64,27 @@ class SubmissionListView extends Marionette.CompositeView {
         this.collection.getFirstPage(this.fetchParams);
 	}
 
+    onShow() {
+        // init masonry layout
+        this.msnry = new Masonry('#submission-list');
+    }
+
     onAttach() {
         //bind scroll handler
         this.winowScrollListener =  _.throttle(() => {
             this.onWindowScroll();
         },500);
         $(window).on('scroll',this.winowScrollListener);
+    }
+
+    /* CHILD EVENTS */
+    onAddChild(child) {
+        
+        //check if model was added at the start of the collecion or not
+        if ( this.collection.length > 0 && child.model.get('_id') == this.collection.at(0).get('_id') )
+            this.msnry.prepended(child.el)
+        else
+            this.msnry.appended(child.el)
     }
 
     onBeforeDestroy() {
@@ -119,6 +134,12 @@ class SubmissionListView extends Marionette.CompositeView {
     
     hideSpinner() {
         this.$('#fetch-spinner').addClass('hidden');
+
+        //reorder
+        setTimeout(() => {
+             this.msnry.layout();
+        },50);
+       
     }
 
 

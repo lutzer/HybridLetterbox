@@ -1,9 +1,5 @@
-<div class="singleview-tags"> 
-	<ul class="tag-list">
-	<% _.each(tags, function(tag) { %>
-		<li><a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a></li>
-	<% }) %>
-	</ul>
+<div class="align-right">
+	<a href="#"><div class="close-button"></div></a>
 </div>
 
 <% _.each(files, function(file) { %>
@@ -16,8 +12,13 @@
 	<%= text %>
 </div>
 <div class="singleview-header">
-	<div class="author"><h3><%= author %></h3></div>
-	<div class="date">Posted on <%= formatDate(createdAt) %></div>
+	<p class="author"><h3><%= author %></h3></p>
+	<p class="date">Posted on <%= formatDate(createdAt) %></p>
+	<ul class="tag-list">
+	<% _.each(tags, function(tag) { %>
+		<li><a href="#/tag/<%= tag %>"><span class="badge"><%= tag %></span></a></li>
+	<% }) %>
+	</ul>
 </div>
 
 <div class="singleview-comments">

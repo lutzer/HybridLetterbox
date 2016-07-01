@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-05-26 13:35:31
+* @Last Modified time: 2016-07-01 16:56:56
 */
 
 import Marionette from 'marionette';
@@ -30,8 +30,7 @@ class SubmissionItemView extends Marionette.ItemView {
 		return {
 			filesUrl : Config.files_url + this.model.get('_id') + '/',
             isAdmin : false,
-            text_truncated_short : _str.truncate(this.model.get('text'),Config.stringTruncateShort,'...'),
-            text_truncated_long : _str.truncate(this.model.get('text'),Config.stringTruncateLong,'...'),
+            text_truncated : _str.truncate(this.model.get('text'),Config.stringTruncateShort,'...'),
             fromNow: function(date) {
                 return Moment(date).fromNow(); 
             }
