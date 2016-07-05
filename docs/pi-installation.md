@@ -92,12 +92,37 @@ sudo resize2fs /dev/mmcblk0p2
 
 2. install pm2 node process manager: `pacman -S pm2`
 
-3. redirect port 80 requests to port 8080
+3. install nginx: `sudo pacman -S nginx`
 
    ``` shell
-    # add this line to /etc/rc.local
-    iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+   # create file /etc/nginx/sites-enabled/hybridletterbox
+
+   # DOMAIN: www.hybridletterbox.de
+   server {
+     listen       80;
+     server_name  localhost;
+     root    /home/letterbox/www;
+
+     #charset koi8-r;
+
+     #access_log  logs/host.access.log  main;
+
+     #location / {
+     #	index  index.html index.htm index.php;
+     #}
+     
+     # forward to letterbox node server
+     location / {
+       proxy_pass http://127.0.0.1:8081;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection 'upgrade';
+       proxy_set_header Host $host;
+       proxy_cache_bypass $http_upgrade;
+     }
+   }
    ```
+4. enable nginx: `sudo systemctl enable nginx` and start `sudo systemctl start nginx`
 
 ### Install MongoDb
 
@@ -118,8 +143,9 @@ sudo resize2fs /dev/mmcblk0p2
 
    [Install]
    WantedBy=multi-user.target
-
    ```
+
+(might neeed to `sudo rm /var/lib/mongodb/mongod.lock`)
 
 ### Enable Serial Connection
 
@@ -193,25 +219,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
    2. also `sudo pip2 install numpy` or `sudo pacman -S python2-numpy`
 
 
-### Configure Git Sparse Checkout
-
-* go to home directory
-
-* ```
-  mkdir HybridLetterbox
-  cd HybridLetterbox
-  git init https://github.com/lutzer/HybridLetterbox.git
-  git config core.sparsecheckout true
-  echo code/pi/scripts/ >> .git/info/sparse-checkout
-  git read-tree -mu HEAD
-  git pull
-  ```
-
 ### Autostart Python Scripts
-
-
-
-#### Letterbox
 
 1. create a file in folder /etc/systemd/system : letterbox.service
 
@@ -249,7 +257,8 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 ### Autostart pm2 manager
 
 1. install pm2: `sudo pip2 install pm2`
-2. enable startup: `pm2 `
+2. enable startup: `pm2 startup systemd `
+3. automatically start server: `pm2 start src/server/node/main.js --name hybrid-letterbox` and save with `pm2 save`
 
 ## Configure Tp-Link Router
 

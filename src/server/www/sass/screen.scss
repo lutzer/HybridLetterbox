@@ -69,6 +69,11 @@ h2 {
 h1 {
 	text-align:center;
 	font-size: 260%;
+
+	@include media($mobile) {
+		font-size: 160%;
+		margin: $text-padding/2;
+	}
 }
 
 p {
@@ -112,6 +117,10 @@ textarea {
 	text-align:center;
 	font-size: 160%;
 	font-weight: bold;
+
+	@include media($mobile) {
+		font-size: 120%;
+	}
 }
 
 /* MAIN STYLES */
@@ -169,10 +178,6 @@ textarea {
 	max-width: $max-width-outer;
 	width: 100%;
 	margin: auto;
-}
-
-.align-right {
-	float:right;
 }
 
 #content {
