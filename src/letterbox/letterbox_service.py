@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-30 14:52:43
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-07-01 21:38:51
 
 import logging
 import time
@@ -115,7 +115,7 @@ def loop ():
 		marker, flipped, val = scanner.findMarker()
 		
 		# check other side
-		if val < float(config.get("MARKER","marker_threshold") and 'img2' in locals():
+		if val < float(config.get("MARKER","marker_threshold")) and 'img2' in locals():
 			img2 = calibrator.undistortImage(img2)
 			scanner = CardScanner(img2)
 			scanner.threshold()
