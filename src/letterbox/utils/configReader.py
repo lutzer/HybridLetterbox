@@ -13,16 +13,16 @@ class ConfigReader:
 				"marker_threshold" : 0.3,
 
 				"text0" : "cat0",
-				"tag0" : "tag0",
+				"tag0" : "",
 
 				"text1" : "cat1",
-				"tag1" : "tag1",
+				"tag1" : "",
 
 				"text2" : "cat2",
-				"tag2" : "tag2",
+				"tag2" : "",
 				
 				"text3" : "cat3",
-				"tag3" : "tag3"
+				"tag3" : ""
 			})
 
 		self.parser.read(file)

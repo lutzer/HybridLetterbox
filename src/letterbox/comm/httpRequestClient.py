@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-01-26 17:02:11
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-23 15:57:14
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-07-14 15:50:44
 
 import requests
 import logging
