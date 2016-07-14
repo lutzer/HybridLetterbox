@@ -5,7 +5,7 @@ define(['exports', 'marionette', 'underscore', 'text!templates/main_tmpl.html'],
     * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
     * @Date:   2016-05-04 11:38:41
     * @Last Modified by:   lutzer
-    * @Last Modified time: 2016-07-01 15:29:12
+    * @Last Modified time: 2016-07-14 11:00:57
     */
 
     Object.defineProperty(exports, "__esModule", {
@@ -88,7 +88,8 @@ define(['exports', 'marionette', 'underscore', 'text!templates/main_tmpl.html'],
                     headerRegion: '#header',
                     topRegion: '#top',
                     contentRegion: '#content',
-                    tagsRegion: '#tags'
+                    tagsRegion: '#tags',
+                    footerRegion: '#footer'
                 };
             }
         }, {
@@ -111,4 +112,4 @@ define(['exports', 'marionette', 'underscore', 'text!templates/main_tmpl.html'],
 
     exports.default = MainView;
 });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy92aWV3cy9tYWluX3ZpZXcuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O1FBY00sUTs7Ozs7Ozs7Ozs7c0NBT1E7QUFBRSx1QkFBTztBQUNmLGtDQUFjLFNBREM7QUFFZiwrQkFBVyxNQUZJO0FBR2xCLG1DQUFlLFVBSEc7QUFJZixnQ0FBWTtBQUpHLGlCQUFQO0FBS1Y7Ozt1Q0FHUyxPLEVBQVMsQ0FFbkI7OztnQ0FkYztBQUFFLHVCQUFPLHFCQUFFLFFBQUYscUJBQVA7QUFBNkI7OztnQ0FFOUI7QUFBRSx1QkFBTyxNQUFQO0FBQWU7Ozs7TUFMZCxxQkFBVyxVOztzQkFxQm5CLFEiLCJmaWxlIjoibWFpbl92aWV3LmpzIiwic291cmNlc0NvbnRlbnQiOlsiJ3VzZSBzdHJpY3QnO1xuXG4vKlxuKiBAQXV0aG9yOiBMdXR6IFJlaXRlciwgRGVzaWduIFJlc2VhcmNoIExhYiwgVW5pdmVyc2l0w6R0IGRlciBLw7xuc3RlIEJlcmxpblxuKiBARGF0ZTogICAyMDE2LTA1LTA0IDExOjM4OjQxXG4qIEBMYXN0IE1vZGlmaWVkIGJ5OiAgIGx1dHplclxuKiBATGFzdCBNb2RpZmllZCB0aW1lOiAyMDE2LTA3LTAxIDE1OjI5OjEyXG4qL1xuXG5pbXBvcnQgTWFyaW9uZXR0ZSBmcm9tICdtYXJpb25ldHRlJ1xuaW1wb3J0IF8gZnJvbSAndW5kZXJzY29yZSdcblxuaW1wb3J0IHRlbXBsYXRlIGZyb20gJ3RleHQhdGVtcGxhdGVzL21haW5fdG1wbC5odG1sJztcblxuY2xhc3MgTWFpblZpZXcgZXh0ZW5kcyBNYXJpb25ldHRlLkxheW91dFZpZXcge1xuXG5cdC8qIHByb3BlcnRpZXMgKi9cbiAgICBnZXQgdGVtcGxhdGUoKSB7IHJldHVybiBfLnRlbXBsYXRlKHRlbXBsYXRlKSB9XG5cbiAgICBnZXQgY2xhc3NOYW1lKCkgeyByZXR1cm4gJ3BhZ2UnIH1cblxuICAgIHJlZ2lvbnMoKSB7IHJldHVybiB7XG4gICAgICAgIGhlYWRlclJlZ2lvbjogJyNoZWFkZXInLFxuICAgICAgICB0b3BSZWdpb246ICcjdG9wJyxcbiAgICBcdGNvbnRlbnRSZWdpb246ICcjY29udGVudCcsXG4gICAgICAgIHRhZ3NSZWdpb246ICcjdGFncydcbiAgICB9fVxuXG4gICAgLyogbWV0aG9kcyAqL1xuICAgIGluaXRpYWxpemUob3B0aW9ucykge1xuXG4gICAgfVxuICAgIFxufVxuXG5leHBvcnQgZGVmYXVsdCBNYWluVmlldyJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy92aWV3cy9tYWluX3ZpZXcuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O1FBY00sUTs7Ozs7Ozs7Ozs7c0NBT1E7QUFBRSx1QkFBTztBQUNmLGtDQUFjLFNBREM7QUFFZiwrQkFBVyxNQUZJO0FBR2xCLG1DQUFlLFVBSEc7QUFJZixnQ0FBWSxPQUpHO0FBS2Ysa0NBQWM7QUFMQyxpQkFBUDtBQU1WOzs7dUNBR1MsTyxFQUFTLENBRW5COzs7Z0NBZmM7QUFBRSx1QkFBTyxxQkFBRSxRQUFGLHFCQUFQO0FBQTZCOzs7Z0NBRTlCO0FBQUUsdUJBQU8sTUFBUDtBQUFlOzs7O01BTGQscUJBQVcsVTs7c0JBc0JuQixRIiwiZmlsZSI6Im1haW5fdmlldy5qcyIsInNvdXJjZXNDb250ZW50IjpbIid1c2Ugc3RyaWN0JztcblxuLypcbiogQEF1dGhvcjogTHV0eiBSZWl0ZXIsIERlc2lnbiBSZXNlYXJjaCBMYWIsIFVuaXZlcnNpdMOkdCBkZXIgS8O8bnN0ZSBCZXJsaW5cbiogQERhdGU6ICAgMjAxNi0wNS0wNCAxMTozODo0MVxuKiBATGFzdCBNb2RpZmllZCBieTogICBsdXR6ZXJcbiogQExhc3QgTW9kaWZpZWQgdGltZTogMjAxNi0wNy0xNCAxMTowMDo1N1xuKi9cblxuaW1wb3J0IE1hcmlvbmV0dGUgZnJvbSAnbWFyaW9uZXR0ZSdcbmltcG9ydCBfIGZyb20gJ3VuZGVyc2NvcmUnXG5cbmltcG9ydCB0ZW1wbGF0ZSBmcm9tICd0ZXh0IXRlbXBsYXRlcy9tYWluX3RtcGwuaHRtbCc7XG5cbmNsYXNzIE1haW5WaWV3IGV4dGVuZHMgTWFyaW9uZXR0ZS5MYXlvdXRWaWV3IHtcblxuXHQvKiBwcm9wZXJ0aWVzICovXG4gICAgZ2V0IHRlbXBsYXRlKCkgeyByZXR1cm4gXy50ZW1wbGF0ZSh0ZW1wbGF0ZSkgfVxuXG4gICAgZ2V0IGNsYXNzTmFtZSgpIHsgcmV0dXJuICdwYWdlJyB9XG5cbiAgICByZWdpb25zKCkgeyByZXR1cm4ge1xuICAgICAgICBoZWFkZXJSZWdpb246ICcjaGVhZGVyJyxcbiAgICAgICAgdG9wUmVnaW9uOiAnI3RvcCcsXG4gICAgXHRjb250ZW50UmVnaW9uOiAnI2NvbnRlbnQnLFxuICAgICAgICB0YWdzUmVnaW9uOiAnI3RhZ3MnLFxuICAgICAgICBmb290ZXJSZWdpb246ICcjZm9vdGVyJ1xuICAgIH19XG5cbiAgICAvKiBtZXRob2RzICovXG4gICAgaW5pdGlhbGl6ZShvcHRpb25zKSB7XG5cbiAgICB9XG4gICAgXG59XG5cbmV4cG9ydCBkZWZhdWx0IE1haW5WaWV3Il19

@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-07-01 20:12:22
+* @Last Modified time: 2016-07-14 11:02:33
 */
 
 import Backbone from 'backbone';
@@ -19,8 +19,10 @@ import SubmissionInputView from 'views/submission_input_view';
 import SubmissionView from 'views/submission_view';
 import AdminView from 'views/admin_view';
 import TabletView from 'views/tablet_view';
+import ProjectionView from 'views/projection_view';
 
 import headerTemplate from 'text!templates/header_tmpl.html';
+import footerTemplate from 'text!templates/footer_tmpl.html';
 
 class Controller extends Marionette.Controller {
 		
@@ -81,6 +83,10 @@ class Controller extends Marionette.Controller {
 				this.mainView.tagsRegion.currentView.setTag(tag);
 			else
 				this.mainView.tagsRegion.show(new TagListView({ tag: tag, dataset: Config.dataset }));
+
+			this.mainView.footerRegion.show(new Marionette.ItemView({
+				template: _.template(footerTemplate)
+			}));
 		}
 
 		showSubmission(id) {
@@ -88,6 +94,9 @@ class Controller extends Marionette.Controller {
 			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
 			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
+			this.mainView.footerRegion.show(new Marionette.ItemView({
+				template: _.template(footerTemplate)
+			}));
 		}
 
 		showAdminPage() {
@@ -97,15 +106,34 @@ class Controller extends Marionette.Controller {
 			this.mainView.contentRegion.show(new AdminView({ dataset: Config.dataset }));
 			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
+			this.mainView.footerRegion.show(new Marionette.ItemView({
+				template: _.template(footerTemplate)
+			}));
 		}
 
 		showTabletView() {
+
+			$('body').addClass("tablet");
+
 			this.mainView.headerRegion.show(new Marionette.ItemView({
-				template: _.template('<h1>Logo</h1><span class="line-horizontal"></span>')
+				template: _.template('<div class="logo"><img src="images/logo.png"></div><span class="line-horizontal"></span>')
 			}));
 			this.mainView.contentRegion.show(new TabletView({ dataset: Config.dataset }) );
 			this.mainView.tagsRegion.reset();
 			this.mainView.topRegion.reset();
+			this.mainView.footerRegion.show(new Marionette.ItemView({
+				template: _.template(footerTemplate)
+			}));
+		}
+
+		showProjection() {
+			$('body').addClass("projection");
+
+			this.mainView.headerRegion.reset();
+			this.mainView.contentRegion.show(new ProjectionView({ dataset: Config.dataset }) );
+			this.mainView.tagsRegion.reset();
+			this.mainView.topRegion.reset();
+			this.mainView.footerRegion.reset();
 		}
 
 		postSubmission() {

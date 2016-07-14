@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-07-05 15:54:07
+* @Last Modified time: 2016-07-14 16:12:13
 */
 
 export default {
@@ -13,6 +13,7 @@ export default {
 	files_url : '/files/',
 	stringTruncateShort: 160,
 	stringTruncateLong: 220,
+	projectionTimeInterval : 100000,
 
 	dataset: null,
 

@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-06-20 15:52:07
+* @Last Modified time: 2016-07-14 12:32:04
 */
 
 import Backbone from 'backbone';
@@ -50,6 +50,9 @@ class SubmissionCollection extends Backbone.Collection {
 
 	getNextPage(options) {
 
+		options = options || {}
+		options.remove = options.remove || false ;
+
 		if (this.paginate.recordsPerPage * this.paginate.page > this.paginate.totalRecords)
 			return;
 
@@ -60,7 +63,11 @@ class SubmissionCollection extends Backbone.Collection {
 			limit: this.paginate.recordsPerPage
 		}
 
-		this.fetch({ remove: false, data : Utils.encodeQueryParameters(_.extend(options,paginateOptions)) });
+		this.fetch({ remove: options.remove, data : Utils.encodeQueryParameters(_.extend(options,paginateOptions)) });
+	}
+
+	setPageSize(numberOfModels) {
+		this.paginate.recordsPerPage = numberOfModels;
 	}
 
 };

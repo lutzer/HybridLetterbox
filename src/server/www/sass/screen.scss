@@ -31,6 +31,7 @@
 @import "singleview";
 @import "admin";
 @import "tablet-list";
+@import "projection";
 
 /* FONTS */
 
@@ -70,9 +71,12 @@ h1 {
 	text-align:center;
 	font-size: 260%;
 
+	margin: 0;
+	padding: $text-padding;
+
 	@include media($mobile) {
 		font-size: 160%;
-		margin: $text-padding/2;
+		padding: $text-padding/2;
 	}
 }
 
