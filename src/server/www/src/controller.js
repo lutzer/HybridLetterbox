@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-07-14 11:02:33
+* @Last Modified time: 2016-07-14 17:10:37
 */
 
 import Backbone from 'backbone';
@@ -66,6 +66,7 @@ class Controller extends Marionette.Controller {
 		/* ROUTES */
 
 		showSubmissionList(tag=null) {
+			$('body').removeClass();
 
 			this.mainView.headerRegion.show(new Marionette.ItemView({
 				template: _.template(headerTemplate)
@@ -90,6 +91,8 @@ class Controller extends Marionette.Controller {
 		}
 
 		showSubmission(id) {
+			$('body').removeClass();
+
 			this.mainView.headerRegion.reset();
 			this.mainView.contentRegion.show(new SubmissionView({ id: id }));
 			this.mainView.tagsRegion.reset();
@@ -100,6 +103,8 @@ class Controller extends Marionette.Controller {
 		}
 
 		showAdminPage() {
+			$('body').removeClass();
+
 			this.mainView.headerRegion.show(new Marionette.ItemView({
 				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Close</span></a></div>')
 			}));
@@ -112,7 +117,7 @@ class Controller extends Marionette.Controller {
 		}
 
 		showTabletView() {
-
+			$('body').removeClass();
 			$('body').addClass("tablet");
 
 			this.mainView.headerRegion.show(new Marionette.ItemView({
@@ -127,6 +132,7 @@ class Controller extends Marionette.Controller {
 		}
 
 		showProjection() {
+			$('body').removeClass();
 			$('body').addClass("projection");
 
 			this.mainView.headerRegion.reset();
