@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-07-01 21:38:51
+# @Last Modified time: 2016-07-14 15:31:33
 
 import logging
 import time
@@ -136,7 +136,7 @@ def loop ():
 		category = -1;
 		tags = None
 		text = " "
-		if val < float(config.get("MARKER","marker_threshold")):
+		if val < float(config.get("MARKER","marker_threshold")) and marker > -1 :
 			category = marker
 			tags = config.get("CATEGORIES","tags"+str(category))
 			text = config.get("CATEGORIES","text"+str(category))
@@ -146,7 +146,7 @@ def loop ():
 			'author' : config.get("MAIN","author"),
 			'category' : marker,
 			'tags' : tags,
-			'text' : text,
+			'title' : text,
 			'dataset' : config.get("MAIN","dataset")
 		}
 

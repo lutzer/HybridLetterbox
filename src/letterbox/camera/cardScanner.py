@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 16:40:02
+# @Last Modified time: 2016-07-14 15:27:58
 
 import cv2
 import numpy as np
@@ -129,6 +129,9 @@ class CardScanner:
 			results.append(minVal)
 
 		#return minimum
+		if (len(results) < 1):
+			return (-1,False,1.0)
+
 		minResult = min(results, key=lambda x: x['value'])
 		return (minResult['marker'], minResult['flipped'], minResult['value'])
 
