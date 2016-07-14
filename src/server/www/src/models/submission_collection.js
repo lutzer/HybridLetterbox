@@ -4,7 +4,7 @@
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-07-14 12:32:04
+* @Last Modified time: 2016-07-14 16:50:11
 */
 
 import Backbone from 'backbone';
@@ -39,6 +39,8 @@ class SubmissionCollection extends Backbone.Collection {
     }
 
 	getFirstPage(options={}) {
+
+		this.paginate.page = 0;
 
 		var paginateOptions = {
 			skip: 0,
