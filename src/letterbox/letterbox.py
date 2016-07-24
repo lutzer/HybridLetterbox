@@ -2,22 +2,69 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-15 12:52:07
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-07-24 19:55:36
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
-import logging
+
+import time
+
+from camera.cardScanner import CardScanner
+from camera.cameraCalibrator import CameraCalibrator
+from hardware.letterboxControl import MotorPosition
+from comm.httpRequestClient import HttpRequestClient
+from utils.configReader import ConfigReader
 
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
 CONFIG_FILE = "letterbox.ini"
 SCAN_RESULT_FILE = "scan.jpg"
 
 # debug options
+import logging
 logging.basicConfig(level=logging.INFO)
 
 lbControl = False
 config = None
+camera = None
+lbVersion = 0
+
+def init ():
+	global lbControl, camera, config, lbVersion
+
+	# read config
+	config = ConfigReader(CONFIG_FILE)
+	lbVersion = int(config.get("MAIN","version"))
+
+	try:
+		#init vars
+		if lbVersion == 0:
+			from hardware.letterboxControlTest import LetterboxControlTest
+			lbControl = LetterboxControlTest()
+		elif lbVersion == 1:
+			from hardware.letterboxControlV1 import LetterboxControlV1
+			lbControl = LetterboxControlV1()
+		else:
+			from hardware.letterboxControlV2 import LetterboxControlV2
+			lbControl = LetterboxControlV2()
+
+		# start camera
+		if lbVersion == 0:
+			from camera.cameraControlTest import CameraControlTest
+			camera = CameraControlTest()
+		else:
+			from camera.cameraControl import CameraControl
+			camera = CameraControl()
+
+	except Exception as err:
+		print(err)
+		lbControl.flashFeedbackLed(10)
+		stop()
+		return False
+	
+	lbControl.flashFeedbackLed(2);
+	print("# finished initializing")
+	return True
 
 def boxsize_commmand():
 	"""Opens a camera window to setup the size of the textbox on the postcards"""
@@ -34,21 +81,24 @@ def roi_command(turned=False):
 def camera_command(calibrate=False,n=5):
 	"""Opens a camera window to focus the lens, to calibrate lens distortion"""
 
-	from camera.cameraControl import CameraControl
-	camera = CameraControl()
+	global lbControl, camera, calibrator
+
+	init();
 
 	if calibrate:
 		from hardware.letterboxControl import LetterboxControl
 		global lbControl
-		lbControl = LetterboxControl()
+
+		lbControl.toggleCameraLed(True)
 
 		# capture images
 		images = []
 		for i in range(0,n):
-			lbControl.setStepperPosition(0) 
+			print "Throw in card "+str(i)
+			time.sleep(5)
 			img = camera.captureImage()
 			images.append(img)
-			lbControl.setStepperPosition(1) 
+			print "done"
 
 		# start calibration
 		from camera.cameraCalibrator import CameraCalibrator
@@ -75,9 +125,9 @@ def scan_command():
 	cat = scanner.extract();
 	scanner.saveImage(SCAN_RESULT_FILE)
 
-	if (cat != False)
+	if (cat != False):
 		print "Found category: "+str(cat)+".";
-	else
+	else:
 		print "Did not find category."
 
 	del camera
