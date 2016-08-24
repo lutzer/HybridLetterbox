@@ -22,7 +22,9 @@ class ConfigReader:
 				"tag2" : "",
 				
 				"text3" : "cat3",
-				"tag3" : ""
+				"tag3" : "",
+
+				"tweet_submissions" : false
 			})
 
 		self.parser.read(file)
