@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-18 15:46:50
+# @Last Modified time: 2016-08-22 17:07:49
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -118,7 +118,7 @@ def camera_command(calibrate=False,n=5):
 	else:
 		camera.startPreview()
 
-def scan_command():
+def scan_command(raw=False):
 	"""Scans a postcard"""
 	global camera,lbControl
 
@@ -126,14 +126,18 @@ def scan_command():
 
 	lbControl.toggleCameraLed(True)
 
-	calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
 
 	img = camera.captureImage()
-	img = calibrator.undistortImage(img)
 
-	scanner = CardScanner(img)
-	#scanner.threshold();
-	scanner.saveImage(SCAN_RESULT_FILE)
+	if raw:
+		scanner = CardScanner(img)
+		scanner.saveImage(SCAN_RESULT_FILE)
+	else:
+		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
+		img = calibrator.undistortImage(img)
+		scanner = CardScanner(img)
+		#scanner.threshold();
+		scanner.saveImage(SCAN_RESULT_FILE)
 
 	#if (cat != False):
 	#	print "Found category: "+str(cat)+".";

@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-07-24 22:09:52
+# @Last Modified time: 2016-08-23 19:02:46
 
 import cv2
 import numpy as np
@@ -13,15 +13,14 @@ logger = logging.getLogger(__name__)
 
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
-CONTOUR_MIN_SIZE = 800*500 # minimal size of the surounding box in pixels
+CONTOUR_MIN_SIZE = 750*450 # minimal size of the surounding box in pixels
 ERODE_KERNEL_SIZE = 3
-ERODE_ITERATIONS = 3
+ERODE_ITERATIONS = 1
 
-MARKER_THRESHOLD = 0.75 # minmal threshold for detecting a marker
 NUMBER_OF_MARKERS = 4
 
-PATTERN_MIN_SIZE = 30*30;
-PATTERN_MAX_SIZE = 80*80;
+PATTERN_MIN_SIZE = 15*15;
+PATTERN_MAX_SIZE = 50*50;
 
 
 class CardScanner:

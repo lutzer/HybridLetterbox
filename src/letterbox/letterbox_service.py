@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-07-24 19:44:55
+# @Last Modified time: 2016-08-23 18:53:29
 
 import logging
 import time
@@ -115,14 +115,16 @@ def loop ():
 		marker, flipped, val = scanner.findMarker()
 		
 		# check other side
-		if val < float(config.get("MARKER","marker_threshold")) and 'img2' in locals():
-			img2 = calibrator.undistortImage(img2)
-			scanner = CardScanner(img2)
-			scanner.threshold()
-			marker, flipped, val = scanner.findMarker()
-			logger.info("Side:2 Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
-		else:
+		# if val > float(config.get("MARKER","marker_threshold")) and 'img2' in locals():
+		# 	img2 = calibrator.undistortImage(img2)
+		# 	scanner = CardScanner(img2)
+		# 	scanner.threshold()
+		# 	marker, flipped, val = scanner.findMarker()
+		# 	logger.info("Side:2 Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
+		if val < float(config.get("MARKER","marker_threshold")):
 			logger.info("Side:1 Found marker: "+str(marker)+" (value: "+str(val)+"). Flipped: "+str(flipped))
+		else:
+			logger.info("Did not find marker (value: "+str(val)+").")
 		
 		# extract text box
 		scanner.maskRectangle()
