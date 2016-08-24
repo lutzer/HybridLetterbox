@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-08-24 13:23:00
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-08-24 13:32:47
 
 import logging
 import time
@@ -139,10 +139,12 @@ def loop ():
 		category = -1;
 		tags = None
 		text = " "
+		twitterMessage = " "
 		if val < float(config.get("MARKER","marker_threshold")) and marker > -1 :
 			category = marker
 			tags = config.get("CATEGORIES","tags"+str(category))
 			text = config.get("CATEGORIES","text"+str(category))
+			twitterMessage = config.get("CATEGORIES","twitter"+str(category))
 
 		submission = {
 			'device' : DEVICE_NAME,
@@ -157,15 +159,15 @@ def loop ():
 		httpClient.postSubmission(submission,filepath,filename);
 
 		#twitter picture
-		if config.get("TWITTER","tweet_submissions") == "true":
-			message = submission['text'] + ' ' + submission['tags']
+		if bool(config.get("TWITTER","tweet_submissions")):
+			message = submission['text']
 			twitter = TwitterPoster(
 				config.get("TWITTER","consumer_key"),
 				config.get("TWITTER","consumer_secret"),
 				config.get("TWITTER","access_token"),
 				config.get("TWITTER","access_token_secret"),
 			)
-			twitter.tweet(filepath,message)
+			twitter.tweet(filepath,twitterMessage)
 
 		
 	time.sleep(DELAY_BETWEEN_READINGS)

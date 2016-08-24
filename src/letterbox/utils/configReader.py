@@ -14,17 +14,21 @@ class ConfigReader:
 
 				"text0" : "cat0",
 				"tag0" : "",
+				"twitter0" : "",
 
 				"text1" : "cat1",
 				"tag1" : "",
+				"twitter1" : "",
 
 				"text2" : "cat2",
 				"tag2" : "",
+				"twitter2" : "",
 				
 				"text3" : "cat3",
 				"tag3" : "",
+				"twitter3" : "",
 
-				"tweet_submissions" : false
+				"tweet_submissions" : False
 			})
 
 		self.parser.read(file)
