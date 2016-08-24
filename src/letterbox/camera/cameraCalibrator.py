@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
-# @Last Modified by:   lutzer
-# @Last Modified time: 2016-06-21 11:09:24
+# @Last Modified by:   lutz
+# @Last Modified time: 2016-08-18 20:17:54
 
 import numpy as np
 import cv2
 import json
 import logging
 
+from camera.cardScanner import showImage 
+
 CHESSBOARD_ROWS = 8
-CHESSBOARD_COLUMNS = 11
+CHESSBOARD_COLUMNS = 13
 
 logger = logging.getLogger(__name__)
 
@@ -97,6 +99,17 @@ class CameraCalibrator:
 		if (self.calibrationData == False):
 			return img
 
-		h,  w = img.shape[:2]
-		img = cv2.undistort(img, np.asarray(self.calibrationData['camera_matrix']), np.asarray(self.calibrationData['dist_coeff']), None)
+		# read parameters
+		h, w = img.shape[:2]
+		mtx = np.asarray(self.calibrationData['camera_matrix'])
+		dist = np.asarray(self.calibrationData['dist_coeff'])
+
+		# dont wrap distortion around edges
+		dist[:,4] = 0
+
+		# undistort
+		newcameramtx, roi =cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
+		img = cv2.undistort(img, mtx, dist, None, newcameramtx)
+		
+		print roi
 		return img

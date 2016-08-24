@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-06-22 15:46:57
+# @Last Modified time: 2016-08-18 15:50:01
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -17,8 +17,13 @@ PIN_LED = 22
 PIN_SERVO = 18
 PIN_PHOTORESISTOR = 17
 PHOTORESISTOR_THRESHOLD = 0.2
+RC_TIMEOUT = 10000
+
+
 SERVO_INVERSE = False
-RC_TIMEOUT = 3000
+SERVO_DUTYCYCLE_LOW = 5
+SERVO_DUTYCYCLE_HIGH = 18
+
 
 
 
@@ -127,7 +132,7 @@ class LetterboxControlV1(LetterboxControl):
 # pin, angle (From 0 to 1), duration (in s for pulse)
 def setServo (pin, angle, duration = 0.7):
 	angle = min(max(0,angle),1)
-	dutycycle = 4 + angle * (19 - 4) 
+	dutycycle = SERVO_DUTYCYCLE_LOW + angle * (SERVO_DUTYCYCLE_HIGH - SERVO_DUTYCYCLE_LOW) 
 	p = GPIO.PWM(pin,85)
 	p.start(dutycycle)
 	time.sleep(duration)

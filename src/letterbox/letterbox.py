@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-07-24 19:55:36
+# @Last Modified time: 2016-08-22 17:07:49
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -22,14 +22,14 @@ SCAN_RESULT_FILE = "scan.jpg"
 
 # debug options
 import logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 lbControl = False
 config = None
 camera = None
 lbVersion = 0
 
-def init ():
+def init (initCamera=True):
 	global lbControl, camera, config, lbVersion
 
 	# read config
@@ -49,12 +49,13 @@ def init ():
 			lbControl = LetterboxControlV2()
 
 		# start camera
-		if lbVersion == 0:
-			from camera.cameraControlTest import CameraControlTest
-			camera = CameraControlTest()
-		else:
-			from camera.cameraControl import CameraControl
-			camera = CameraControl()
+		if initCamera:
+			if lbVersion == 0:
+				from camera.cameraControlTest import CameraControlTest
+				camera = CameraControlTest()
+			else:
+				from camera.cameraControl import CameraControl
+				camera = CameraControl()
 
 	except Exception as err:
 		print(err)
@@ -65,6 +66,14 @@ def init ():
 	lbControl.flashFeedbackLed(2);
 	print("# finished initializing")
 	return True
+
+def stop():
+	global lbControl, camera
+	
+	print("# program stopped. cleaning up...")
+	del lbControl
+	del camera
+	return
 
 def boxsize_commmand():
 	"""Opens a camera window to setup the size of the textbox on the postcards"""
@@ -108,29 +117,32 @@ def camera_command(calibrate=False,n=5):
 
 	else:
 		camera.startPreview()
-	del camera
 
-def scan_command():
+def scan_command(raw=False):
 	"""Scans a postcard"""
-	from camera.cameraControl import CameraControl
-	from camera.cameraCalibrator import CameraCalibrator
-	from camera.cardScanner import CardScanner
-	camera = CameraControl()
-	calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
+	global camera,lbControl
+
+	init()
+
+	lbControl.toggleCameraLed(True)
+
 
 	img = camera.captureImage()
-	img = calibrator.undistortImage(img)
 
-	scanner = CardScanner(img)
-	cat = scanner.extract();
-	scanner.saveImage(SCAN_RESULT_FILE)
-
-	if (cat != False):
-		print "Found category: "+str(cat)+".";
+	if raw:
+		scanner = CardScanner(img)
+		scanner.saveImage(SCAN_RESULT_FILE)
 	else:
-		print "Did not find category."
+		calibrator = CameraCalibrator(CAMERA_MATRIX_FILE)
+		img = calibrator.undistortImage(img)
+		scanner = CardScanner(img)
+		#scanner.threshold();
+		scanner.saveImage(SCAN_RESULT_FILE)
 
-	del camera
+	#if (cat != False):
+	#	print "Found category: "+str(cat)+".";
+	#else:
+	#	print "Did not find category."
 
 def led_command(off=False,name='cam',blink=0):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""
@@ -155,15 +167,12 @@ def photocell_command(repeat=1):
 	"""Gets a reading from the photocell"""
 	
 	global lbControl
-	from hardware.letterboxControl import LetterboxControl
-	lbControl = LetterboxControl()
+
+	init()
 
 	for n in range(0,repeat):
 		response = lbControl.checkPhotocell();
-		if response:
-			print response
-		else:
-			print "Timed out"
+		print response
 
 def reset_command():
 	"""Resets and restarts the headboard"""
@@ -174,23 +183,24 @@ def reset_command():
 
 	lbControl.reset();
 
-def stepper_command(pos=0,calibrate=False):
+def motor_command(pos=0,calibrate=False):
 	'''Turns or calibrates the stepper motor'''
 	global lbControl
-	from hardware.letterboxControl import LetterboxControl
-	lbControl = LetterboxControl()
+
+	init(initCamera=False)
 
 	if (calibrate):
-		if lbControl.calibrateStepper() == False:
+		if lbControl.calibrateMotor() == False:
 			print "Error: Stepper could not calibrate"
 		else:
 			print "Stepper calibrated succesfully."
 	else:
-		if lbControl.setStepperPosition(pos) == False:
-			print "Error: Stepper did not reach position."
-		else:
-			print "Stepper reached position."
+		lbControl.setMotorPosition(pos)
 
+def signal_term_handler(signal, frame):
+	logger.info("got SIGTERM")
+	stop()
+	sys_exit(0)
 
 if __name__ == '__main__':
 	import scriptine
@@ -200,6 +210,5 @@ if __name__ == '__main__':
 	except KeyboardInterrupt:
 	    print("interrupted")
 	finally:
-		if (lbControl != False):
-			del lbControl
+		stop()
         
