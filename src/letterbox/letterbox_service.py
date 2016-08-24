@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
-# @Last Modified by:   lutz
-# @Last Modified time: 2016-07-24 19:44:55
+# @Last Modified by:   lutzer
+# @Last Modified time: 2016-08-24 13:20:34
 
 import logging
 import time
@@ -11,6 +11,7 @@ from camera.cardScanner import CardScanner
 from camera.cameraCalibrator import CameraCalibrator
 from hardware.letterboxControl import MotorPosition
 from comm.httpRequestClient import HttpRequestClient
+from comm.twitterPoster import TwitterPoster
 from utils.configReader import ConfigReader
 from utils.utils import generateImageName
 
@@ -152,6 +153,18 @@ def loop ():
 
 		# send data and picture
 		httpClient.postSubmission(submission,filepath,filename);
+
+		#twitter picture
+		if config.get("TWITTER","tweet_submissions") == "true":
+			message = submission['text'] + ' ' + submission['tags']
+			twitter = TwitterPoster(
+				config.get("TWITTER","consumer_key"),
+				config.get("TWITTER","consumer_secret"),
+				config.get("TWITTER","access_token"),
+				config.get("TWITTER","access_token_secret"),
+			)
+			twitter.tweet(filepath,message)
+
 		
 	time.sleep(DELAY_BETWEEN_READINGS)
 	return

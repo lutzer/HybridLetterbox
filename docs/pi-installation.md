@@ -259,6 +259,17 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 2. enable startup: `pm2 startup systemd `
 3. automatically start server: `pm2 start src/server/node/main.js --name hybrid-letterbox` and save with `pm2 save`
 
+
+
+
+## Camera Calibration
+
+* put a book behind the calibration pattern to raise it a bit up
+* run `./letterbox.py camera —calibrate` within src/letterbox folder
+
+
+
+
 ## Configure Tp-Link Router
 
 * first **upgarde firmware**! Then install configuration image or configure it manually.
