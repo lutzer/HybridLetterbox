@@ -44,7 +44,7 @@ Device         Boot  Start     End Sectors  Size Id Type
 * press w to write partion table
 -----
 sudo reboot
-sudo resize2fs /dev/mmcblk0p2
+ 
 ```
 
 ### Setup ip adress of pi or skip or use dhcp server
@@ -200,13 +200,10 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
 ### Install Python 2
 
-{0}. sudo pacman -S python2 gcc
-{0}. pacman -S python2-pip
-{0}. pip2 install pyserial
-{0}. pip2 install picamera
-{0}. pip2 install RPi.GPIO
-{0}. pip2 install requests & pip2 install gerequests
-{0}. pacman -S python2-scipy
+* `pacman -S python2 gcc python2-pip`
+* `pip2 install pyserial picamera enum requests RPi.GPIO`
+  `Collecting pyserial scriptine`
+* pacman -S python2-scipy
 
 ### Install opencv
 
@@ -236,7 +233,9 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
    Type=simple
 
-   ExecStart=/bin/python2 /home/letterbox/scripts/letterbox/letterbox.py
+   WorkingDirectory=/home/letterbox/HybridLetterbox/src/letterbox/
+
+   ExecStart=/bin/python2 letterbox_service.py
 
    RemainAfterExit=true
 
@@ -246,13 +245,13 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
    ```
 
 
-1. sudo systemctl daemon-reload
+1. `sudo systemctl daemon-reload`
 
-2. sudo systemctl enable letterbox.service
+2. `sudo systemctl enable letterbox.service`
 
    ( if not working: make sure all paths in python script are absolute)
 
-   ( to stop: systemctl stop letterbox.service or systemctl disable letterbox.service
+   ( to stop: `systemctl stop letterbox.service` or `systemctl disable letterbox.service`
 
 ### Autostart pm2 manager
 
