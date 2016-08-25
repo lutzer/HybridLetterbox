@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-18 15:50:01
+# @Last Modified time: 2016-08-25 13:06:25
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -80,7 +80,7 @@ class LetterboxControlV1(LetterboxControl):
 	def checkPhotocell(self):
 		# turn on led
 		if not(self.ledState):
-			self.toggleFeedbackLed(True);
+			self.toggleCameraLed(True);
 			time.sleep(0.1)
 
 		val = readRCPin(self.pinPhotoresistor,RC_TIMEOUT)
