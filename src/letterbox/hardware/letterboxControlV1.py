@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-25 13:06:25
+# @Last Modified time: 2016-08-25 13:17:49
 
 from letterboxControl import LetterboxControl, MotorPosition
 import logging
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 PIN_LED = 22
 PIN_SERVO = 18
 PIN_PHOTORESISTOR = 17
-PHOTORESISTOR_THRESHOLD = 0.2
+PHOTORESISTOR_THRESHOLD = 0.3
 RC_TIMEOUT = 10000
 
 
@@ -108,10 +108,15 @@ class LetterboxControlV1(LetterboxControl):
 
 	def calibrate(self):
 		logger.info("calibrating lbcontrol")
-		self.toggleFeedbackLed(True)
+		self.toggleCameraLed(True)
 		self.setMotorPosition(MotorPosition.EJECT)
 		time.sleep(1)
 		self.setMotorPosition(MotorPosition.START)
+		# get initial readings
+		for _ in range(0,10):
+			self.checkPhotocell()
+
+		# read photocell
 		if self.checkPhotocell() == True:
 			raise Exception("Photoresistor cant getting any readings. Maybe it is unplugged or blocked.")
 
