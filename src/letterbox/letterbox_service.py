@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-29 20:31:15
+# @Last Modified time: 2016-08-29 20:39:14
 
 import logging
 import time
@@ -159,7 +159,7 @@ def loop ():
 		httpClient.postSubmission(submission,filepath,filename);
 
 		#twitter picture
-		if bool(config.get("TWITTER","tweet_submissions")):
+		if config.getboolean("TWITTER","tweet_submissions"):
 			message = submission['text']
 			twitter = TwitterPoster(
 				config.get("TWITTER","consumer_key"),
