@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-31 11:22:18
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-18 20:17:54
+# @Last Modified time: 2016-08-24 23:44:53
 
 import numpy as np
 import cv2
@@ -111,5 +111,4 @@ class CameraCalibrator:
 		newcameramtx, roi =cv2.getOptimalNewCameraMatrix(mtx,dist,(w,h),1,(w,h))
 		img = cv2.undistort(img, mtx, dist, None, newcameramtx)
 		
-		print roi
 		return img

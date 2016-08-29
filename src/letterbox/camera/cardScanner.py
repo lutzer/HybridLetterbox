@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-30 17:41:12
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-23 19:02:46
+# @Last Modified time: 2016-08-24 23:22:19
 
 import cv2
 import numpy as np
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # CV PARAMETERS
 RESIZE_FACTOR = 0.3
 CONTOUR_MIN_SIZE = 750*450 # minimal size of the surounding box in pixels
-ERODE_KERNEL_SIZE = 3
+ERODE_KERNEL_SIZE = 1
 ERODE_ITERATIONS = 1
 
 NUMBER_OF_MARKERS = 4
@@ -67,8 +67,8 @@ class CardScanner:
 
 		# erode small pixels
 		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
-		threshImage = cv2.dilate(threshImage,kernel,ERODE_ITERATIONS)
-		threshImage = cv2.erode(threshImage,kernel,ERODE_ITERATIONS)
+		threshImage = cv2.dilate(threshImage,kernel,iterations=ERODE_ITERATIONS)
+		threshImage = cv2.erode(threshImage,kernel,iterations=ERODE_ITERATIONS)
 
 		self.binaryImage = threshImage
 
@@ -160,8 +160,8 @@ class CardScanner:
 				n += 1;
 
 		# erode mask
-		kernel = np.ones((ERODE_KERNEL_SIZE,ERODE_KERNEL_SIZE),np.uint8)
-		contourMask = cv2.erode(contourMask,kernel,ERODE_ITERATIONS)
+		kernel = np.ones((3,3),np.uint8)
+		contourMask = cv2.erode(contourMask,kernel)
 
 		# delete all pixels, that didnt had overlappying contours
 		contourMask[contourMask < n] = 0
