@@ -20,9 +20,12 @@ class TwitterPoster:
 	
 def tweetThread(auth,photo_path,status):
 	logger.info("process: sending file to twitter...")
-	api = tweepy.API(auth)
-	api.update_with_media(photo_path, status=status)
-	logger.info("process: file sent to twitter.")
+	try:
+		api = tweepy.API(auth)
+		api.update_with_media(photo_path, status=status)
+		logger.info("process: file sent to twitter.")
+	except Exception as err:
+		logger.info(err)
 
 def finishedTweetThread(args):
 	logger.info("file sent to twitter")
