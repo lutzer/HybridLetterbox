@@ -76,10 +76,6 @@ class CardScanner:
 		greyImage[threshImage == 255] = 255
 		threshImage = greyImage
 
-		#increase contrast
-		minVal = threshImage.min()
-		threshImage[threshImage < 255] = threshImage[threshImage < 255] - minVal
-
 		self.image = threshImage 
 
 
@@ -179,6 +175,9 @@ class CardScanner:
 			x,y,w,h = cv2.boundingRect(contours[0])
 			self.image = self.image[y:y+h,x:x+w]
 
+		#increase contrast
+		self.image = increaseContrast(self.image)
+
 
 def showImage(img,wait = 0,resize=True):
 	import cv2
@@ -190,3 +189,8 @@ def showImage(img,wait = 0,resize=True):
 
 def invertImage(img):
 	return 255 - img
+
+def increaseContrast(img):
+	minVal = img.min()
+	img[img < 255] = img[img < 255] - minVal
+	return img
