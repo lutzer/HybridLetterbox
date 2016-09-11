@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 var Utils = r_require('/utils/utils.js');
 var exec = require('child_process').exec;
 
+var Auth = r_require('/_authentification');
+
 /* Configure express */
 
 module.exports = function (app) {
@@ -43,7 +45,7 @@ module.exports = function (app) {
 	/* save edited ini file */
 	app.use('/save', bodyParser.json());
 	app.use('/save', bodyParser.urlencoded({ extended: true }));
-	app.post('/save', function(req, res) {
+	app.post('/save', Auth.authentificate, function(req, res) {
 
 		var text = req.body.text
 
@@ -65,7 +67,7 @@ module.exports = function (app) {
 	});
 
 	/* reset ini file to default */
-	app.get('/reset', function(req, res) {
+	app.get('/reset', Auth.authentificate, function(req, res) {
 		fs.readFile(Config.defaultFileName, 'utf8', function (err,data) {
 			if (err) Utils.handleError(err);
 			fs.writeFile(Config.fileName, data, 'utf8', function (err) {
@@ -78,7 +80,7 @@ module.exports = function (app) {
 
 
 	/* restart letterbox script */
-	app.get('/restart', function(req, res) {
+	app.get('/restart', Auth.authentificate, function(req, res) {
 		var child = exec("echo "+Config.sudoPassword+" | sudo -S systemctl restart letterbox.service", function (err, stdout, stderr) {
 			if (err) Utils.handleError(err);
 			console.log(stdout);

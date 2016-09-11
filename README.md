@@ -48,6 +48,7 @@ see  [atmega-installation.md](atmega-installation.md)`
 * start admin node script on port 9000
 
   * `cd src/server/admin/ `
+  * `npm install`
   * `cp config.default.js  config.js` and adjust parameters in editor `nano config.js`
   * create startup script for admin server: `pm2 start main.js --name LetterboxBackend` and save `pms2 save`
 
