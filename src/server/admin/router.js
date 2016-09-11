@@ -74,7 +74,7 @@ module.exports = function (app) {
 			if (err) Utils.handleError(err);
 			console.log(stdout);
 
-			res.send("Restarting Letterbox.")
+			res.send("Letterbox restarted.")
 		});
 	});
 
