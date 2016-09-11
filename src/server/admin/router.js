@@ -70,7 +70,7 @@ module.exports = function (app) {
 
 	/* restart letterbox script */
 	app.get('/restart', function(req, res) {
-		var child = exec("echo "+Config.sudoPassword+" | sudo systemctl restart letterbox.service", function (err, stdout, stderr) {
+		var child = exec("echo "+Config.sudoPassword+" | sudo -S systemctl restart letterbox.service", function (err, stdout, stderr) {
 			if (err) Utils.handleError(err);
 			console.log(stdout);
 
