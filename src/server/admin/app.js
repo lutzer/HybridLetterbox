@@ -1,11 +1,11 @@
-'use strict';
-
-/* 
+/*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
-* @Date:   2016-01-25 11:08:47
+* @Date:   2016-09-08 13:40:07
 * @Last Modified by:   lutzer
-* @Last Modified time: 2016-09-09 12:46:49
+* @Last Modified time: 2016-09-10 20:24:46
 */
+
+'use strict';
 
 module.exports = {
 
@@ -22,30 +22,23 @@ module.exports = {
 		/* alias for printing */
 		global.print = function(string,namespace) {
 			var namespace = (typeof namespace !== 'undefined') ?  namespace : 'INFO';
-			
 			console.log(namespace+':'+string);
 		}
 
-		/* if startet as test server, change to test database */
-		if (process.argv[2] == 'test') { 
-			Config.database = Config.testDatabase
-			Config.port = Config.testPort
-			//print = function() {}; //turn of printing
-		}
-
-		/*Define dependencies.*/
-
+		/* Dependencies */
 		var express = require('express');
 		var app = express();
 		var http = require('http').Server(app);
+		var exphbs = require('express-handlebars');
 
-		/* Load Sockets */
+		/* Setup Template Engine */
 
-		var sockets = r_require('/sockets')(http);
+		app.engine('.hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+		app.set('view engine', '.hbs');
 
-		/* Load Router */
+		/* Router */
 
-		var router = r_require('/router')(app);
+		var router = r_require('/router.js')(app);
 
 		/* Run the server */
 

@@ -29,3 +29,20 @@
 
 see  [atmega-installation.md](atmega-installation.md)`
 
+
+
+## Update
+
+
+
+### 10.9.2016
+
+* edit  /etc/systemd/system/letterbox.service and change value:
+
+  ```
+  RemainAfterExit=false
+  ```
+
+* `git pull`
+
+* start admin server

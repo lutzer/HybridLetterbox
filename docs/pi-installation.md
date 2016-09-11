@@ -237,7 +237,7 @@ see  http://rpi900.com/tutorials/using-the-serial-port.html
 
    ExecStart=/bin/python2 letterbox_service.py
 
-   RemainAfterExit=true
+   RemainAfterExit=false
 
    [Install]
 

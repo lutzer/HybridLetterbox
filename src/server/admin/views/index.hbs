@@ -1,0 +1,35 @@
+<div class="editor">
+	<textarea id="pad" class="full-height">
+{{ text }}
+	</textarea>
+</div>
+<div class="buttons">
+	<button id="restartButton">Restart Letterbox</button>
+	<button id="resetButton">Reset</button>
+	<button id="saveButton">Save</button>
+</div>
+<script>
+	$('#saveButton').on('click', function() {
+		$.post( "/save", {
+			text: $('#pad').val(),
+			success: function() {
+				location.reload();
+			}
+		});
+
+	});
+	$('#resetButton').on('click', function() {
+		$.get( "/reset", {
+			success: function() {
+				location.reload();
+			}
+		});
+	});
+	$('#restartButton').on('click', function() {
+		$.get( "/restart", function(res) {
+			console.log(res);
+			alert(res);
+		});
+	});
+</script>
+       
