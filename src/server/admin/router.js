@@ -56,6 +56,15 @@ module.exports = function (app) {
 	});
 
 	/* reset ini file to default */
+	app.get('/text', function(req, res) {
+		//read file
+		fs.readFile(Config.fileName, 'utf8', function (err,data) {
+			if (err) Utils.handleError(err);
+			res.send(data);
+		});
+	});
+
+	/* reset ini file to default */
 	app.get('/reset', function(req, res) {
 		fs.readFile(Config.defaultFileName, 'utf8', function (err,data) {
 			if (err) Utils.handleError(err);

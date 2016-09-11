@@ -3,29 +3,45 @@
 {{ text }}
 	</textarea>
 </div>
-<div class="buttons">
-	<button id="restartButton">Restart Letterbox</button>
-	<button id="resetButton">Reset</button>
-	<button id="saveButton">Save</button>
+<div class="footer">
+	<div id="statusBar"></div>
+	<div class="buttonBar">
+		<button id="restartButton">Restart Letterbox</button>
+		<button id="resetButton">Reset</button>
+		<button id="saveButton">Save</button>
+	</div>
 </div>
 <script>
+
+	function showStatus(title, message) {
+		$('#statusBar').html(message);
+		setTimeout(function() {
+			$('#statusBar').html('');
+		},3000);
+	}
+
+	function fetchText() {
+		$.get( "/text", function(res) {
+			$('#pad').val(res);
+		});
+	}
+
 	$('#saveButton').on('click', function() {
 		$.post( "/save", { text: $('#pad').val() } , function(res) {
-			alert(res);
-			location.reload();
+			showStatus("Status",res);
+			fetchText();
 		});
 
 	});
 	$('#resetButton').on('click', function() {
 		$.get( "/reset", function(res) {
-			alert(res);
-			location.reload();
+			showStatus("Status",res);
+			fetchText();
 		});
 	});
 	$('#restartButton').on('click', function() {
 		$.get( "/restart", function(res) {
-			console.log(res);
-			alert(res);
+			showStatus("Status",res);
 		});
 	});
 </script>
