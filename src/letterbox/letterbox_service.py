@@ -2,10 +2,12 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-29 20:39:14
+# @Last Modified time: 2016-09-11 03:23:25
 
 import logging
 import time
+import signal
+import sys
 
 from camera.cardScanner import CardScanner
 from camera.cameraCalibrator import CameraCalibrator
@@ -35,6 +37,7 @@ camera = None
 calibrator = None
 config = None
 lbVersion = 0
+cleanedUp = False
 
 ##################
 # MAIN FUNCTIONS #
@@ -174,7 +177,11 @@ def loop ():
 	return
 
 def stop ():
-	global lbControl, camera
+	global lbControl, camera, cleanedUp
+
+	if cleanedUp:
+		return
+	cleanedUp = True
 	
 	logger.info("# program stopped. cleaning up...")
 	del lbControl
@@ -184,7 +191,10 @@ def stop ():
 def signal_term_handler(signal, frame):
 	logger.info("got SIGTERM")
 	stop()
-	sys_exit(0)
+	sys.exit(0)
+
+signal.signal(signal.SIGTERM, signal_term_handler)
+signal.signal(signal.SIGINT, signal_term_handler)
 
 #################
 # START PROGRAM #
