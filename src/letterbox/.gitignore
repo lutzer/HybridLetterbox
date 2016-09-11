@@ -3,3 +3,5 @@
 _tmp/*
 !_tmp/.keep
 letterbox.ini
+logs/*
+!logs/.keep

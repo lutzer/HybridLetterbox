@@ -6,11 +6,11 @@ var Config = {
 	baseUrl : '/', // with trailing /
 	publicDir : 'public',
 	hostname : false, // 127.0.0.1 = private, false = public
-	port : '8081',
+	port : '9000',
 
 	/* INI FILES */
-	fileName : 'data/test.ini',
-	defaultFileName: 'data/default.ini',
+	fileName : '../../letterbox/letterbox.ini',
+	defaultFileName: '../../letterbox/letterbox.default.ini',
 
 	/* AUTH DATA */
 	authName: 'admin',

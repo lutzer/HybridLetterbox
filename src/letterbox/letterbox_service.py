@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-09-11 03:23:25
+# @Last Modified time: 2016-09-11 11:28:56
 
 import logging
 import time
@@ -20,6 +20,10 @@ from utils.utils import generateImageName
 # Debug options
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+hdlr = logging.FileHandler('logs/letterbox_service.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+hdlr.setFormatter(formatter)
+logger.addHandler(hdlr) 
 
 # CHANGEABLE PARAMETERS
 CAMERA_MATRIX_FILE = "camera/camera_matrix.json"
