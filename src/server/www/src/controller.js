@@ -3,8 +3,8 @@
 /*
 * @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 * @Date:   2016-05-04 11:38:41
-* @Last Modified by:   lutzer
-* @Last Modified time: 2016-07-14 17:10:37
+* @Last Modified by:   lutz
+* @Last Modified time: 2016-08-29 20:49:29
 */
 
 import Backbone from 'backbone';
@@ -106,7 +106,7 @@ class Controller extends Marionette.Controller {
 			$('body').removeClass();
 
 			this.mainView.headerRegion.show(new Marionette.ItemView({
-				template: _.template('<div class="link-back"><a href="#"><span class="close-button">Close</span></a></div>')
+				template: _.template('<div class="link-back"><a href="#"><span class="close-button"></span></a></div>')
 			}));
 			this.mainView.contentRegion.show(new AdminView({ dataset: Config.dataset }));
 			this.mainView.tagsRegion.reset();

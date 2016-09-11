@@ -3,7 +3,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-08-22 17:07:49
+# @Last Modified time: 2016-08-25 13:06:59
 
 # to make this script callable, first type chmod +x letterbox-setup.py in console 
 
@@ -29,7 +29,7 @@ config = None
 camera = None
 lbVersion = 0
 
-def init (initCamera=True):
+def init (initCamera=True, cleanup=True):
 	global lbControl, camera, config, lbVersion
 
 	# read config
@@ -40,13 +40,13 @@ def init (initCamera=True):
 		#init vars
 		if lbVersion == 0:
 			from hardware.letterboxControlTest import LetterboxControlTest
-			lbControl = LetterboxControlTest()
+			lbControl = LetterboxControlTest(cleanup=cleanup)
 		elif lbVersion == 1:
 			from hardware.letterboxControlV1 import LetterboxControlV1
-			lbControl = LetterboxControlV1()
+			lbControl = LetterboxControlV1(cleanup=cleanup)
 		else:
 			from hardware.letterboxControlV2 import LetterboxControlV2
-			lbControl = LetterboxControlV2()
+			lbControl = LetterboxControlV2(cleanup=cleanup)
 
 		# start camera
 		if initCamera:
@@ -68,7 +68,7 @@ def init (initCamera=True):
 	return True
 
 def stop():
-	global lbControl, camera
+	global lbControl, camera, cleanUp
 	
 	print("# program stopped. cleaning up...")
 	del lbControl
@@ -148,8 +148,8 @@ def led_command(off=False,name='cam',blink=0):
 	"""Turns on camera led, led name can be 'cam' or 'feedback'"""
 	
 	global lbControl
-	from hardware.letterboxControl import LetterboxControl
-	lbControl = LetterboxControl(cleanup=False)
+
+	init(initCamera=False, cleanup=False)
 
 	print "Turning "+ name + " led " + ("off" if off else "on")
 

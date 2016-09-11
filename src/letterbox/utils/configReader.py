@@ -35,3 +35,6 @@ class ConfigReader:
 
 	def get(self,section,name):
 		return self.parser.get(section,name)
+
+	def getboolean(self,section,name):
+		return self.parser.getboolean(section,name)
