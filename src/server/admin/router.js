@@ -51,9 +51,9 @@ module.exports = function (app) {
 
 		//write file
 		fs.writeFile(Config.fileName, text, 'utf8', function (err) {
-		  if (err) Utils.handleError(err);
+		  if (Utils.handleError(err,res)) return;
 
-		  res.send("File saved.")
+		  res.send("File saved. Restart Letterbox to make changes take effect.")
 		});
 	});
 
@@ -61,7 +61,7 @@ module.exports = function (app) {
 	app.get('/text', function(req, res) {
 		//read file
 		fs.readFile(Config.fileName, 'utf8', function (err,data) {
-			if (err) Utils.handleError(err);
+			if (Utils.handleError(err,res)) return;
 			res.send(data);
 		});
 	});
@@ -69,9 +69,9 @@ module.exports = function (app) {
 	/* reset ini file to default */
 	app.get('/reset', Auth.authentificate, function(req, res) {
 		fs.readFile(Config.defaultFileName, 'utf8', function (err,data) {
-			if (err) Utils.handleError(err);
+			if (Utils.handleError(err,res)) return;
 			fs.writeFile(Config.fileName, data, 'utf8', function (err) {
-				if (err) Utils.handleError(err);
+				if (Utils.handleError(err,res)) return;
 
 				res.send("File reset to default.")
 			});
@@ -82,8 +82,10 @@ module.exports = function (app) {
 	/* restart letterbox script */
 	app.get('/restart', Auth.authentificate, function(req, res) {
 		var child = exec("echo "+Config.sudoPassword+" | sudo -S systemctl restart letterbox.service", function (err, stdout, stderr) {
-			if (err) Utils.handleError(err);
-			console.log(stdout);
+			if (err) {
+				Utils.handleError({ message: 'Could not restart letterbox. Wrong sudo password?' },res);
+				return;
+			}
 
 			res.send("Letterbox restarted.")
 		});

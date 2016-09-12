@@ -14,20 +14,11 @@ module.exports = {
 	        //if res defined, also give server answer
 	        if (res) {
 	        	res.setHeader('Content-Type','application/json');
-	        	res.status(500).send({ error: err });
+	        	res.status(500).send({ error: err.message });
 	        }
 
 	        return true;
 	    }
 	    return false;
-	},
-
-	//escape paths in mongoose pre save middleware
-	escapePath: function(doc, path) {
-        elements = doc.get(path);
-        if (_.isArray(elements))
-            doc.set(path, _.map(elements,_.escape))
-        else    
-            doc.set(path, _.escape(elements));
-    }
+	}
 }

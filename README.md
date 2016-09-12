@@ -37,7 +37,7 @@ see  [atmega-installation.md](atmega-installation.md)`
 
 ### 10.9.2016
 
-* edit  /etc/systemd/system/letterbox.service and change value:
+* edit  `sudo nano /etc/systemd/system/letterbox.service` and change value:
 
   ```
   RemainAfterExit=false

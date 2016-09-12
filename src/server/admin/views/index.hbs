@@ -14,10 +14,14 @@
 <script>
 
 	function showStatus(title, message) {
+
+		if (title)
+			message = '<b>'+title+':</b> '+message;
+
 		$('#statusBar').html(message);
 		setTimeout(function() {
 			$('#statusBar').html('');
-		},3000);
+		},5000);
 	}
 
 	function fetchText() {
@@ -28,20 +32,23 @@
 
 	$('#saveButton').on('click', function() {
 		$.post( "/save", { text: $('#pad').val() } , function(res) {
-			showStatus("Status",res);
+			showStatus(false,res);
 			fetchText();
 		});
 
 	});
 	$('#resetButton').on('click', function() {
 		$.get( "/reset", function(res) {
-			showStatus("Status",res);
+			showStatus(false,res);
 			fetchText();
 		});
 	});
 	$('#restartButton').on('click', function() {
 		$.get( "/restart", function(res) {
-			showStatus("Status",res);
+			showStatus(false,res);
+		}).fail(function(res) {
+			console.log(res);
+			showStatus("Error",res.responseJSON.error);
 		});
 	});
 </script>
