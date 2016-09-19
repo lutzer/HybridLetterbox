@@ -2,7 +2,7 @@
 # @Author: Lutz Reiter, Design Research Lab, Universität der Künste Berlin
 # @Date:   2016-03-21 17:27:32
 # @Last Modified by:   lutz
-# @Last Modified time: 2016-09-11 11:28:56
+# @Last Modified time: 2016-09-11 12:27:49
 
 import logging
 import time
@@ -149,7 +149,7 @@ def loop ():
 		twitterMessage = " "
 		if val < float(config.get("MARKER","marker_threshold")) and marker > -1 :
 			category = marker
-			tags = config.get("CATEGORIES","tags"+str(category))
+			tags = config.get("CATEGORIES","tag"+str(category))
 			text = config.get("CATEGORIES","text"+str(category))
 			twitterMessage = config.get("CATEGORIES","twitter"+str(category))
 
