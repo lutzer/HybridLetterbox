@@ -60,7 +60,7 @@ see  [atmega-installation.md](atmega-installation.md)`
       sudoPassword: 'password'
       ```
 
-  * create startup script for admin server: `pm2 start main.js --name LetterboxBackend` and save `pms2 save`
+  * create startup script for admin server: `pm2 start main.js --name LetterboxBackend` and save `pm2 save`
 
 * reboot with `sudo reboot`
 
